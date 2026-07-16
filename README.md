@@ -9,6 +9,11 @@ This repository preserves the paper sources, research plan, literature matrix,
 analysis scripts, frozen protocol, statistical outputs, generated tables and
 figures, compiled PDFs, submission packages, and reproducibility records.
 
+GitHub archive:
+https://github.com/kamrul28890/snas-2026-construction-vlm-xai-paper
+
+Visibility is intentionally private while the double-blind paper is unpublished.
+
 ## Current Status
 
 - Submission candidate: complete and double-blind

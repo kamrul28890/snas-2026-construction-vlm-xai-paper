@@ -1,5 +1,11 @@
 # SNAS 2026 Paper Submission Todo and Requirements
 
+GitHub archive: https://github.com/kamrul28890/snas-2026-construction-vlm-xai-paper
+
+Repository visibility: private
+
+Default branch: main
+
 ## Full-Paper Completion Update
 
 - [x] Preserved the original visible draft and created a separate submission candidate.
