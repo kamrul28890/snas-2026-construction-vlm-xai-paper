@@ -1,0 +1,11 @@
+{
+  "image_id": "0001274",
+  "primary_class": "fall_hazard",
+  "assigned_rule_id": "rule_3",
+  "targeted_answer_changed": false,
+  "targeted_centroid_drift": 0.5824007501447521,
+  "random_seed": 45,
+  "random_answer_changed": false,
+  "random_centroid_drift": 0.0,
+  "random_mask_target_iou": 0.0
+}

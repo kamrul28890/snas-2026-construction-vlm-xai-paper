@@ -1,0 +1,55 @@
+{
+  "protocol_version": "1.0.0",
+  "frozen_on": "2026-07-16",
+  "study_type": "feasibility and construct-validity audit",
+  "primary_claim": "Answer stability does not guarantee stable or faithful visual evidence in a VLM-grounded construction-safety decision pipeline.",
+  "system": {
+    "model_id": "microsoft/Florence-2-base-ft",
+    "model_revision": "f6c1a25888ffc1d945ee8a1a77ac833c7303d46e",
+    "decoding": "beam",
+    "num_beams": 3,
+    "decision_layer": "deterministic person-relative geometry over open-vocabulary grounding",
+    "native_free_form_vqa": false
+  },
+  "data": {
+    "dataset_id": "LouisChen15/ConstructionSite",
+    "dataset_revision": "ca3d9b885b45cbec956817edc42253664c7faf3f",
+    "license": "CC BY-NC 4.0",
+    "split": "test",
+    "sample_manifest": "pilot/data/pilot_samples.csv",
+    "sample_size": 163,
+    "minimum_stable_subgroup_n": 30,
+    "underpowered_subgroups": ["struck_by_risk"]
+  },
+  "primary_intervention": {
+    "targeted_mask": "black rectangle covering the first rule-relevant object box",
+    "control_mask": "black rectangle with identical clipped width and height at a seeded random location",
+    "control_overlap_policy": "sample up to 200 locations seeking target-box IoU <= 0.05; otherwise retain the minimum-IoU candidate and report overlap",
+    "random_placement_seeds": [42, 43, 44, 45, 46],
+    "worker_loss_correction": true
+  },
+  "outcomes": {
+    "answer_change": "perturbed verdict differs from baseline verdict",
+    "genuine_answer_change": "answer change without loss of the baseline worker detection",
+    "iou_drift_threshold": 0.3,
+    "genuine_relocation_threshold": 0.2,
+    "centroid_normalization": "image diagonal",
+    "disappearance": "baseline object exists and perturbed object does not"
+  },
+  "statistics": {
+    "analysis_unit": "image",
+    "confidence_interval": 0.95,
+    "bootstrap_resamples": 10000,
+    "bootstrap_seed": 20260716,
+    "paired_test": "two-sided Wilcoxon signed-rank",
+    "alpha": 0.05,
+    "multiplicity": "Holm adjustment across the two primary paired tests",
+    "effect_size": "matched-pairs rank-biserial correlation"
+  },
+  "claim_boundaries": [
+    "No claim of native end-to-end visual question answering.",
+    "No claim of deployment readiness or autonomous inspection.",
+    "No claim that technical explanation faithfulness creates calibrated human trust.",
+    "No confirmatory class-level claim for a subgroup with n < 30."
+  ]
+}

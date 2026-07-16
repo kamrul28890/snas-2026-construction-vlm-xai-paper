@@ -1,0 +1,132 @@
+{
+  "primary_results": {
+    "targeted_answer_change": {
+      "label": "Answer change",
+      "point": 0.3924050632911392,
+      "lo": 0.31645569620253167,
+      "hi": 0.46835443037974683,
+      "n": 158,
+      "ci": 0.95,
+      "notes": "",
+      "p_value": NaN,
+      "effect_size": NaN,
+      "effect_name": ""
+    },
+    "matched_random_answer_change": {
+      "label": "Answer change",
+      "point": 0.09240506329113923,
+      "lo": 0.05696202531645571,
+      "hi": 0.13164556962025317,
+      "n": 158,
+      "ci": 0.95,
+      "notes": "",
+      "p_value": NaN,
+      "effect_size": NaN,
+      "effect_name": ""
+    },
+    "targeted_centroid_drift": {
+      "label": "Normalized centroid drift",
+      "point": 0.1963922417909106,
+      "lo": 0.1698210875088079,
+      "hi": 0.2221065835403371,
+      "n": 150,
+      "ci": 0.95,
+      "notes": "",
+      "p_value": NaN,
+      "effect_size": NaN,
+      "effect_name": ""
+    },
+    "matched_random_centroid_drift": {
+      "label": "Normalized centroid drift",
+      "point": 0.03119060678813216,
+      "lo": 0.02060537592652616,
+      "hi": 0.04312447914521604,
+      "n": 154,
+      "ci": 0.95,
+      "notes": "",
+      "p_value": NaN,
+      "effect_size": NaN,
+      "effect_name": ""
+    },
+    "answer_difference": {
+      "point": 0.3,
+      "lo": 0.2227848101265823,
+      "hi": 0.37721518987341773,
+      "n": 158,
+      "ci": 0.95
+    },
+    "answer_test": {
+      "statistic": 127.5,
+      "p_value": 5.089190783520406e-11,
+      "effect_size": 0.8880597014925373,
+      "n": 158,
+      "holm_p": 5.089190783520406e-11
+    },
+    "drift_difference": {
+      "point": 0.1661180731929328,
+      "lo": 0.13973396458386286,
+      "hi": 0.1930683892671634,
+      "n": 149,
+      "ci": 0.95
+    },
+    "drift_test": {
+      "statistic": 593.0,
+      "p_value": 4.588302554054967e-21,
+      "effect_size": 0.8924360602212951,
+      "n": 149,
+      "holm_p": 9.176605108109933e-21
+    }
+  },
+  "validity": {
+    "per_image_iou_failure": {
+      "label": "Stable-answer IoU failure",
+      "point": 0.2211513346007017,
+      "lo": 0.19172383655374164,
+      "hi": 0.2511872700084725,
+      "n": 158,
+      "ci": 0.95,
+      "notes": "",
+      "p_value": NaN,
+      "effect_size": NaN,
+      "effect_name": ""
+    },
+    "per_image_centroid_relocation": {
+      "label": "Stable-answer genuine relocation",
+      "point": 0.12252543518366302,
+      "lo": 0.1009298081489537,
+      "hi": 0.14488189596971243,
+      "n": 158,
+      "ci": 0.95,
+      "notes": "",
+      "p_value": NaN,
+      "effect_size": NaN,
+      "effect_name": ""
+    },
+    "size_bands": [
+      {
+        "size_band": "Small",
+        "images": 53,
+        "iou_failure": 0.30483211756796663,
+        "centroid_relocation": 0.17422341809134262,
+        "mean_iou": 0.5982838018736235,
+        "mean_centroid_drift": 0.06775575253129171
+      },
+      {
+        "size_band": "Medium",
+        "images": 52,
+        "iou_failure": 0.23865354730739344,
+        "centroid_relocation": 0.11710330268022576,
+        "mean_iou": 0.7005661171670552,
+        "mean_centroid_drift": 0.054878792227453996
+      },
+      {
+        "size_band": "Large",
+        "images": 53,
+        "iou_failure": 0.12029856935517313,
+        "centroid_relocation": 0.07614728039256342,
+        "mean_iou": 0.8019286903754279,
+        "mean_centroid_drift": 0.04623095023616311
+      }
+    ]
+  }
+}

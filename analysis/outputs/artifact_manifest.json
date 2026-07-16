@@ -1,0 +1,112 @@
+{
+  "protocol_version": "1.0.0",
+  "source_repository": {
+    "commit": "84ec95177fab618f7168f4139b06138c700eabab",
+    "branch": "scaleup/phase1",
+    "dirty": true,
+    "status": [
+      "M feedbacks-for-full-project.md",
+      " M my-notes.md",
+      " M pilot/report/scaleup/main.tex",
+      " M pilot/scripts/02_select_samples.py",
+      " M pilot/src/xai_pilot/config.py",
+      " M pilot/src/xai_pilot/stats.py",
+      " M pilot/tests/test_stats.py",
+      "?? pilot/report/scaleup/phase3_2_multiseed.tex",
+      "?? pilot/results/chapter4_masking_gallery.pdf",
+      "?? pilot/results/figures/descriptive_accuracy/0000057_rule_1_flip.png",
+      "?? pilot/results/figures/descriptive_accuracy/0000074_rule_2_flip.png",
+      "?? pilot/results/figures/descriptive_accuracy/0000129_rule_1_flip.png",
+      "?? pilot/results/figures/descriptive_accuracy/0000229_rule_1_flip.png",
+      "?? pilot/results/figures/descriptive_accuracy/0000233_rule_1_flip.png",
+      "?? pilot/results/figures/descriptive_accuracy/0000550_rule_3_flip.png",
+      "?? professor-package/"
+    ]
+  },
+  "software": {
+    "numpy": "2.2.6",
+    "pandas": "2.3.3",
+    "scipy": "1.15.3",
+    "matplotlib": "3.10.9",
+    "Pillow": "12.2.0",
+    "torch": "2.12.1+cu130",
+    "transformers": "4.49.0",
+    "datasets": "4.5.0"
+  },
+  "artifacts": [
+    {
+      "path": "pilot\\data\\pilot_samples.csv",
+      "bytes": 7590,
+      "sha256": "a7e08a6e8c966f799ed3fdc3682b9cdb6225427f752ef7f9b8efbc8a34ad2a82"
+    },
+    {
+      "path": "pilot\\results\\baseline_predictions.csv",
+      "bytes": 68440,
+      "sha256": "4b6447541646ad90d1c9021d5898d2d349682b8d8c736eeed906e0638af1bd67"
+    },
+    {
+      "path": "pilot\\results\\region_extraction.csv",
+      "bytes": 17147,
+      "sha256": "a06ec2880ea8b20c3face01a6b0d61149cc589c310d36e15249b0c7148bd0a3b"
+    },
+    {
+      "path": "pilot\\results\\region_extraction_rule_aware.csv",
+      "bytes": 17382,
+      "sha256": "987ad17e6e60e7f823bcbb82b49d910f8e2a7ede385f676f41b5c9b802ecfeb0"
+    },
+    {
+      "path": "pilot\\results\\descriptive_accuracy_rule_aware_wlc.csv",
+      "bytes": 22368,
+      "sha256": "6cdb37976b3aab69abb67cd3d13f6c3ac4b1d3c94213a85226eb1504ab9dd484"
+    },
+    {
+      "path": "pilot\\results\\robustness_sweep.csv",
+      "bytes": 313919,
+      "sha256": "b7b703018f5b69d5a7ee50941a1e5f2de6626740dc4aad2fcc8ddd120c83e68d"
+    },
+    {
+      "path": "pilot\\src\\xai_pilot\\config.py",
+      "bytes": 4568,
+      "sha256": "9107c370a0ec2f3b2ea9f31e7e6623478fcbb358b9c5e1ba45b19867d38bbbc8"
+    },
+    {
+      "path": "pilot\\src\\xai_pilot\\inference.py",
+      "bytes": 11294,
+      "sha256": "3f614147b37c3c86b28392a24c3c3aea48a8c13e4259f8bc7cfce653687b4f91"
+    },
+    {
+      "path": "pilot\\src\\xai_pilot\\regions.py",
+      "bytes": 10124,
+      "sha256": "5953e4d9dd5e4de47cc0e6fafb11e47ef04b4f97be31b1227679f78d8fd63d83"
+    },
+    {
+      "path": "pilot\\src\\xai_pilot\\metrics\\robustness.py",
+      "bytes": 3648,
+      "sha256": "ae54d924808de7c3fc31d8531179a2a3077597cf79ff1450a6c85fd7a1d58a59"
+    },
+    {
+      "path": "analysis\\protocol.json",
+      "bytes": 2453,
+      "sha256": "ee035423493308cff552cec2075272c478ceade42672f2a5739ab1ea9e6ca3d7"
+    },
+    {
+      "path": "analysis\\outputs\\matched_random_occlusion.csv",
+      "bytes": 383829,
+      "sha256": "8cf1b1592835d6a6c5330a32c22778c45269a34620c5fa5b99ec261091cbbd1a"
+    },
+    {
+      "path": "analysis\\outputs\\sample_audit.csv",
+      "bytes": 14476,
+      "sha256": "008fce37632d89de9200effd716644733dbf8765b45d666c981f3f3e38e45d59"
+    }
+  ],
+  "validation": {
+    "sample_rows": 163,
+    "matched_intervention_rows": 948,
+    "matched_images": 158,
+    "targeted_rows": 158,
+    "random_rows": 790,
+    "exact_area_match": true,
+    "random_rows_with_mask_target_iou_le_0_05": 0.8822784810126583
+  }
+}

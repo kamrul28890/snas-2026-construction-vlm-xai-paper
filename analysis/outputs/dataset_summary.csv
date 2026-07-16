@@ -1,0 +1,5 @@
+primary_class,display_class,n,assigned_rules,status
+compliant,Compliant,50,"rule_1, rule_2, rule_3, rule_4",Stable subgroup
+ppe_violation,PPE violation,50,rule_1,Stable subgroup
+fall_hazard,Fall hazard,50,"rule_2, rule_3",Stable subgroup
+struck_by_risk,Struck-by risk,13,rule_4,Exploratory

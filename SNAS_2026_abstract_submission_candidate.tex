@@ -1,0 +1,39 @@
+% SNAS 2026 double-blind abstract submission candidate.
+\documentclass[12pt,letterpaper,twoside]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{fontspec}
+\setmainfont{Times New Roman}
+\usepackage{setspace}
+\doublespacing
+\usepackage{fancyhdr}
+\usepackage[hidelinks]{hyperref}
+\hypersetup{
+  pdftitle={Beyond Stable Answers: Abstract},
+  pdfauthor={},
+  pdfsubject={Double-blind abstract submission candidate for the 5th SNAS Interdisciplinary Research Conference},
+  pdfkeywords={explainable artificial intelligence, vision-language models, construction safety}
+}
+
+\setlength{\parindent}{0.5in}
+\setlength{\parskip}{0pt}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[LE,LO]{\textit{Beyond Stable Answers}}
+\fancyhead[RE,RO]{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\setlength{\headheight}{15pt}
+
+\begin{document}
+
+\begin{center}
+\textbf{Beyond Stable Answers: Auditing Explanation Faithfulness in a Construction-Safety Vision-Language Pipeline}
+\end{center}
+
+\begin{center}
+\textbf{Abstract}
+\end{center}
+
+Vision-language models (VLMs) may support construction-safety review, but answer accuracy alone does not show whether a judgment depends on relevant visual evidence. This feasibility and construct-validity study adapts a six-dimensional explainable artificial intelligence evaluation framework to a VLM-grounded construction-safety pipeline. Florence-2-base-ft grounded workers and rule-relevant objects in 163 held-out ConstructionSite 10k images; deterministic person-relative geometry then produced the safety verdict. The pipeline was not native free-form visual question answering. Explanations were audited through semantic region ranking, safety-object masking, worker-loss correction, and paired targeted-versus-control interventions. The primary control placed five seeded black rectangles per image, each exactly matching the targeted object's clipped width and height. Area ranking selected the worker instead of the safety object in 50.3\% of usable cases; rule-aware ranking reduced this to 0.6\%. Among 158 images with a valid target, targeted masking changed 39.2\% of verdicts versus 9.2\% under matched-random masking, a paired difference of 30.0 percentage points (95\% CI [22.3, 37.7]). Targeted normalized centroid drift was 0.196 versus 0.031 for the control, a difference of 0.166 (95\% CI [0.140, 0.193], Holm-adjusted \textit{p} < .001, rank-biserial \textit{r} = .892). In secondary stable-answer analyses, intersection-over-union flagged 22.1\% of cases while size-invariant centroid relocation flagged 12.3\%; the discrepancy was largest for small boxes. These results show that output stability, evidence movement, and evidence availability must be measured separately. The low-sensitivity pipeline remains a research testbed requiring human oversight, not an autonomous safety system.
+
+\end{document}
