@@ -34,6 +34,7 @@ from faithbench.scaleup import choose_rule_for_row, classify_source_row, select_
 from faithbench.scoring import compare_evidence, normalize_answer
 from faithbench.statistics import bootstrap_ci, holm_adjust, paired_bootstrap_difference
 from experiments.analyze_score_slices import build_slices
+from experiments.build_human_audit_batch import build_batch, priority_for
 
 
 def test_rules_and_prompts_load_and_render():
@@ -416,6 +417,51 @@ def test_score_slice_analyzer_groups_by_rule_and_ambiguity():
     assert keyed[("overall", "all")]["accuracy"] == "0.5"
     assert keyed[("rule_id", "ppe_hard_hat")]["mean_best_evidence_iou"] == "0.5"
     assert keyed[("annotation_ambiguous", "yes")]["evidence_presence_rate"] == "0.0"
+
+
+def test_human_audit_batch_prioritizes_disagreement_rows():
+    score_row = {
+        "image_id": "0000001",
+        "rule_id": "ppe_hard_hat",
+        "truth_answer": "violation",
+        "predicted_answer": "compliant",
+        "answer_correct": "false",
+        "annotation_ambiguous": "no",
+        "annotation_applies_to_image": "yes",
+        "has_reference_evidence": "true",
+        "has_predicted_evidence": "true",
+        "best_evidence_iou": "0.05",
+        "best_evidence_centroid_drift": "0.2",
+    }
+    score, reason = priority_for(score_row)
+    assert score == 170
+    assert "florence_disagrees_with_bootstrap" in reason
+    rows = build_batch(
+        scores=[score_row],
+        manifest_rows=[
+            {
+                "image_id": "0000001",
+                "rule_id": "ppe_hard_hat",
+                "image_width": "100",
+                "image_height": "80",
+                "image_caption": "A worker is visible.",
+                "source_violation_boxes_xyxy": "[[1,2,3,4]]",
+            }
+        ],
+        annotation_rows=[
+            {
+                "image_id": "0000001",
+                "rule_id": "ppe_hard_hat",
+                "evidence_regions_xyxy": "[[1,2,3,4]]",
+            }
+        ],
+        questions_by_rule={"ppe_hard_hat": "Is each visible worker wearing required head protection?"},
+        batch_size=1,
+        per_rule_cap=1,
+    )
+    assert rows[0]["audit_id"] == "audit_001_0001"
+    assert rows[0]["annotator_1_answer_label"] == ""
+    assert rows[0]["priority_score"] == "170"
 
 
 def test_scaleup_classification_and_rule_choice():

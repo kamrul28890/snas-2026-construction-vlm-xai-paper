@@ -17,7 +17,7 @@ Use this before treating the scaffold as a serious NeurIPS-style submission.
 ## Annotation Review
 
 - [ ] Do not describe `pilot_model_assisted_annotations.*` as human ground truth.
-- [ ] Select a stratified subset for independent annotation.
+- [x] Select a stratified subset for independent annotation.
 - [ ] Use at least two annotators per audited example.
 - [ ] Report agreement for answer labels and evidence regions.
 - [ ] Mark ambiguous examples instead of forcing binary labels.
@@ -39,4 +39,3 @@ Use this before treating the scaffold as a serious NeurIPS-style submission.
 - [ ] Make all claims match the actual artifact status.
 - [ ] Keep deployment, surveillance, and worker-discipline limitations explicit.
 - [ ] Move implementation details to appendix when the main text exceeds page limits.
-

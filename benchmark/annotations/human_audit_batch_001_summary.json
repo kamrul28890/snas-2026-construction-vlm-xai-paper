@@ -1,0 +1,24 @@
+{
+  "batch_id": "human_audit_batch_001",
+  "row_count": 120,
+  "batch_size_requested": 120,
+  "per_rule_cap": 30,
+  "source_scores": "D:\\My Projects\\society-of-north-american-scholar-paper\\results\\tables\\scaleup_florence_grounding_per_example_scores.csv",
+  "source_manifest": "D:\\My Projects\\society-of-north-american-scholar-paper\\benchmark\\splits\\scaleup_candidate_manifest.csv",
+  "source_annotations": "D:\\My Projects\\society-of-north-american-scholar-paper\\benchmark\\annotations\\scaleup_model_assisted_annotations.jsonl",
+  "rule_counts": {
+    "fall_harness": 30,
+    "guardrail_edge": 30,
+    "ppe_hard_hat": 30,
+    "struck_by_equipment": 30
+  },
+  "priority_reason_counts": {
+    "bootstrap_nonambiguous": 82,
+    "florence_disagrees_with_bootstrap": 118,
+    "low_evidence_iou": 59,
+    "missing_predicted_evidence": 1,
+    "rule_applies": 83
+  },
+  "florence_bootstrap_disagreement_count": 118,
+  "provenance": "Prioritized for independent human/domain audit from scale-up Florence score diagnostics. Blank annotator fields are intentionally unfilled."
+}

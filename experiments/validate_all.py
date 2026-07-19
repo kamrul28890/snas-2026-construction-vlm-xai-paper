@@ -21,6 +21,7 @@ COMMANDS = [
         "--summary",
         ".\\benchmark\\annotations\\scaleup_model_assisted_annotation_summary.json",
     ],
+    ["python", ".\\experiments\\validate_human_audit_batch.py"],
     ["python", ".\\experiments\\validate_model_outputs.py"],
     [
         "python",

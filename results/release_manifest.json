@@ -1,7 +1,7 @@
 {
   "manifest_version": "0.1.0",
   "description": "Frozen artifact manifest for the ConstructionSafety-FaithBench scaffold.",
-  "artifact_count": 147,
+  "artifact_count": 155,
   "include_roots": [
     "benchmark",
     "experiments",
@@ -22,6 +22,26 @@
       "path": "benchmark/annotations/annotation_protocol.md",
       "bytes": 2891,
       "sha256": "440a55845dc7156be157dbac04fa5a0aab53cfb5f24f7251c50afe2a0b15ad6f"
+    },
+    {
+      "path": "benchmark/annotations/human_audit_batch_001.csv",
+      "bytes": 66166,
+      "sha256": "defe8656e0f2502b8abfe8b029f801a5c150d994efb49b347b2fa421ba26677f"
+    },
+    {
+      "path": "benchmark/annotations/human_audit_batch_001.jsonl",
+      "bytes": 159219,
+      "sha256": "55fab40135f2f3ffe3ad2e876c844cf4e55c91b491beee96c838679c0f27ee20"
+    },
+    {
+      "path": "benchmark/annotations/human_audit_batch_001_summary.json",
+      "bytes": 1106,
+      "sha256": "5c8d4f25002542674205b32ad5e9417aa9bb5475ee74156dbdd9f2368e5ede7b"
+    },
+    {
+      "path": "benchmark/annotations/human_audit_protocol.md",
+      "bytes": 1092,
+      "sha256": "c6658c767a1762efafa837c24baa9730ef6910724fe7271b795c1f5808442a3b"
     },
     {
       "path": "benchmark/annotations/model_assisted_methodology.md",
@@ -149,9 +169,24 @@
       "sha256": "79409b7abda8413d6c18de15eeb979627f4a468d06c1d6ecb58a9fbe4445cc54"
     },
     {
+      "path": "experiments/__pycache__/analyze_score_slices.cpython-310.pyc",
+      "bytes": 4166,
+      "sha256": "fe139bacb78aef3379f516d663fd143607fed523e07c7eca21cc585956c5c2b7"
+    },
+    {
+      "path": "experiments/__pycache__/build_human_audit_batch.cpython-310.pyc",
+      "bytes": 7798,
+      "sha256": "3934f651e1dc347af651ee32486276df83b721be253e5cc28f5d60afc7b67f75"
+    },
+    {
       "path": "experiments/analyze_score_slices.py",
       "bytes": 3391,
       "sha256": "08ed7900456592583133cb27e0d2a83216244ba6d8655a078a3ffc23a4090065"
+    },
+    {
+      "path": "experiments/build_human_audit_batch.py",
+      "bytes": 9640,
+      "sha256": "7421a1f88d2aab56cce3b05557f02eea40ccb49d838bed8e8c7ebedf8b79642b"
     },
     {
       "path": "experiments/build_intervention_specs.py",
@@ -215,8 +250,8 @@
     },
     {
       "path": "experiments/validate_all.py",
-      "bytes": 3096,
-      "sha256": "eab717eeb4fdd3f70a1d5117014315870519eaab6b58d8986da95b71a4b0888e"
+      "bytes": 3161,
+      "sha256": "cf1797b28b935ddbd78f9c4d70bec1db9168e49a597f717212e18d4493e80a64"
     },
     {
       "path": "experiments/validate_annotations.py",
@@ -227,6 +262,11 @@
       "path": "experiments/validate_benchmark_specs.py",
       "bytes": 895,
       "sha256": "83da3a8a5591eefced3226d81347fd1428bcb95af5ed9c54b60e876cae936374"
+    },
+    {
+      "path": "experiments/validate_human_audit_batch.py",
+      "bytes": 2967,
+      "sha256": "57843c757758f0029ef8eb3947d446cd06cee0ce409cacee109592b7641bfd65"
     },
     {
       "path": "experiments/validate_intervention_outputs.py",
@@ -255,8 +295,8 @@
     },
     {
       "path": "paper/neurips/ConstructionSafety-FaithBench_scaffold.pdf",
-      "bytes": 137466,
-      "sha256": "0d5163b345608b419f5abee814400e3630aa587ac1d2053a576f526d8b646c3d"
+      "bytes": 137582,
+      "sha256": "7823cff83fa89aa1dde84789044940ed79587dd67010ac6efac866c80bfd6ab0"
     },
     {
       "path": "paper/neurips/README.md",
@@ -290,8 +330,8 @@
     },
     {
       "path": "paper/neurips/sections/03_benchmark.tex",
-      "bytes": 1440,
-      "sha256": "e8f3d313b837bff115dd98d12d3c090b4153a2838abf68115591ae42a581b891"
+      "bytes": 1599,
+      "sha256": "bc16c51cb327ca4060e2788a2457072824fd7d2d81d86ceb0f7f6e9b1089d8ed"
     },
     {
       "path": "paper/neurips/sections/04_metrics.tex",
@@ -740,13 +780,13 @@
     },
     {
       "path": "tests/__pycache__/test_faithbench_specs.cpython-310-pytest-8.4.2.pyc",
-      "bytes": 35673,
-      "sha256": "a72df5484d577b9b85f2338aedb25b8f8d24d30bea7a8145fba68ce5b7dcd2e1"
+      "bytes": 38520,
+      "sha256": "6ec5fa1ec27087421965d000633aff7eb43a21b1aa721bb1a1d7a1ebf6346013"
     },
     {
       "path": "tests/test_faithbench_specs.py",
-      "bytes": 19665,
-      "sha256": "d893fb1928a56342f6b27743a2564056965991968e5d02aeb3538297a5421ea2"
+      "bytes": 21282,
+      "sha256": "1c9644df41148018bbb1ac149b32f3befbe3f1229f112a09dea80d5086f132cf"
     }
   ]
 }
