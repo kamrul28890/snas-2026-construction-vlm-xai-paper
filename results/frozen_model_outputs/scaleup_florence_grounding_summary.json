@@ -1,0 +1,11 @@
+{
+  "output_stem": "scaleup_florence_grounding",
+  "row_count": 588,
+  "model_id": "microsoft/Florence-2-base-ft:grounding_pipeline",
+  "prompt_id": "florence_grounding_beam",
+  "decoding": "beam",
+  "answer_counts": {
+    "compliant": 399,
+    "violation": 189
+  }
+}

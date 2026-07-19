@@ -10,7 +10,7 @@ Current built-in adapters are deterministic baselines used to test the harness:
 - `majority_violation`: image-blind majority-class baseline.
 - `caption_keyword`: uses only source captions and rule-specific keywords,
   without image pixels.
-- `pilot_florence_grounding`: runs the local Florence-2 grounding pipeline and
+- `pilot_florence_grounding` / `scaleup_florence_grounding`: run the local Florence-2 grounding pipeline and
   deterministic geometric decision layer.
 
 These outputs are not multi-model VLM benchmark results yet. They are the first

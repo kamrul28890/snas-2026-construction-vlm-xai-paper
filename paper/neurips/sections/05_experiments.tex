@@ -4,9 +4,10 @@ The current Phase 3 harness provides deterministic baselines to validate the ben
 
 \begin{itemize}
 \item \textbf{Annotation bootstrap}: echoes the model-assisted annotation labels and evidence.
+\item \textbf{Florence grounding}: runs the local Florence-2 grounding pipeline from the companion XAI pilot and maps grounded detections through a deterministic geometric decision layer.
 \item \textbf{Manifest seed}: echoes the pilot weak label from the manifest.
 \item \textbf{Majority violation}: image-blind baseline that always predicts violation.
 \item \textbf{Caption keyword}: caption-only leakage baseline using rule-specific keywords and no image pixels.
 \end{itemize}
 
-Future experiments should add open and closed VLM adapters behind the same normalized output schema. Each adapter must record model version, prompt ID, decoding settings, access date, and raw response provenance.
+Future experiments should add instruction-following VLM adapters and, if budget permits, closed VLM adapters behind the same normalized output schema. Each adapter must record model version, prompt ID, decoding settings, access date, and raw response provenance.

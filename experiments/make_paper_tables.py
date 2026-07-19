@@ -37,6 +37,7 @@ def main() -> int:
 
     scaleup_score_files = {
         "Annotation bootstrap": ROOT / "results" / "tables" / "scaleup_annotation_bootstrap_scores.csv",
+        "Florence grounding": ROOT / "results" / "tables" / "scaleup_florence_grounding_scores.csv",
         "Manifest seed": ROOT / "results" / "tables" / "scaleup_manifest_seed_scores.csv",
         "Majority violation": ROOT / "results" / "tables" / "scaleup_majority_violation_scores.csv",
         "Caption keyword": ROOT / "results" / "tables" / "scaleup_caption_keyword_scores.csv",

@@ -1,6 +1,6 @@
 \section{Current Pilot Results}
 
-Table~\ref{tab:pilot-baselines} reports the current deterministic baseline scores against the model-assisted bootstrap annotation layer. These are pipeline-validation numbers, not final benchmark claims.
+Table~\ref{tab:pilot-baselines} reports the current pilot scores against the model-assisted bootstrap annotation layer. These are pipeline-validation numbers, not final benchmark claims.
 
 \begin{table}[h]
 \centering
@@ -20,7 +20,7 @@ Table~\ref{tab:pilot-interventions} summarizes the frozen pilot intervention spe
 
 The current repository therefore validates the benchmark plumbing: manifests, annotations, outputs, interventions, and score tables can be regenerated and checked automatically.
 
-Table~\ref{tab:scaleup-baselines} reports the same deterministic baselines on the scale-up candidate manifest. The caption-keyword baseline is intentionally included as a leakage diagnostic: high performance would suggest that source captions encode too much of the label, while low performance suggests the split cannot be solved by this simple caption-only heuristic.
+Table~\ref{tab:scaleup-baselines} reports the same adapters on the scale-up candidate manifest. The Florence row is the first image-grounded local model output in the repository. The caption-keyword baseline is intentionally included as a leakage diagnostic: high performance would suggest that source captions encode too much of the label, while low performance suggests the split cannot be solved by this simple caption-only heuristic.
 
 \begin{table}[h]
 \centering
