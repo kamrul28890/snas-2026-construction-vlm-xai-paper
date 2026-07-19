@@ -35,6 +35,7 @@ from faithbench.scoring import compare_evidence, normalize_answer
 from faithbench.statistics import bootstrap_ci, holm_adjust, paired_bootstrap_difference
 from experiments.analyze_score_slices import build_slices
 from experiments.build_human_audit_batch import build_batch, priority_for
+from experiments.score_human_audit_status import summarize as summarize_human_audit_status
 
 
 def test_rules_and_prompts_load_and_render():
@@ -462,6 +463,26 @@ def test_human_audit_batch_prioritizes_disagreement_rows():
     assert rows[0]["audit_id"] == "audit_001_0001"
     assert rows[0]["annotator_1_answer_label"] == ""
     assert rows[0]["priority_score"] == "170"
+
+
+def test_human_audit_status_handles_unfilled_and_completed_rows():
+    rows = [
+        {
+            "annotator_1_answer_label": "",
+            "annotator_2_answer_label": "",
+            "adjudicated_answer_label": "",
+        },
+        {
+            "annotator_1_answer_label": "violation",
+            "annotator_2_answer_label": "violation",
+            "adjudicated_answer_label": "violation",
+        },
+    ]
+    summary = summarize_human_audit_status(rows)
+    metrics = {row["metric_id"]: row for row in summary}
+    assert metrics["row_count"]["value"] == "2.0"
+    assert metrics["dual_annotation_completion_rate"]["value"] == "0.5"
+    assert metrics["raw_answer_agreement"]["value"] == "1.0"
 
 
 def test_scaleup_classification_and_rule_choice():

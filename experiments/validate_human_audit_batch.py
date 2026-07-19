@@ -68,6 +68,15 @@ def main() -> int:
         rule_counts[row["rule_id"]] = rule_counts.get(row["rule_id"], 0) + 1
     if rule_counts != summary["rule_counts"]:
         raise RuntimeError(f"Audit rule-count mismatch: {rule_counts} != {summary['rule_counts']}")
+    status_path = ROOT / "results" / "tables" / "human_audit_batch_001_status.csv"
+    if status_path.exists():
+        with status_path.open("r", encoding="utf-8", newline="") as handle:
+            status_rows = list(csv.DictReader(handle))
+        metric_ids = {row["metric_id"] for row in status_rows}
+        required = {"row_count", "dual_annotation_completion_rate", "raw_answer_agreement"}
+        missing = required - metric_ids
+        if missing:
+            raise RuntimeError(f"Audit status file missing metrics: {sorted(missing)}")
     print(f"Validated {len(csv_rows)} human-audit rows from {args.csv}")
     return 0
 

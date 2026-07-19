@@ -1,7 +1,7 @@
 {
   "manifest_version": "0.1.0",
   "description": "Frozen artifact manifest for the ConstructionSafety-FaithBench scaffold.",
-  "artifact_count": 155,
+  "artifact_count": 158,
   "include_roots": [
     "benchmark",
     "experiments",
@@ -179,6 +179,11 @@
       "sha256": "3934f651e1dc347af651ee32486276df83b721be253e5cc28f5d60afc7b67f75"
     },
     {
+      "path": "experiments/__pycache__/score_human_audit_status.cpython-310.pyc",
+      "bytes": 4035,
+      "sha256": "7171fad198dd33e91d721b7aec36ca038318a8347e00dca6d548dcc3eebdf436"
+    },
+    {
       "path": "experiments/analyze_score_slices.py",
       "bytes": 3391,
       "sha256": "08ed7900456592583133cb27e0d2a83216244ba6d8655a078a3ffc23a4090065"
@@ -239,6 +244,11 @@
       "sha256": "edc453d41e38bb2773e8798ea939de955bc60fad78db227b61ae82bf06a6586c"
     },
     {
+      "path": "experiments/score_human_audit_status.py",
+      "bytes": 3231,
+      "sha256": "28932befef4aa2a7c55a716f2dbefd61999d57fdbfc7a4713e7615a4e921804c"
+    },
+    {
       "path": "experiments/score_intervention_outputs.py",
       "bytes": 2148,
       "sha256": "67f57be4b2bbf7bac12dae59d2edca912f5661978f8d560fec99094080914515"
@@ -265,8 +275,8 @@
     },
     {
       "path": "experiments/validate_human_audit_batch.py",
-      "bytes": 2967,
-      "sha256": "57843c757758f0029ef8eb3947d446cd06cee0ce409cacee109592b7641bfd65"
+      "bytes": 3513,
+      "sha256": "d0e20a4c778897db873e08ecbc47ee14f75cbb33d3faf6d97d3cc226b9e9b0d1"
     },
     {
       "path": "experiments/validate_intervention_outputs.py",
@@ -545,8 +555,13 @@
     },
     {
       "path": "results/tables/README.md",
-      "bytes": 3109,
-      "sha256": "f5ce362817080d3941b3722f85da44224cef0f492471e04af2cb9e2a88ca0495"
+      "bytes": 3245,
+      "sha256": "79120c45bfe822b128a08ca39edc5480196cc9c37e2166b88152d0ee7627699a"
+    },
+    {
+      "path": "results/tables/human_audit_batch_001_status.csv",
+      "bytes": 421,
+      "sha256": "422754e225c158fddbb950d727b878baede73e557937e4a8de60be57709147c3"
     },
     {
       "path": "results/tables/pilot_annotation_bootstrap_per_example_scores.csv",
@@ -780,13 +795,13 @@
     },
     {
       "path": "tests/__pycache__/test_faithbench_specs.cpython-310-pytest-8.4.2.pyc",
-      "bytes": 38520,
-      "sha256": "6ec5fa1ec27087421965d000633aff7eb43a21b1aa721bb1a1d7a1ebf6346013"
+      "bytes": 39569,
+      "sha256": "b51c03d1be2fd7c639e2d17ffa3fe16dee3eb061409947e2e7c24b8753359d2f"
     },
     {
       "path": "tests/test_faithbench_specs.py",
-      "bytes": 21282,
-      "sha256": "1c9644df41148018bbb1ac149b32f3befbe3f1229f112a09dea80d5086f132cf"
+      "bytes": 22083,
+      "sha256": "3b507c1a917f1b92ac6a00d227a7a7212e3d899de1bc7183b24888cdba6546e7"
     }
   ]
 }
