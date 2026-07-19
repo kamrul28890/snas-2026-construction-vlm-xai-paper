@@ -22,6 +22,7 @@ from faithbench.metrics import load_annotations, load_jsonl, load_manifest_by_ke
 from faithbench.model_harness import (
     MODEL_OUTPUT_FIELDS,
     adapter_by_name,
+    caption_keyword_answer,
     load_annotations_by_key,
     load_model_inputs,
     run_adapter,
@@ -264,6 +265,17 @@ def test_image_blind_majority_baseline_emits_no_evidence():
     assert rows[0]["answer"] == "violation"
     assert rows[0]["evidence_objects"] == "[]"
     assert rows[0]["provenance"] == "deterministic_baseline_no_image_access"
+
+
+def test_caption_keyword_baseline_predicts_from_caption_only():
+    answer, rationale = caption_keyword_answer(
+        "ppe_hard_hat",
+        "A worker is not wearing a hard hat near concrete forms.",
+    )
+    assert answer == "violation"
+    assert "Caption" in rationale
+    answer, _ = caption_keyword_answer("struck_by_equipment", "An excavator is parked on soil.")
+    assert answer == "compliant"
 
 
 def test_intervention_specs_from_manifest_create_targeted_and_controls():

@@ -18,7 +18,7 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         "--adapter",
-        choices=["majority_violation", "manifest_seed", "annotation_bootstrap"],
+        choices=["majority_violation", "manifest_seed", "annotation_bootstrap", "caption_keyword"],
         default="annotation_bootstrap",
     )
     parser.add_argument(

@@ -35,6 +35,7 @@ def main() -> int:
         "pilot_manifest_seed_scores.csv",
         "pilot_majority_violation_scores.csv",
         "scaleup_annotation_bootstrap_scores.csv",
+        "scaleup_caption_keyword_scores.csv",
         "scaleup_manifest_seed_scores.csv",
         "scaleup_majority_violation_scores.csv",
     ]

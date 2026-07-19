@@ -1,0 +1,14 @@
+{
+  "adapter": "caption_keyword",
+  "model_id": "baseline/caption_keyword_v1",
+  "prompt_id": "caption_only_keywords",
+  "row_count": 588,
+  "jsonl_path": "D:\\My Projects\\society-of-north-american-scholar-paper\\results\\frozen_model_outputs\\scaleup_caption_keyword.jsonl",
+  "csv_path": "D:\\My Projects\\society-of-north-american-scholar-paper\\results\\frozen_model_outputs\\scaleup_caption_keyword.csv",
+  "answer_counts": {
+    "uncertain": 394,
+    "compliant": 190,
+    "violation": 4
+  },
+  "provenance": "caption_only_no_image_pixels"
+}

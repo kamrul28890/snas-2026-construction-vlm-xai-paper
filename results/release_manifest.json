@@ -1,7 +1,7 @@
 {
   "manifest_version": "0.1.0",
   "description": "Frozen artifact manifest for the ConstructionSafety-FaithBench scaffold.",
-  "artifact_count": 113,
+  "artifact_count": 118,
   "include_roots": [
     "benchmark",
     "experiments",
@@ -184,8 +184,8 @@
     },
     {
       "path": "experiments/run_model_harness.py",
-      "bytes": 2629,
-      "sha256": "84c38f53f83c92c475b72ef49f5fddc91022586311724e04de9bd92269313512"
+      "bytes": 2648,
+      "sha256": "edc453d41e38bb2773e8798ea939de955bc60fad78db227b61ae82bf06a6586c"
     },
     {
       "path": "experiments/score_model_outputs.py",
@@ -194,8 +194,8 @@
     },
     {
       "path": "experiments/validate_all.py",
-      "bytes": 2216,
-      "sha256": "805b0152ce2c8edaa40b15fd5183a88848bc6e95d614340a6088bfd8e3125b25"
+      "bytes": 2484,
+      "sha256": "6efa7d71dbca78e9795a35ddb9463c218b210d70fcd0bfc8fbd553d3470a0349"
     },
     {
       "path": "experiments/validate_annotations.py",
@@ -219,8 +219,8 @@
     },
     {
       "path": "experiments/validate_phase4_outputs.py",
-      "bytes": 2152,
-      "sha256": "ff04e9311963828ba95b3583b7f00fb07ba6b07eb1afc16595a0abe6bd1a8760"
+      "bytes": 2198,
+      "sha256": "87ee32a2706c62210eeca0fb6bfbd3b142c265ae4305087170940e37a9cc860e"
     },
     {
       "path": "experiments/validate_scaleup_manifest.py",
@@ -299,8 +299,8 @@
     },
     {
       "path": "results/frozen_model_outputs/README.md",
-      "bytes": 787,
-      "sha256": "8f85eeaa68a1546eccd9dfab8f9f7da6aa6ad73b73591c4ae690753f6eb30355"
+      "bytes": 886,
+      "sha256": "2140cd431dcbb3e8034b917f9b497ac63ace6458c5774395e6d2dc93dfa7f397"
     },
     {
       "path": "results/frozen_model_outputs/pilot_annotation_bootstrap.csv",
@@ -363,6 +363,21 @@
       "sha256": "9032a131ddec5969137a481c87ddc75cff0e78d4ef125bb9a7a49e36574ab466"
     },
     {
+      "path": "results/frozen_model_outputs/scaleup_caption_keyword.csv",
+      "bytes": 247511,
+      "sha256": "d25e07e848525aaf6cdd27730723d2fd7bad1264253fbfd4b80f8caeae88cedb"
+    },
+    {
+      "path": "results/frozen_model_outputs/scaleup_caption_keyword.jsonl",
+      "bytes": 347946,
+      "sha256": "cbe404acb1560725f516870d6bcadc9640139a47e2429c115304d2e7dbd30b69"
+    },
+    {
+      "path": "results/frozen_model_outputs/scaleup_caption_keyword_summary.json",
+      "bytes": 563,
+      "sha256": "1d313b34225562172ee78b83cb8fbff6140c312771ce3cdd06cad1e633ecb92b"
+    },
+    {
       "path": "results/frozen_model_outputs/scaleup_majority_violation.csv",
       "bytes": 114574,
       "sha256": "39880178837c2abb33c469590d3697d7b0e6861d81f85aded7a8d3404b16908a"
@@ -394,8 +409,8 @@
     },
     {
       "path": "results/tables/README.md",
-      "bytes": 1639,
-      "sha256": "8a717f49c9a4699a99a05c40ce45cb8d8e81355102ae0697d81091d00eca29c1"
+      "bytes": 1930,
+      "sha256": "47d1b95558f98a1e5c92cc2ee8d6c92f716f50c817b4530ad35b706d8a6f1351"
     },
     {
       "path": "results/tables/pilot_annotation_bootstrap_per_example_scores.csv",
@@ -436,6 +451,16 @@
       "path": "results/tables/scaleup_annotation_bootstrap_scores.csv",
       "bytes": 414,
       "sha256": "bcd6a3f44d03184054ea830d9b9aef1794658dce6319b1f39cdbdfb0ad84e343"
+    },
+    {
+      "path": "results/tables/scaleup_caption_keyword_per_example_scores.csv",
+      "bytes": 76163,
+      "sha256": "db590de5fb628a458c146181b7288c3479de54f298eee9eb405f244a3277176a"
+    },
+    {
+      "path": "results/tables/scaleup_caption_keyword_scores.csv",
+      "bytes": 442,
+      "sha256": "50493b34ecf08f68dd48aabfff94cd57a1d437a2e62a60cd94e82db05d94b136"
     },
     {
       "path": "results/tables/scaleup_majority_violation_per_example_scores.csv",
@@ -494,8 +519,8 @@
     },
     {
       "path": "src/faithbench/__pycache__/model_harness.cpython-310.pyc",
-      "bytes": 8237,
-      "sha256": "a52a6c2e4b8cb5f480879d6ab33811b2221fd542426a9ef462bb6ebd47cba1b8"
+      "bytes": 11214,
+      "sha256": "a332296036e98c42a96cce1b67dd29ad4f2283f45904f6a7c5986aabf1e5186a"
     },
     {
       "path": "src/faithbench/__pycache__/scaleup.cpython-310.pyc",
@@ -544,8 +569,8 @@
     },
     {
       "path": "src/faithbench/model_harness.py",
-      "bytes": 8634,
-      "sha256": "8b450224efa5c15e020ae7244bb833dbf8f03b644c1ccb7c171263afdbf9e445"
+      "bytes": 11751,
+      "sha256": "7a90020d9bc66873c41551c43d446c1b1de6770dc40d5a76552c2f3900c524aa"
     },
     {
       "path": "src/faithbench/scaleup.py",
@@ -574,8 +599,8 @@
     },
     {
       "path": "tests/test_faithbench_specs.py",
-      "bytes": 15365,
-      "sha256": "f944af913f45d6a249c49a7294e0f6c7eeedf152e7558d12064b6ca6bc165e71"
+      "bytes": 15801,
+      "sha256": "4ecc20141373a3c7fb804037f85a80aec8e49bd6d8a13a36cd9c34b28c6d7a9c"
     }
   ]
 }

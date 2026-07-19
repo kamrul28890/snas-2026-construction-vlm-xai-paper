@@ -29,6 +29,7 @@ Start with:
 - one open instruction/VQA VLM;
 - one stronger open multimodal reasoning model;
 - one detector-only or Florence-style pipeline baseline;
+- one caption-only leakage baseline;
 - the existing image-blind majority baseline.
 
 Add closed models only after budget, data-sharing, and API logging constraints
@@ -52,4 +53,3 @@ User or advisor input is needed before:
 - recruiting or naming human/domain annotators;
 - publishing raw image-derived artifacts publicly;
 - claiming any result as human-ground-truth validated.
-

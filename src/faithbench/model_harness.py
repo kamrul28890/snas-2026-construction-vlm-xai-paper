@@ -126,6 +126,30 @@ class ManifestSeedBaseline:
         )
 
 
+class CaptionKeywordBaseline:
+    """Caption-only baseline for leakage and shortcut checks."""
+
+    model_id = "baseline/caption_keyword_v1"
+    prompt_id = "caption_only_keywords"
+
+    def predict(self, item: ModelInput) -> ModelOutput:
+        caption = item.manifest_row.get("image_caption", "")
+        answer, rationale = caption_keyword_answer(item.rule_id, caption)
+        return ModelOutput(
+            image_id=item.image_id,
+            rule_id=item.rule_id,
+            model_id=self.model_id,
+            prompt_id=self.prompt_id,
+            answer=answer,
+            evidence_objects=[],
+            evidence_regions_xyxy=[],
+            rationale=rationale,
+            confidence=None,
+            raw_response=json.dumps({"caption": caption, "answer": answer}, separators=(",", ":")),
+            provenance="caption_only_no_image_pixels",
+        )
+
+
 class AnnotationBootstrapAdapter:
     """Baseline that echoes completed model-assisted annotation rows."""
 
@@ -201,11 +225,54 @@ def adapter_by_name(name: str, *, annotations_path: Path | None = None) -> Model
         return MajorityViolationBaseline()
     if name == "manifest_seed":
         return ManifestSeedBaseline()
+    if name == "caption_keyword":
+        return CaptionKeywordBaseline()
     if name == "annotation_bootstrap":
         if annotations_path is None:
             raise ValueError("annotation_bootstrap requires annotations_path")
         return AnnotationBootstrapAdapter(load_annotations_by_key(annotations_path))
     raise KeyError(f"Unknown model adapter: {name}")
+
+
+def caption_keyword_answer(rule_id: str, caption: str) -> tuple[str, str]:
+    """Return a rule-specific caption-only keyword prediction."""
+    text = caption.lower()
+    negative_terms = [
+        "without",
+        "not wearing",
+        "no hard hat",
+        "no helmet",
+        "missing",
+        "unprotected",
+        "unsafe",
+        "near excavator",
+        "close to excavator",
+        "edge without",
+        "opening not protected",
+    ]
+    if any(term in text for term in negative_terms):
+        return "violation", "Caption contains violation-like wording."
+    if rule_id == "ppe_hard_hat":
+        if any(term in text for term in ["hard hat", "helmet", "head protection"]):
+            return "compliant", "Caption mentions head protection without violation wording."
+        if "worker" in text:
+            return "uncertain", "Caption mentions workers but no head-protection evidence."
+    if rule_id == "fall_harness":
+        if any(term in text for term in ["harness", "fall protection", "lanyard"]):
+            return "compliant", "Caption mentions fall-protection equipment without violation wording."
+        if any(term in text for term in ["height", "roof", "scaffold", "ladder"]):
+            return "uncertain", "Caption suggests height context but no harness evidence."
+    if rule_id == "guardrail_edge":
+        if any(term in text for term in ["guardrail", "barrier", "protected"]):
+            return "compliant", "Caption mentions edge protection without violation wording."
+        if any(term in text for term in ["edge", "opening", "pit", "rebar cage"]):
+            return "uncertain", "Caption suggests edge/opening context but no protection evidence."
+    if rule_id == "struck_by_equipment":
+        if any(term in text for term in ["excavator", "crane", "loader", "truck", "equipment"]):
+            if "worker" in text or "workers" in text:
+                return "uncertain", "Caption mentions workers and heavy equipment but no distance evidence."
+            return "compliant", "Caption mentions equipment without worker-proximity evidence."
+    return "uncertain", "Caption lacks enough rule-specific evidence."
 
 
 def run_adapter(adapter: ModelAdapter, items: list[ModelInput]) -> list[dict[str, str]]:
@@ -245,4 +312,3 @@ def write_model_outputs(rows: list[dict[str, str]], *, jsonl_path: Path, csv_pat
         writer = csv.DictWriter(handle, fieldnames=MODEL_OUTPUT_FIELDS)
         writer.writeheader()
         writer.writerows(rows)
-

@@ -8,6 +8,8 @@ Current built-in adapters are deterministic baselines used to test the harness:
 - `annotation_bootstrap`: echoes model-assisted/source-metadata annotations.
 - `manifest_seed`: echoes the weak manifest answer seed.
 - `majority_violation`: image-blind majority-class baseline.
+- `caption_keyword`: uses only source captions and rule-specific keywords,
+  without image pixels.
 
 These outputs are not multi-model VLM benchmark results yet. They are the first
 validated harness artifacts for Phase 3.
