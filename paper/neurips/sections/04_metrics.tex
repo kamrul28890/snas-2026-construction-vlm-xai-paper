@@ -1,0 +1,13 @@
+\section{Metrics}
+
+The benchmark separates answer-level metrics from evidence-level metrics.
+
+\paragraph{Answer metrics.}
+The current scoring code reports answer accuracy, macro-F1 over compliant and violation labels, invalid-output rate, and nonambiguous-example accuracy.
+
+\paragraph{Evidence metrics.}
+The current scoring code reports evidence presence and best evidence IoU against the bootstrap reference boxes. The broader intervention audit also tracks normalized centroid drift and disappearance, which are needed because IoU is size-sensitive for small PPE objects.
+
+\paragraph{Intervention metrics.}
+Each row with a target box receives one targeted occlusion and five same-size matched-random occlusions. The key comparison is whether the rule-relevant intervention changes answers or evidence more than the matched control.
+

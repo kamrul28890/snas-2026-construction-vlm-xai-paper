@@ -1,0 +1,9 @@
+\section{Benchmark}
+
+Each benchmark example consists of an image identifier, source dataset revision, safety rule, expected answer seed, evidence metadata, and annotation fields. The first implemented rule families are hard-hat/PPE compliance, harness/fall protection, guardrail/edge protection, and struck-by/equipment proximity.
+
+The pilot manifest contains 163 image-rule pairs from the ConstructionSite test split. It preserves both legacy rule IDs and normalized benchmark rule IDs so the benchmark remains traceable to the original pilot artifacts.
+
+\paragraph{Annotation status.}
+The current completed annotation files are model-assisted bootstrap annotations generated from ConstructionSite metadata, captions, source rule-violation records, and pilot target boxes. They are useful for pipeline validation and triage, but they are not independent human ground truth. A NeurIPS-level version must add domain-audited annotations with agreement statistics.
+

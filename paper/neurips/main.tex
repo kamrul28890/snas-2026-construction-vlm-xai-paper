@@ -1,0 +1,34 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage[numbers]{natbib}
+
+\title{ConstructionSafety-FaithBench: Counterfactual Evaluation of Visual-Evidence Faithfulness in Vision-Language Safety Inspection}
+\author{Anonymous Authors}
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Construction-safety vision-language models are commonly evaluated by final answers, textual rationales, or grounding overlap. These signals can overstate whether a system uses rule-relevant visual evidence. We introduce the working scaffold for ConstructionSafety-FaithBench, a benchmark and audit protocol for separating answer correctness from visual-evidence faithfulness under targeted and matched-control interventions. The current repository implements the pilot benchmark manifest, model-assisted bootstrap annotations, normalized model-output schema, deterministic baselines, intervention specifications, and scoring code. The current annotation layer is not human ground truth; it is a source-metadata-assisted bootstrap used to validate the pipeline before independent domain annotation and multi-model VLM experiments.
+\end{abstract}
+
+\input{sections/01_introduction}
+\input{sections/02_related_work}
+\input{sections/03_benchmark}
+\input{sections/04_metrics}
+\input{sections/05_experiments}
+\input{sections/06_results}
+\input{sections/07_limitations_ethics}
+
+\bibliographystyle{plainnat}
+\bibliography{references}
+
+\appendix
+\input{appendix}
+
+\end{document}
+

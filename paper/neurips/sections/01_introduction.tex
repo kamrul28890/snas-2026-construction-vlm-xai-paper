@@ -1,0 +1,11 @@
+\section{Introduction}
+
+Vision-language models may support construction-safety review by linking site imagery to natural-language safety rules. However, a correct or stable final answer does not establish that the model relied on the right visual evidence. This gap matters in safety inspection: a warning is less useful if the cited evidence moves from a hard hat to unrelated background scaffolding, or if the model ignores a counterfactual edit to the rule-relevant object.
+
+The current pilot study found that targeted occlusion changed answers more often than same-size random controls and that IoU-based drift can be distorted by object size. These observations motivate a broader benchmark contribution rather than a single-model feasibility report.
+
+ConstructionSafety-FaithBench is designed to evaluate whether model answers, evidence regions, and rationales remain aligned under counterfactual interventions. The benchmark is currently implemented as a reproducible pilot scaffold; the next research step is to expand it to multiple VLMs, larger splits, and independent human/domain annotation.
+
+\paragraph{Current contributions in this repository.}
+The repository currently provides: (i) a normalized construction-safety rule specification, (ii) a 163-example pilot manifest, (iii) model-assisted bootstrap annotations, (iv) normalized model-output schema and deterministic baselines, (v) frozen targeted and matched-random intervention specs, and (vi) scoring scripts for answer and evidence metrics.
+

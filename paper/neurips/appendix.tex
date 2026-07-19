@@ -1,0 +1,24 @@
+\section{Artifact Map}
+
+Key artifacts:
+
+\begin{itemize}
+\item \texttt{benchmark/rules.json}: normalized safety rules.
+\item \texttt{benchmark/splits/}: pilot image-rule manifest.
+\item \texttt{benchmark/annotations/}: bootstrap annotation templates and completed model-assisted annotations.
+\item \texttt{benchmark/interventions/}: frozen intervention specs.
+\item \texttt{results/frozen\_model\_outputs/}: normalized baseline outputs.
+\item \texttt{results/tables/}: generated score tables.
+\end{itemize}
+
+\section{Regeneration Commands}
+
+\begin{verbatim}
+python .\experiments\build_pilot_manifest.py
+python .\experiments\build_model_assisted_annotations.py
+python .\experiments\run_model_harness.py --adapter annotation_bootstrap
+python .\experiments\build_intervention_specs.py
+python .\experiments\score_model_outputs.py
+python .\experiments\validate_phase4_outputs.py
+python -m pytest .\analysis\tests .\tests -q
+\end{verbatim}

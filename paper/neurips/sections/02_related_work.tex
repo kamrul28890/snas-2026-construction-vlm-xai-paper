@@ -1,0 +1,10 @@
+\section{Related Work}
+
+\paragraph{Construction-safety VLMs.}
+Recent construction-safety VLM work evaluates hazard identification, safety-rule VQA, grounding, and caption quality. ConstructionSite 10k is the closest dataset foundation for this project because it includes construction images, rule-violation records, captions, and visual grounding metadata \citep{chen2025constructionsite}. Florence-2 is relevant to the current pilot because it supports prompted grounding and detection-style outputs \citep{xiao2024florence}.
+
+\paragraph{Faithfulness and rationales.}
+Prior XAI and VLM literature shows that plausible explanations are not necessarily faithful. Attention, textual rationales, and final-answer correctness must therefore be treated as separate evidence channels \citep{jain2019attention}. Counterfactual and perturbation-based evaluation is especially relevant when the claim concerns whether a model uses the cited visual evidence.
+
+\paragraph{Evaluation and datasets.}
+The intended top-tier framing is an evaluation artifact: a benchmark, intervention protocol, scoring suite, and failure taxonomy. This aligns more closely with an Evaluations \& Datasets contribution than with a new-model contribution unless a faithfulness-improving method is added later. The safety framing follows the broader risk-management emphasis on documented limits, measurement, and appropriate use \citep{nist2023airmf}.

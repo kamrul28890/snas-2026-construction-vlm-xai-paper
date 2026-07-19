@@ -1,0 +1,22 @@
+\section{Current Pilot Results}
+
+Table~\ref{tab:pilot-baselines} reports the current deterministic baseline scores against the model-assisted bootstrap annotation layer. These are pipeline-validation numbers, not final benchmark claims.
+
+\begin{table}[h]
+\centering
+\caption{Pilot baseline scores against model-assisted bootstrap annotations.}
+\label{tab:pilot-baselines}
+\input{tables/pilot_baseline_scores}
+\end{table}
+
+Table~\ref{tab:pilot-interventions} summarizes the frozen pilot intervention specifications. These specs can be consumed by future model runners to produce targeted-versus-control faithfulness results.
+
+\begin{table}[h]
+\centering
+\caption{Frozen pilot intervention specifications.}
+\label{tab:pilot-interventions}
+\input{tables/pilot_intervention_counts}
+\end{table}
+
+The current repository therefore validates the benchmark plumbing: manifests, annotations, outputs, interventions, and score tables can be regenerated and checked automatically.
+
