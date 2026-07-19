@@ -13,6 +13,14 @@ from faithbench.annotation import ANNOTATOR_ID, model_assisted_annotation, norma
 from faithbench.geometry import clip_box, normalized_centroid_drift, same_size_random_box
 from faithbench.interventions import matched_random_occlusion_spec, targeted_occlusion_spec
 from faithbench.manifest import LEGACY_RULE_MAP, build_pilot_manifest, evidence_size_band
+from faithbench.model_harness import (
+    MODEL_OUTPUT_FIELDS,
+    adapter_by_name,
+    load_annotations_by_key,
+    load_model_inputs,
+    run_adapter,
+    validate_output_row,
+)
 from faithbench.schema import load_prompts, load_rules
 from faithbench.scoring import compare_evidence, normalize_answer
 from faithbench.statistics import bootstrap_ci, holm_adjust, paired_bootstrap_difference
@@ -194,3 +202,44 @@ def test_checked_in_model_assisted_annotations_are_complete_and_labeled():
         assert row["applies_to_image"] in {"yes", "no", "uncertain"}
         assert row["ambiguous"] in {"yes", "no"}
         assert row["evidence_regions_xyxy"].startswith("[")
+
+
+def test_model_output_schema_file_lists_required_fields():
+    schema_path = ROOT / "benchmark" / "model_output_schema.json"
+    with schema_path.open("r", encoding="utf-8") as handle:
+        schema = json.load(handle)
+    assert schema["required_fields"] == MODEL_OUTPUT_FIELDS
+    assert "invalid" in schema["answer_values"]
+
+
+def test_model_harness_runs_annotation_bootstrap_adapter():
+    rules = load_rules(ROOT / "benchmark" / "rules.json")
+    items = load_model_inputs(
+        ROOT / "benchmark" / "splits" / "pilot_manifest.csv",
+        {rule.rule_id: rule for rule in rules.rules},
+    )
+    annotations = load_annotations_by_key(
+        ROOT / "benchmark" / "annotations" / "pilot_model_assisted_annotations.jsonl"
+    )
+    adapter = adapter_by_name(
+        "annotation_bootstrap",
+        annotations_path=ROOT / "benchmark" / "annotations" / "pilot_model_assisted_annotations.jsonl",
+    )
+    rows = run_adapter(adapter, items[:3])
+    assert len(rows) == 3
+    assert len(annotations) == 163
+    assert rows[0]["answer"] == "violation"
+    assert rows[0]["model_id"] == "baseline/model_assisted_annotation_v1"
+    validate_output_row(rows[0])
+
+
+def test_image_blind_majority_baseline_emits_no_evidence():
+    rules = load_rules(ROOT / "benchmark" / "rules.json")
+    items = load_model_inputs(
+        ROOT / "benchmark" / "splits" / "pilot_manifest.csv",
+        {rule.rule_id: rule for rule in rules.rules},
+    )
+    rows = run_adapter(adapter_by_name("majority_violation"), items[:1])
+    assert rows[0]["answer"] == "violation"
+    assert rows[0]["evidence_objects"] == "[]"
+    assert rows[0]["provenance"] == "deterministic_baseline_no_image_access"

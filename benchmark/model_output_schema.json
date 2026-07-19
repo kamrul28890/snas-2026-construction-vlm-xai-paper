@@ -1,0 +1,27 @@
+{
+  "schema_version": "0.1.0",
+  "prepared_on": "2026-07-19",
+  "description": "Normalized model output schema for ConstructionSafety-FaithBench.",
+  "required_fields": [
+    "image_id",
+    "rule_id",
+    "model_id",
+    "prompt_id",
+    "answer",
+    "evidence_objects",
+    "evidence_regions_xyxy",
+    "rationale",
+    "confidence",
+    "raw_response",
+    "provenance"
+  ],
+  "answer_values": ["compliant", "violation", "uncertain", "invalid"],
+  "coordinate_format": "absolute_xyxy",
+  "notes": [
+    "evidence_objects is a JSON array of strings",
+    "evidence_regions_xyxy is a JSON array of absolute-pixel boxes",
+    "confidence may be null when unavailable",
+    "raw_response should preserve enough original model output for audit"
+  ]
+}
+
