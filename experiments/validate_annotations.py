@@ -5,15 +5,37 @@ from __future__ import annotations
 import csv
 import json
 from pathlib import Path
+import argparse
 
 
 ROOT = Path(__file__).resolve().parents[1]
 
 
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--jsonl",
+        type=Path,
+        default=ROOT / "benchmark" / "annotations" / "pilot_model_assisted_annotations.jsonl",
+    )
+    parser.add_argument(
+        "--csv",
+        type=Path,
+        default=ROOT / "benchmark" / "annotations" / "pilot_model_assisted_annotations.csv",
+    )
+    parser.add_argument(
+        "--summary",
+        type=Path,
+        default=ROOT / "benchmark" / "annotations" / "pilot_model_assisted_annotation_summary.json",
+    )
+    return parser.parse_args()
+
+
 def main() -> int:
-    annotation_path = ROOT / "benchmark" / "annotations" / "pilot_model_assisted_annotations.jsonl"
-    csv_path = ROOT / "benchmark" / "annotations" / "pilot_model_assisted_annotations.csv"
-    summary_path = ROOT / "benchmark" / "annotations" / "pilot_model_assisted_annotation_summary.json"
+    args = parse_args()
+    annotation_path = args.jsonl
+    csv_path = args.csv
+    summary_path = args.summary
     with annotation_path.open("r", encoding="utf-8") as handle:
         rows = [json.loads(line) for line in handle if line.strip()]
     with csv_path.open("r", encoding="utf-8", newline="") as handle:

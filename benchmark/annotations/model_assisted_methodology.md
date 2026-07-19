@@ -8,6 +8,10 @@ The files `pilot_model_assisted_annotations.jsonl` and
 `pilot_model_assisted_annotations.csv` are complete bootstrap annotations for
 the 163-image pilot manifest.
 
+The files `scaleup_model_assisted_annotations.jsonl` and
+`scaleup_model_assisted_annotations.csv` are complete bootstrap annotations for
+the 588-row scale-up candidate manifest.
+
 They are not human ground truth. They should be described as
 model-assisted/source-metadata-assisted annotations.
 
@@ -48,4 +52,3 @@ selection for compliant examples.
 
 Before using these rows as evidence in a NeurIPS-scale paper, complete an
 independent human/domain audit on a stratified subset and report agreement.
-

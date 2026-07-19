@@ -1,0 +1,14 @@
+{
+  "annotation_version": "0.1.0-model-assisted",
+  "annotator_id": "gpt5_model_assisted_metadata_v1",
+  "row_count": 588,
+  "provenance": "Generated from scale-up candidate manifest metadata. This is not human/domain-expert ground truth.",
+  "answer_counts": {
+    "compliant": 250,
+    "violation": 338
+  },
+  "ambiguous_counts": {
+    "yes": 415,
+    "no": 173
+  }
+}

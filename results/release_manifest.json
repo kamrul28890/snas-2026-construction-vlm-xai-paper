@@ -1,7 +1,7 @@
 {
   "manifest_version": "0.1.0",
   "description": "Frozen artifact manifest for the ConstructionSafety-FaithBench scaffold.",
-  "artifact_count": 92,
+  "artifact_count": 113,
   "include_roots": [
     "benchmark",
     "experiments",
@@ -24,8 +24,8 @@
     },
     {
       "path": "benchmark/annotations/model_assisted_methodology.md",
-      "bytes": 1731,
-      "sha256": "99842f26c099ef013c960bf972ff2c4510e992f841d2fd08521bf8ac141659c2"
+      "bytes": 1909,
+      "sha256": "2930c96d60ab7448bb2ded012879e0a261857eac44fb40101f07df7cc0019721"
     },
     {
       "path": "benchmark/annotations/pilot_annotation_template.csv",
@@ -51,6 +51,31 @@
       "path": "benchmark/annotations/pilot_model_assisted_annotations.jsonl",
       "bytes": 113115,
       "sha256": "a8f94646bff89ea75c9b3d1d5494b897e2d25f4fda0c2bd1e80cf4d01befb48f"
+    },
+    {
+      "path": "benchmark/annotations/scaleup_annotation_template.csv",
+      "bytes": 65449,
+      "sha256": "faa1f5d58920b770e2e483d0a5bafacb20b4f4d77b02aee6fa19a8079d5a8ed6"
+    },
+    {
+      "path": "benchmark/annotations/scaleup_annotation_template.jsonl",
+      "bytes": 244545,
+      "sha256": "0c2eb3eeb96a505d4fe1bf65ed706ec0ec0f787f7e0cd9a64c713e6923638bf7"
+    },
+    {
+      "path": "benchmark/annotations/scaleup_model_assisted_annotation_summary.json",
+      "bytes": 384,
+      "sha256": "64c0ef2bdac366a18fe881754e20933f5f720bccc284423a0bbcc48c68b14544"
+    },
+    {
+      "path": "benchmark/annotations/scaleup_model_assisted_annotations.csv",
+      "bytes": 231944,
+      "sha256": "61b689a61882888a7b88c196f03efd312d95c9d27810e26938ad09f04a174258"
+    },
+    {
+      "path": "benchmark/annotations/scaleup_model_assisted_annotations.jsonl",
+      "bytes": 408014,
+      "sha256": "200db376185241b31fe8c1bd3609e82d47d2946755c96018a98c03be7b619ab8"
     },
     {
       "path": "benchmark/data_card.md",
@@ -143,6 +168,11 @@
       "sha256": "d444fd1e9d56f881fe35d570bcbfae98a86e29c6abc83039bfefc2b24f01aba4"
     },
     {
+      "path": "experiments/build_scaleup_annotations.py",
+      "bytes": 5449,
+      "sha256": "3daf541ecad9f9290da52e1f67b5237bbac568a192262a6fdb8ef3d059d9a41b"
+    },
+    {
       "path": "experiments/build_scaleup_candidate_manifest.py",
       "bytes": 2701,
       "sha256": "e4d7e7d334a16e116d3fa9ef94bdbc57d72b4dc8d3a7a87fa19812db467f8379"
@@ -154,23 +184,23 @@
     },
     {
       "path": "experiments/run_model_harness.py",
-      "bytes": 2345,
-      "sha256": "e26a39d4c8d32d57c19bafdfa09f20cec3ae89a9c960257c053eacd2be5ee898"
+      "bytes": 2629,
+      "sha256": "84c38f53f83c92c475b72ef49f5fddc91022586311724e04de9bd92269313512"
     },
     {
       "path": "experiments/score_model_outputs.py",
-      "bytes": 1596,
-      "sha256": "33ffe529639dfb48c0c1ca9b9aa468fbd6dfc94fe028ce8eb8cc8344d8f97de8"
+      "bytes": 1786,
+      "sha256": "ef7c16f7fabfa957651c7c12f0c6cc2d5daa291d2db820b68bd78c1453006a4f"
     },
     {
       "path": "experiments/validate_all.py",
-      "bytes": 1020,
-      "sha256": "0b745a05008daf72ce5a5cac0f745df87b53853c29f161cd89cd352d832d1543"
+      "bytes": 2216,
+      "sha256": "805b0152ce2c8edaa40b15fd5183a88848bc6e95d614340a6088bfd8e3125b25"
     },
     {
       "path": "experiments/validate_annotations.py",
-      "bytes": 1894,
-      "sha256": "93cb088e68e1f6f514729e70b0dee3e1fe5a3b3112531bdfe32aa93246d9d40e"
+      "bytes": 2356,
+      "sha256": "60e16b9ac9f2a298132b79ffb67bb111e400956123b1bb60edc1041780048cc6"
     },
     {
       "path": "experiments/validate_benchmark_specs.py",
@@ -189,8 +219,8 @@
     },
     {
       "path": "experiments/validate_phase4_outputs.py",
-      "bytes": 2009,
-      "sha256": "004be60677e5d9770f128ca0325ae105208b40e6ab8b58012dc2de9cedfffc2d"
+      "bytes": 2152,
+      "sha256": "ff04e9311963828ba95b3583b7f00fb07ba6b07eb1afc16595a0abe6bd1a8760"
     },
     {
       "path": "experiments/validate_scaleup_manifest.py",
@@ -269,8 +299,8 @@
     },
     {
       "path": "results/frozen_model_outputs/README.md",
-      "bytes": 692,
-      "sha256": "10b82bec2689a90be12ff57963784aa311aa5bae647a5632fb88e8a96d22f4ec"
+      "bytes": 787,
+      "sha256": "8f85eeaa68a1546eccd9dfab8f9f7da6aa6ad73b73591c4ae690753f6eb30355"
     },
     {
       "path": "results/frozen_model_outputs/pilot_annotation_bootstrap.csv",
@@ -318,9 +348,54 @@
       "sha256": "9f25e69d6952400abf8af924be6b3dbc4e590f0fdd1bb1131bd89755de0c60e4"
     },
     {
+      "path": "results/frozen_model_outputs/scaleup_annotation_bootstrap.csv",
+      "bytes": 660818,
+      "sha256": "92c9b058a7d182c43cb12c748331379a3e5292fd2ad3654f45eefcb2e3552272"
+    },
+    {
+      "path": "results/frozen_model_outputs/scaleup_annotation_bootstrap.jsonl",
+      "bytes": 758212,
+      "sha256": "742d6852eb8f65f080dd58b631099a2ba7c711a011fa38be7c730e478f19fed7"
+    },
+    {
+      "path": "results/frozen_model_outputs/scaleup_annotation_bootstrap_summary.json",
+      "bytes": 590,
+      "sha256": "9032a131ddec5969137a481c87ddc75cff0e78d4ef125bb9a7a49e36574ab466"
+    },
+    {
+      "path": "results/frozen_model_outputs/scaleup_majority_violation.csv",
+      "bytes": 114574,
+      "sha256": "39880178837c2abb33c469590d3697d7b0e6861d81f85aded7a8d3404b16908a"
+    },
+    {
+      "path": "results/frozen_model_outputs/scaleup_majority_violation.jsonl",
+      "bytes": 214994,
+      "sha256": "c884595ca566de370b3ce8bab0d112aa160e83f49265327634597888fdfdcffd"
+    },
+    {
+      "path": "results/frozen_model_outputs/scaleup_majority_violation_summary.json",
+      "bytes": 537,
+      "sha256": "21eb9946def627c476be4fceb4a8ec68faaca48848bf1db176da21255d29df30"
+    },
+    {
+      "path": "results/frozen_model_outputs/scaleup_manifest_seed.csv",
+      "bytes": 121042,
+      "sha256": "50007f834df3a5a6cefc2e83ff0a06b2c50dd2b298ab41aec81c8f4cccc0dee9"
+    },
+    {
+      "path": "results/frozen_model_outputs/scaleup_manifest_seed.jsonl",
+      "bytes": 221462,
+      "sha256": "ce48e3d89674dd0ee373b0496523695653904c0fe25295d107cd062a275ae50a"
+    },
+    {
+      "path": "results/frozen_model_outputs/scaleup_manifest_seed_summary.json",
+      "bytes": 522,
+      "sha256": "825a7c1107aea39da86cda1a6559ca72c4ef772e90a3b13e17c9bbdc84c41113"
+    },
+    {
       "path": "results/tables/README.md",
-      "bytes": 755,
-      "sha256": "0f9ca8b90606a2612529d8e1d3896d7b9d9c43682ab18f12464bb9d46fa0d802"
+      "bytes": 1639,
+      "sha256": "8a717f49c9a4699a99a05c40ce45cb8d8e81355102ae0697d81091d00eca29c1"
     },
     {
       "path": "results/tables/pilot_annotation_bootstrap_per_example_scores.csv",
@@ -351,6 +426,36 @@
       "path": "results/tables/pilot_manifest_seed_scores.csv",
       "bytes": 393,
       "sha256": "fe1ce893e2bbdccb5216a8c668c5e50b256376452b50a408acaab0c4dae4b211"
+    },
+    {
+      "path": "results/tables/scaleup_annotation_bootstrap_per_example_scores.csv",
+      "bytes": 82668,
+      "sha256": "696e47e285764fe3bc39bce2ff0e0d1b4dd12942c83596c9421495ebcd6cb0c2"
+    },
+    {
+      "path": "results/tables/scaleup_annotation_bootstrap_scores.csv",
+      "bytes": 414,
+      "sha256": "bcd6a3f44d03184054ea830d9b9aef1794658dce6319b1f39cdbdfb0ad84e343"
+    },
+    {
+      "path": "results/tables/scaleup_majority_violation_per_example_scores.csv",
+      "bytes": 75353,
+      "sha256": "dc88f09ecfdcbec0f63bf06d1f091b00177ad0e937af7e229fd2a75335e41347"
+    },
+    {
+      "path": "results/tables/scaleup_majority_violation_scores.csv",
+      "bytes": 439,
+      "sha256": "ce257142c24d666e69118fe7719249061c8b85f70dc77af96317b36138fc01f0"
+    },
+    {
+      "path": "results/tables/scaleup_manifest_seed_per_example_scores.csv",
+      "bytes": 69811,
+      "sha256": "74bd248d289fcc19b2bdcf0b40aaa2c55b5be7103e2d15ec1b8fa56bbfb48c8a"
+    },
+    {
+      "path": "results/tables/scaleup_manifest_seed_scores.csv",
+      "bytes": 394,
+      "sha256": "8c2107f4dd178dd4fb7fc59d84c058b895032992ed2fd9cf7170387021ddf456"
     },
     {
       "path": "src/faithbench/__init__.py",
@@ -464,13 +569,13 @@
     },
     {
       "path": "tests/__pycache__/test_faithbench_specs.cpython-310-pytest-8.4.2.pyc",
-      "bytes": 28062,
-      "sha256": "2e51093479f6f409e297c5ce18c9b41b17048bfbf939cb809c9f0c56d5eb00c6"
+      "bytes": 32431,
+      "sha256": "455cc88e9be4019c7f865529ecfd74cdf7c26efe3958d6e526c1f267524a55d5"
     },
     {
       "path": "tests/test_faithbench_specs.py",
-      "bytes": 14603,
-      "sha256": "9584c5541477ccc6fae977c678d5f4ee0892021adcfa5fc1defa363e9351d401"
+      "bytes": 15365,
+      "sha256": "f944af913f45d6a249c49a7294e0f6c7eeedf152e7558d12064b6ca6bc165e71"
     }
   ]
 }

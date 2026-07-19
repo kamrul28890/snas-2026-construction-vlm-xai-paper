@@ -1,0 +1,13 @@
+{
+  "adapter": "manifest_seed",
+  "model_id": "baseline/manifest_seed_v1",
+  "prompt_id": "manifest_seed",
+  "row_count": 588,
+  "jsonl_path": "D:\\My Projects\\society-of-north-american-scholar-paper\\results\\frozen_model_outputs\\scaleup_manifest_seed.jsonl",
+  "csv_path": "D:\\My Projects\\society-of-north-american-scholar-paper\\results\\frozen_model_outputs\\scaleup_manifest_seed.csv",
+  "answer_counts": {
+    "compliant": 250,
+    "violation": 338
+  },
+  "provenance": "weak_label_manifest_seed"
+}

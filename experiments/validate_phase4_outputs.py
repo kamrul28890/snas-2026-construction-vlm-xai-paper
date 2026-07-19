@@ -34,6 +34,9 @@ def main() -> int:
         "pilot_annotation_bootstrap_scores.csv",
         "pilot_manifest_seed_scores.csv",
         "pilot_majority_violation_scores.csv",
+        "scaleup_annotation_bootstrap_scores.csv",
+        "scaleup_manifest_seed_scores.csv",
+        "scaleup_majority_violation_scores.csv",
     ]
     for filename in expected_score_files:
         rows = _read_csv(ROOT / "results" / "tables" / filename)
@@ -48,4 +51,3 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-

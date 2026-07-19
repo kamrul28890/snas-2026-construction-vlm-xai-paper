@@ -211,6 +211,20 @@ def test_checked_in_model_assisted_annotations_are_complete_and_labeled():
         assert row["evidence_regions_xyxy"].startswith("[")
 
 
+def test_checked_in_scaleup_annotations_are_complete_and_labeled():
+    annotation_path = ROOT / "benchmark" / "annotations" / "scaleup_model_assisted_annotations.jsonl"
+    summary_path = ROOT / "benchmark" / "annotations" / "scaleup_model_assisted_annotation_summary.json"
+    if not annotation_path.exists():
+        return
+    with annotation_path.open("r", encoding="utf-8") as handle:
+        rows = [json.loads(line) for line in handle if line.strip()]
+    with summary_path.open("r", encoding="utf-8") as handle:
+        summary = json.load(handle)
+    assert len(rows) == summary["row_count"] == 588
+    assert "not human/domain-expert ground truth" in summary["provenance"]
+    assert summary["answer_counts"] == {"compliant": 250, "violation": 338}
+
+
 def test_model_output_schema_file_lists_required_fields():
     schema_path = ROOT / "benchmark" / "model_output_schema.json"
     with schema_path.open("r", encoding="utf-8") as handle:

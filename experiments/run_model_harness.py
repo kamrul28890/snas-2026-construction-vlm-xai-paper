@@ -26,6 +26,17 @@ def parse_args() -> argparse.Namespace:
         type=Path,
         default=ROOT / "results" / "frozen_model_outputs",
     )
+    parser.add_argument(
+        "--manifest",
+        type=Path,
+        default=ROOT / "benchmark" / "splits" / "pilot_manifest.csv",
+    )
+    parser.add_argument(
+        "--annotations",
+        type=Path,
+        default=ROOT / "benchmark" / "annotations" / "pilot_model_assisted_annotations.jsonl",
+    )
+    parser.add_argument("--output-stem", default="")
     return parser.parse_args()
 
 
@@ -33,13 +44,13 @@ def main() -> int:
     args = parse_args()
     rules = load_rules(ROOT / "benchmark" / "rules.json")
     rules_by_id = {rule.rule_id: rule for rule in rules.rules}
-    items = load_model_inputs(ROOT / "benchmark" / "splits" / "pilot_manifest.csv", rules_by_id)
+    items = load_model_inputs(args.manifest, rules_by_id)
     adapter = adapter_by_name(
         args.adapter,
-        annotations_path=ROOT / "benchmark" / "annotations" / "pilot_model_assisted_annotations.jsonl",
+        annotations_path=args.annotations,
     )
     rows = run_adapter(adapter, items)
-    stem = f"pilot_{args.adapter}"
+    stem = args.output_stem or f"pilot_{args.adapter}"
     jsonl_path = args.output_dir / f"{stem}.jsonl"
     csv_path = args.output_dir / f"{stem}.csv"
     write_model_outputs(rows, jsonl_path=jsonl_path, csv_path=csv_path)
@@ -66,4 +77,3 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-

@@ -1,0 +1,12 @@
+{
+  "adapter": "majority_violation",
+  "model_id": "baseline/majority_violation_v1",
+  "prompt_id": "image_blind_prior",
+  "row_count": 588,
+  "jsonl_path": "D:\\My Projects\\society-of-north-american-scholar-paper\\results\\frozen_model_outputs\\scaleup_majority_violation.jsonl",
+  "csv_path": "D:\\My Projects\\society-of-north-american-scholar-paper\\results\\frozen_model_outputs\\scaleup_majority_violation.csv",
+  "answer_counts": {
+    "violation": 588
+  },
+  "provenance": "deterministic_baseline_no_image_access"
+}

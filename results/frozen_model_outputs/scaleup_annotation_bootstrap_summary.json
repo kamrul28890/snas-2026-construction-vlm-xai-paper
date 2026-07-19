@@ -1,0 +1,13 @@
+{
+  "adapter": "annotation_bootstrap",
+  "model_id": "baseline/model_assisted_annotation_v1",
+  "prompt_id": "annotation_bootstrap",
+  "row_count": 588,
+  "jsonl_path": "D:\\My Projects\\society-of-north-american-scholar-paper\\results\\frozen_model_outputs\\scaleup_annotation_bootstrap.jsonl",
+  "csv_path": "D:\\My Projects\\society-of-north-american-scholar-paper\\results\\frozen_model_outputs\\scaleup_annotation_bootstrap.csv",
+  "answer_counts": {
+    "compliant": 250,
+    "violation": 338
+  },
+  "provenance": "model_assisted_annotation_echo_not_independent_model"
+}

@@ -30,6 +30,16 @@ def parse_args() -> argparse.Namespace:
         default="pilot_annotation_bootstrap",
         help="Output stem for score files.",
     )
+    parser.add_argument(
+        "--annotations",
+        type=Path,
+        default=ROOT / "benchmark" / "annotations" / "pilot_model_assisted_annotations.jsonl",
+    )
+    parser.add_argument(
+        "--manifest",
+        type=Path,
+        default=ROOT / "benchmark" / "splits" / "pilot_manifest.csv",
+    )
     return parser.parse_args()
 
 
@@ -37,10 +47,8 @@ def main() -> int:
     args = parse_args()
     summary = score_model_outputs(
         model_output_rows=load_jsonl(args.model_output),
-        annotations_by_key=load_annotations(
-            ROOT / "benchmark" / "annotations" / "pilot_model_assisted_annotations.jsonl"
-        ),
-        manifest_by_key=load_manifest_by_key(ROOT / "benchmark" / "splits" / "pilot_manifest.csv"),
+        annotations_by_key=load_annotations(args.annotations),
+        manifest_by_key=load_manifest_by_key(args.manifest),
     )
     out_dir = ROOT / "results" / "tables"
     write_score_outputs(
