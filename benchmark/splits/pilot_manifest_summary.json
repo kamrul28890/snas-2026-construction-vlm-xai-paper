@@ -1,0 +1,25 @@
+{
+  "benchmark_version": "0.1.0-pilot",
+  "source_sample_audit": "D:\\My Projects\\society-of-north-american-scholar-paper\\analysis\\outputs\\sample_audit.csv",
+  "source_dataset_summary": "D:\\My Projects\\society-of-north-american-scholar-paper\\analysis\\outputs\\dataset_summary.csv",
+  "row_count": 163,
+  "annotation_template_count": 163,
+  "class_counts": {
+    "ppe_violation": 50,
+    "compliant": 50,
+    "fall_hazard": 50,
+    "struck_by_risk": 13
+  },
+  "priority_counts": {
+    "standard": 50,
+    "metric_validity_edge_case": 87,
+    "missing_evidence": 13,
+    "underpowered_class": 13
+  },
+  "legacy_rule_map": {
+    "rule_1": "ppe_hard_hat",
+    "rule_2": "fall_harness",
+    "rule_3": "guardrail_edge",
+    "rule_4": "struck_by_equipment"
+  }
+}

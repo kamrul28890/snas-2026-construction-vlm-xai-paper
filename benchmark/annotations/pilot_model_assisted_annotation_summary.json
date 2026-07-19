@@ -1,0 +1,24 @@
+{
+  "annotation_version": "0.1.0-model-assisted",
+  "annotator_id": "gpt5_model_assisted_metadata_v1",
+  "row_count": 163,
+  "provenance": "Generated from ConstructionSite metadata, captions, source rule-violation records, and pilot manifest target boxes. This is not human/domain-expert ground truth.",
+  "legacy_rule_map": {
+    "rule_1": "ppe_hard_hat",
+    "rule_2": "fall_harness",
+    "rule_3": "guardrail_edge",
+    "rule_4": "struck_by_equipment"
+  },
+  "answer_counts": {
+    "violation": 113,
+    "compliant": 50
+  },
+  "applies_to_image_counts": {
+    "yes": 155,
+    "uncertain": 8
+  },
+  "ambiguous_counts": {
+    "yes": 94,
+    "no": 69
+  }
+}

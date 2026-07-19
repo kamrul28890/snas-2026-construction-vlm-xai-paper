@@ -1,0 +1,23 @@
+{
+  "schema_version": "0.1.0",
+  "prepared_on": "2026-07-19",
+  "output_contract": {
+    "answer_values": ["compliant", "violation", "uncertain"],
+    "required_fields": ["answer", "evidence_objects", "rationale"],
+    "rationale_policy": "Use a short evidence-grounded statement, not hidden chain-of-thought."
+  },
+  "prompts": [
+    {
+      "prompt_id": "direct_vqa_v1",
+      "template": "For the construction-site image, answer this safety rule question: {question} Respond as JSON with answer, evidence_objects, and rationale. Use answer=compliant, violation, or uncertain."
+    },
+    {
+      "prompt_id": "evidence_first_v1",
+      "template": "Inspect only visible evidence in the image for this rule: {question} First list the visible safety evidence objects, then give answer=compliant, violation, or uncertain. Respond as JSON with answer, evidence_objects, and rationale."
+    },
+    {
+      "prompt_id": "uncertainty_aware_v1",
+      "template": "Evaluate this construction-safety rule from the image: {question} If the image is ambiguous, occluded, or too low quality, use answer=uncertain. Respond as JSON with answer, evidence_objects, and rationale."
+    }
+  ]
+}

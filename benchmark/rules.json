@@ -1,0 +1,73 @@
+{
+  "schema_version": "0.1.0",
+  "prepared_on": "2026-07-19",
+  "coordinate_format": "absolute_xyxy",
+  "answer_labels": ["compliant", "violation", "uncertain", "invalid"],
+  "rules": [
+    {
+      "rule_id": "ppe_hard_hat",
+      "rule_family": "ppe",
+      "short_name": "Hard-hat compliance",
+      "question": "Is each visible worker wearing required head protection?",
+      "compliant_condition": "All visible workers who require head protection have visible hard hats or equivalent head protection.",
+      "violation_condition": "At least one visible worker who requires head protection lacks visible head protection.",
+      "primary_evidence_objects": ["worker", "hard_hat", "head_protection"],
+      "counterfactual_target_objects": ["hard_hat", "head_protection"],
+      "known_ambiguities": [
+        "helmet occluded by camera angle",
+        "very small or blurred worker head",
+        "multiple workers with mixed compliance",
+        "non-worker people in background"
+      ]
+    },
+    {
+      "rule_id": "fall_harness",
+      "rule_family": "fall_protection",
+      "short_name": "Harness/fall protection",
+      "question": "Does the worker at height have visible fall-protection equipment?",
+      "compliant_condition": "Workers exposed to fall risk have visible harness or equivalent fall-protection equipment.",
+      "violation_condition": "A worker exposed to fall risk lacks visible harness or equivalent fall-protection equipment.",
+      "primary_evidence_objects": ["worker", "harness", "lanyard", "height_context"],
+      "counterfactual_target_objects": ["harness", "lanyard"],
+      "known_ambiguities": [
+        "fall height not inferable from a single image",
+        "harness hidden by clothing or pose",
+        "worker not clearly exposed to fall hazard",
+        "temporary platform or ladder context unclear"
+      ]
+    },
+    {
+      "rule_id": "guardrail_edge",
+      "rule_family": "fall_protection",
+      "short_name": "Guardrail/edge protection",
+      "question": "Is the visible elevated edge protected by a guardrail or equivalent barrier?",
+      "compliant_condition": "A visible elevated edge or opening has guardrail, barrier, or equivalent protection.",
+      "violation_condition": "A visible elevated edge or opening lacks guardrail, barrier, or equivalent protection.",
+      "primary_evidence_objects": ["worker", "guardrail", "edge", "opening", "barrier"],
+      "counterfactual_target_objects": ["guardrail", "barrier", "edge"],
+      "known_ambiguities": [
+        "camera crop hides full edge",
+        "temporary barrier not visually clear",
+        "edge height cannot be estimated",
+        "worker proximity to edge unclear"
+      ]
+    },
+    {
+      "rule_id": "struck_by_equipment",
+      "rule_family": "struck_by",
+      "short_name": "Worker-equipment proximity",
+      "question": "Is a worker unsafely close to active heavy equipment?",
+      "compliant_condition": "Visible workers are outside the apparent danger zone of heavy equipment.",
+      "violation_condition": "At least one visible worker appears within an unsafe proximity zone around heavy equipment.",
+      "primary_evidence_objects": ["worker", "excavator", "heavy_equipment", "proximity_zone"],
+      "counterfactual_target_objects": ["worker", "excavator", "heavy_equipment"],
+      "known_ambiguities": [
+        "equipment activity cannot be inferred from still image",
+        "depth and distance are visually ambiguous",
+        "worker separated by barrier not visible",
+        "partial equipment crop"
+      ]
+    }
+  ]
+}
+

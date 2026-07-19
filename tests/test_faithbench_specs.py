@@ -1,0 +1,196 @@
+from __future__ import annotations
+
+import math
+import csv
+import json
+import sys
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "src"))
+
+from faithbench.annotation import ANNOTATOR_ID, model_assisted_annotation, normalized_box_to_abs
+from faithbench.geometry import clip_box, normalized_centroid_drift, same_size_random_box
+from faithbench.interventions import matched_random_occlusion_spec, targeted_occlusion_spec
+from faithbench.manifest import LEGACY_RULE_MAP, build_pilot_manifest, evidence_size_band
+from faithbench.schema import load_prompts, load_rules
+from faithbench.scoring import compare_evidence, normalize_answer
+from faithbench.statistics import bootstrap_ci, holm_adjust, paired_bootstrap_difference
+
+
+def test_rules_and_prompts_load_and_render():
+    rules = load_rules(ROOT / "benchmark" / "rules.json")
+    prompts = load_prompts(ROOT / "benchmark" / "prompts" / "safety_rule_prompts.json")
+    assert len(rules.rules) == 4
+    assert len(prompts.prompts) >= 3
+    rendered = prompts.by_id("direct_vqa_v1").render(question=rules.by_id("ppe_hard_hat").question)
+    assert "head protection" in rendered.lower()
+    assert "json" in rendered.lower()
+
+
+def test_clip_box_preserves_one_pixel_inside_image():
+    assert clip_box((-10, -5, 0, 0), (100, 50)) == (0, 0, 1, 1)
+
+
+def test_same_size_random_box_preserves_dimensions_and_low_overlap():
+    random_box, overlap = same_size_random_box((200, 100), (10, 20, 40, 60), seed=42, image_id="0000007")
+    assert random_box[2] - random_box[0] == 30
+    assert random_box[3] - random_box[1] == 40
+    assert overlap <= 0.05
+
+
+def test_normalized_centroid_drift_uses_image_diagonal():
+    drift = normalized_centroid_drift((0, 0, 10, 10), (3, 4, 13, 14), (3, 4))
+    assert math.isclose(drift, 1.0)
+
+
+def test_compare_evidence_makes_disappearance_explicit():
+    comparison = compare_evidence((0, 0, 10, 10), None, image_size=(100, 100))
+    assert comparison.baseline_present is True
+    assert comparison.perturbed_present is False
+    assert comparison.disappeared is True
+    assert math.isnan(comparison.iou)
+
+
+def test_compare_evidence_marks_large_relocation():
+    comparison = compare_evidence((0, 0, 10, 10), (80, 80, 90, 90), image_size=(100, 100))
+    assert comparison.iou == 0.0
+    assert comparison.centroid_drift > 0.2
+    assert comparison.relocated is True
+
+
+def test_normalize_answer_aliases_and_invalids():
+    assert normalize_answer("safe") == "compliant"
+    assert normalize_answer("not compliant") == "violation"
+    assert normalize_answer("cannot determine") == "uncertain"
+    assert normalize_answer("maybe") == "invalid"
+
+
+def test_intervention_specs_are_stable_and_descriptive():
+    targeted = targeted_occlusion_spec(image_id="0001", rule_id="ppe_hard_hat", target_box=(1, 2, 3, 4))
+    random = matched_random_occlusion_spec(
+        image_id="0001",
+        rule_id="ppe_hard_hat",
+        image_size=(100, 80),
+        target_box=(1, 2, 3, 4),
+        seed=7,
+    )
+    assert targeted.intervention_type == "targeted_occlusion"
+    assert targeted.mask_target_iou == 1.0
+    assert random.intervention_type == "matched_random_occlusion"
+    assert random.seed == 7
+
+
+def test_statistics_are_reproducible():
+    first = bootstrap_ci([0, 1, 1, 0], n_boot=1000, seed=7)
+    second = bootstrap_ci([0, 1, 1, 0], n_boot=1000, seed=7)
+    assert first == second
+    assert paired_bootstrap_difference([2, 3], [1, 1], n_boot=1000, seed=4)["point"] == 1.5
+    assert holm_adjust([0.04, 0.001, 0.03]) == [0.06, 0.003, 0.06]
+
+
+def test_legacy_rule_mapping_covers_all_pilot_rules():
+    assert LEGACY_RULE_MAP == {
+        "rule_1": "ppe_hard_hat",
+        "rule_2": "fall_harness",
+        "rule_3": "guardrail_edge",
+        "rule_4": "struck_by_equipment",
+    }
+
+
+def test_evidence_size_band_uses_fixed_thresholds():
+    assert evidence_size_band("") == "missing"
+    assert evidence_size_band(0.0005) == "tiny"
+    assert evidence_size_band(0.005) == "small"
+    assert evidence_size_band(0.05) == "medium"
+    assert evidence_size_band(0.5) == "large"
+
+
+def test_build_pilot_manifest_to_temporary_directory(tmp_path):
+    rules = load_rules(ROOT / "benchmark" / "rules.json")
+    result = build_pilot_manifest(
+        sample_audit_path=ROOT / "analysis" / "outputs" / "sample_audit.csv",
+        dataset_summary_path=ROOT / "analysis" / "outputs" / "dataset_summary.csv",
+        rules=rules,
+        manifest_path=tmp_path / "pilot_manifest.csv",
+        annotation_jsonl_path=tmp_path / "pilot_annotation_template.jsonl",
+        annotation_csv_path=tmp_path / "pilot_annotation_template.csv",
+        summary_path=tmp_path / "pilot_manifest_summary.json",
+    )
+    assert result.row_count == 163
+    assert result.annotation_count == 163
+    with result.manifest_path.open("r", encoding="utf-8", newline="") as handle:
+        rows = list(csv.DictReader(handle))
+    assert rows[0]["rule_id"] == "ppe_hard_hat"
+    assert rows[0]["expected_answer_seed"] == "violation"
+    with result.summary_path.open("r", encoding="utf-8") as handle:
+        summary = json.load(handle)
+    assert summary["class_counts"]["struck_by_risk"] == 13
+    assert summary["priority_counts"]["missing_evidence"] == 13
+
+
+def test_checked_in_pilot_manifest_matches_summary():
+    manifest_path = ROOT / "benchmark" / "splits" / "pilot_manifest.csv"
+    summary_path = ROOT / "benchmark" / "splits" / "pilot_manifest_summary.json"
+    annotation_path = ROOT / "benchmark" / "annotations" / "pilot_annotation_template.jsonl"
+    with manifest_path.open("r", encoding="utf-8", newline="") as handle:
+        manifest_rows = list(csv.DictReader(handle))
+    with annotation_path.open("r", encoding="utf-8") as handle:
+        annotation_rows = [json.loads(line) for line in handle if line.strip()]
+    with summary_path.open("r", encoding="utf-8") as handle:
+        summary = json.load(handle)
+    assert len(manifest_rows) == summary["row_count"] == 163
+    assert len(annotation_rows) == summary["annotation_template_count"] == 163
+    assert {row["rule_id"] for row in manifest_rows} == set(LEGACY_RULE_MAP.values())
+
+
+def test_normalized_source_boxes_convert_to_absolute_pixels():
+    assert normalized_box_to_abs([0.1, 0.2, 0.5, 0.6], 100, 200) == [10, 40, 50, 120]
+
+
+def test_model_assisted_annotation_uses_source_violation_when_available():
+    manifest_row = {
+        "image_id": "0000007",
+        "rule_id": "ppe_hard_hat",
+        "question": "Is each visible worker wearing required head protection?",
+        "expected_answer_seed": "violation",
+        "image_width": "100",
+        "image_height": "50",
+        "has_worker_box": "true",
+        "has_object_box": "true",
+        "target_box_xyxy": "[1, 2, 3, 4]",
+        "annotation_priority": "standard",
+        "notes": "",
+    }
+    dataset_row = {
+        "image_caption": "Two workers are visible.",
+        "quality_of_info": "poor info",
+        "rule_1_violation": {
+            "bounding_box": [[0.1, 0.2, 0.5, 0.6]],
+            "reason": "A worker is missing head protection.",
+        },
+    }
+    annotation = model_assisted_annotation(manifest_row, dataset_row)
+    assert annotation["annotator_id"] == ANNOTATOR_ID
+    assert annotation["answer_label"] == "violation"
+    assert annotation["evidence_regions_xyxy"] == "[[10,10,50,30]]"
+    assert annotation["image_quality_issue"] == "yes"
+    assert "not human ground truth" in annotation["free_text_notes"]
+
+
+def test_checked_in_model_assisted_annotations_are_complete_and_labeled():
+    annotation_path = ROOT / "benchmark" / "annotations" / "pilot_model_assisted_annotations.jsonl"
+    summary_path = ROOT / "benchmark" / "annotations" / "pilot_model_assisted_annotation_summary.json"
+    with annotation_path.open("r", encoding="utf-8") as handle:
+        rows = [json.loads(line) for line in handle if line.strip()]
+    with summary_path.open("r", encoding="utf-8") as handle:
+        summary = json.load(handle)
+    assert len(rows) == summary["row_count"] == 163
+    assert summary["answer_counts"] == {"violation": 113, "compliant": 50}
+    assert "not human/domain-expert ground truth" in summary["provenance"]
+    for row in rows:
+        assert row["annotator_id"] == ANNOTATOR_ID
+        assert row["answer_label"] in {"compliant", "violation"}
+        assert row["applies_to_image"] in {"yes", "no", "uncertain"}
+        assert row["ambiguous"] in {"yes", "no"}
+        assert row["evidence_regions_xyxy"].startswith("[")
