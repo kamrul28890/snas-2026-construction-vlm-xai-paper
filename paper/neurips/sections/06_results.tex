@@ -37,3 +37,12 @@ Table~\ref{tab:scaleup-baselines} reports the same adapters on the scale-up cand
 \label{tab:scaleup-baselines}
 \input{tables/scaleup_baseline_scores}
 \end{table}
+
+Table~\ref{tab:scaleup-florence-slices} breaks the scale-up Florence result down by safety rule. The current local grounding pipeline is weakest on PPE and struck-by examples, showing where adapter and annotation work should be prioritized next.
+
+\begin{table}[h]
+\centering
+\caption{Scale-up Florence rule slices.}
+\label{tab:scaleup-florence-slices}
+\input{tables/scaleup_florence_rule_slices}
+\end{table}

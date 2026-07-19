@@ -15,6 +15,8 @@ python .\experiments\score_model_outputs.py --model-output .\results\frozen_mode
 python .\experiments\score_model_outputs.py --model-output .\results\frozen_model_outputs\scaleup_manifest_seed.jsonl --name scaleup_manifest_seed --annotations .\benchmark\annotations\scaleup_model_assisted_annotations.jsonl --manifest .\benchmark\splits\scaleup_candidate_manifest.csv
 python .\experiments\score_model_outputs.py --model-output .\results\frozen_model_outputs\scaleup_majority_violation.jsonl --name scaleup_majority_violation --annotations .\benchmark\annotations\scaleup_model_assisted_annotations.jsonl --manifest .\benchmark\splits\scaleup_candidate_manifest.csv
 python .\experiments\score_intervention_outputs.py --intervention-output .\results\intervention_outputs\pilot_florence_interventions.jsonl --intervention-csv .\results\intervention_outputs\pilot_florence_interventions.csv --baseline-output .\results\frozen_model_outputs\pilot_florence_grounding.jsonl --manifest .\benchmark\splits\pilot_manifest.csv --name pilot_florence_interventions
+python .\experiments\analyze_score_slices.py --per-example .\results\tables\pilot_florence_grounding_per_example_scores.csv --name pilot_florence_grounding
+python .\experiments\analyze_score_slices.py --per-example .\results\tables\scaleup_florence_grounding_per_example_scores.csv --name scaleup_florence_grounding
 ```
 
 The current scores use model-assisted annotations as reference labels. They are

@@ -59,6 +59,13 @@ def main() -> int:
     missing = expected_intervention_metrics - intervention_metrics
     if missing:
         raise RuntimeError(f"pilot_florence_interventions_summary.csv missing metrics: {sorted(missing)}")
+    for filename in ["pilot_florence_grounding_slices.csv", "scaleup_florence_grounding_slices.csv"]:
+        rows = _read_csv(ROOT / "results" / "tables" / filename)
+        slice_keys = {(row["slice_type"], row["slice_value"]) for row in rows}
+        if ("overall", "all") not in slice_keys:
+            raise RuntimeError(f"{filename} missing overall slice")
+        if not any(slice_type == "rule_id" for slice_type, _ in slice_keys):
+            raise RuntimeError(f"{filename} missing rule_id slices")
     print("Validated Phase 4 intervention specs and score tables.")
     return 0
 

@@ -62,6 +62,7 @@ def main() -> int:
 
     write_intervention_table(out_dir / "pilot_intervention_counts.tex")
     write_intervention_effects_table(out_dir / "pilot_intervention_effects.tex")
+    write_rule_slice_table(out_dir / "scaleup_florence_rule_slices.tex")
 
     print(f"Wrote generated paper tables to {out_dir}")
     return 0
@@ -136,6 +137,40 @@ def write_intervention_effects_table(path: Path) -> None:
         "",
     ]
     path.write_text("\n".join(lines), encoding="utf-8")
+
+
+def write_rule_slice_table(path: Path) -> None:
+    rows = []
+    with (ROOT / "results" / "tables" / "scaleup_florence_grounding_slices.csv").open(
+        "r", encoding="utf-8", newline=""
+    ) as handle:
+        for row in csv.DictReader(handle):
+            if row["slice_type"] == "rule_id":
+                rows.append(row)
+    lines = [
+        "\\begin{tabular}{lrrrr}",
+        "\\toprule",
+        "Rule & N & Accuracy & Evidence present & Mean IoU \\\\",
+        "\\midrule",
+    ]
+    for row in rows:
+        pretty = pretty_label(row["slice_value"])
+        lines.append(
+            f"{pretty} & {row['n']} & {pct(row['accuracy'])} & "
+            f"{pct(row['evidence_presence_rate'])} & {float(row['mean_best_evidence_iou']):.3f} \\\\"
+        )
+    lines.extend(["\\bottomrule", "\\end{tabular}", ""])
+    path.write_text("\n".join(lines), encoding="utf-8")
+
+
+def pretty_label(value: str) -> str:
+    labels = {
+        "fall_harness": "Fall harness",
+        "guardrail_edge": "Guardrail edge",
+        "ppe_hard_hat": "PPE hard hat",
+        "struck_by_equipment": "Struck-by equipment",
+    }
+    return labels.get(value, value.replace("_", " ").title())
 
 
 if __name__ == "__main__":

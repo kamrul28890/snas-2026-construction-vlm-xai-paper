@@ -33,6 +33,7 @@ from faithbench.schema import load_prompts, load_rules
 from faithbench.scaleup import choose_rule_for_row, classify_source_row, select_scaleup_candidates
 from faithbench.scoring import compare_evidence, normalize_answer
 from faithbench.statistics import bootstrap_ci, holm_adjust, paired_bootstrap_difference
+from experiments.analyze_score_slices import build_slices
 
 
 def test_rules_and_prompts_load_and_render():
@@ -383,6 +384,38 @@ def test_majority_violation_baseline_scores_below_seed_labels():
     metrics = {row["metric_id"]: row for row in summary.summary_rows}
     assert float(metrics["accuracy"]["value"]) < 1.0
     assert metrics["evidence_presence_rate"]["value"] == "0.0"
+
+
+def test_score_slice_analyzer_groups_by_rule_and_ambiguity():
+    rows = [
+        {
+            "rule_id": "ppe_hard_hat",
+            "answer_correct": "true",
+            "invalid_output": "false",
+            "has_predicted_evidence": "true",
+            "has_reference_evidence": "true",
+            "best_evidence_iou": "0.5",
+            "best_evidence_centroid_drift": "0.1",
+            "annotation_ambiguous": "no",
+            "annotation_applies_to_image": "yes",
+        },
+        {
+            "rule_id": "fall_harness",
+            "answer_correct": "false",
+            "invalid_output": "false",
+            "has_predicted_evidence": "false",
+            "has_reference_evidence": "false",
+            "best_evidence_iou": "",
+            "best_evidence_centroid_drift": "",
+            "annotation_ambiguous": "yes",
+            "annotation_applies_to_image": "uncertain",
+        },
+    ]
+    slices = build_slices(rows)
+    keyed = {(row["slice_type"], row["slice_value"]): row for row in slices}
+    assert keyed[("overall", "all")]["accuracy"] == "0.5"
+    assert keyed[("rule_id", "ppe_hard_hat")]["mean_best_evidence_iou"] == "0.5"
+    assert keyed[("annotation_ambiguous", "yes")]["evidence_presence_rate"] == "0.0"
 
 
 def test_scaleup_classification_and_rule_choice():
