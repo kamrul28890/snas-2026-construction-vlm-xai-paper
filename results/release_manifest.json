@@ -305,8 +305,8 @@
     },
     {
       "path": "paper/neurips/ConstructionSafety-FaithBench_scaffold.pdf",
-      "bytes": 137582,
-      "sha256": "7823cff83fa89aa1dde84789044940ed79587dd67010ac6efac866c80bfd6ab0"
+      "bytes": 174373,
+      "sha256": "23ae4b3329ebf9d0c7a74b074085148398755f9e40ce34c6c40cf6976fff8df1"
     },
     {
       "path": "paper/neurips/README.md",
@@ -315,8 +315,8 @@
     },
     {
       "path": "paper/neurips/appendix.tex",
-      "bytes": 1026,
-      "sha256": "e4e81b017dc9c47178c9b5de367e556777d749e9477c59b3896c878bf203ef7c"
+      "bytes": 11713,
+      "sha256": "f8c6437d5992109dd47ad36c89f75f675393609ef5678ddb16e7070de09fce0c"
     },
     {
       "path": "paper/neurips/main.tex",

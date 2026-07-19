@@ -1,25 +1,232 @@
-\section{Artifact Map}
+\section{Detailed Results and Reproducibility Status}
 
-Key artifacts:
+This appendix records the concrete artifacts, counts, and result tables currently implemented in the repository. All numbers in this appendix are generated from checked artifacts rather than manually annotated human ground truth. The model-assisted annotation layer remains a bootstrap reference for pipeline validation and audit prioritization.
+
+\subsection{Implemented Artifact Set}
+
+The current scaffold contains the following reproducible components:
 
 \begin{itemize}
-\item \texttt{benchmark/rules.json}: normalized safety rules.
-\item \texttt{benchmark/splits/}: pilot image-rule manifest.
-\item \texttt{benchmark/splits/scaleup\_candidate\_manifest.csv}: larger candidate manifest.
-\item \texttt{benchmark/annotations/}: bootstrap annotation templates and completed model-assisted annotations.
-\item \texttt{benchmark/interventions/}: frozen intervention specs.
-\item \texttt{results/frozen\_model\_outputs/}: normalized baseline outputs.
-\item \texttt{results/tables/}: generated score tables.
+\item \path{benchmark/rules.json}: four normalized construction-safety rules: PPE hard hat, fall harness, guardrail edge, and struck-by equipment.
+\item \path{benchmark/prompts/}: prompt templates for normalized model adapters.
+\item \path{benchmark/splits/pilot_manifest.csv}: 163 pilot image-rule pairs.
+\item \path{benchmark/splits/scaleup_candidate_manifest.csv}: 588 scale-up candidate image-rule pairs.
+\item \path{benchmark/annotations/}: pilot and scale-up model-assisted annotation layers, annotation templates, human-audit protocol, and the first human-audit queue.
+\item \path{benchmark/interventions/}: 948 frozen pilot intervention specifications.
+\item Frozen model outputs: \path{results/frozen_model_outputs/}. These include deterministic baselines and local Florence-2 grounding outputs.
+\item \path{results/intervention_outputs/}: Florence-2 outputs after targeted and matched-random occlusions.
+\item \path{results/tables/}: aggregate score tables, per-example score files, slice diagnostics, intervention summaries, and human-audit status.
+\item \path{results/release_manifest.json}: SHA-256 manifest for 158 checked artifacts.
 \end{itemize}
 
-\section{Regeneration Commands}
+\subsection{Benchmark Manifests}
 
+The pilot manifest contains 163 examples from the ConstructionSite test split. It was designed for early pipeline validation and includes a relatively balanced set for PPE, fall, and compliant scenes, with struck-by risk underrepresented because that source class is scarce.
+
+\begin{table}[h]
+\centering
+\caption{Pilot manifest class counts.}
+\begin{tabular}{lr}
+\toprule
+Class & Count \\
+\midrule
+PPE violation & 50 \\
+Compliant & 50 \\
+Fall hazard & 50 \\
+Struck-by risk & 13 \\
+\midrule
+Total & 163 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The scale-up candidate manifest contains 588 image-rule pairs selected from 3,004 scanned test-split source rows with seed 20260719. The target was 250 examples per class where available, but fall-hazard and struck-by-risk cases remained limited by source data availability.
+
+\begin{table}[h]
+\centering
+\caption{Scale-up candidate manifest class counts.}
+\input{tables/scaleup_candidate_counts}
+\end{table}
+
+\begin{table}[h]
+\centering
+\caption{Scale-up candidate rule counts.}
+\begin{tabular}{lr}
+\toprule
+Rule & Count \\
+\midrule
+PPE hard hat & 303 \\
+Guardrail edge & 110 \\
+Struck-by equipment & 106 \\
+Fall harness & 69 \\
+\midrule
+Total & 588 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Annotation Layers}
+
+Two model-assisted annotation files have been completed. They are generated from ConstructionSite metadata, captions, source rule-violation records, and available target boxes. They are useful for debugging the benchmark and prioritizing review, but they are not independent human or domain-expert ground truth.
+
+\begin{table}[h]
+\centering
+\caption{Completed model-assisted annotation status.}
+\begin{tabular}{lrrrrr}
+\toprule
+Split & Rows & Compliant & Violation & Ambiguous yes & Ambiguous no \\
+\midrule
+Pilot & 163 & 50 & 113 & 94 & 69 \\
+Scale-up & 588 & 250 & 338 & 415 & 173 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The repository also contains \texttt{human\_audit\_batch\_001}, a balanced 120-row audit queue prioritized from scale-up Florence/bootstrap disagreements and weak evidence-overlap cases. It has 30 rows per rule. Among these 120 rows, 118 are Florence/bootstrap answer disagreements, 82 have nonambiguous bootstrap labels, 83 are marked as rule-applicable, 59 have low evidence IoU, and one has missing predicted evidence. Human completion is currently zero because the annotator fields are intentionally blank.
+
+\begin{table}[h]
+\centering
+\caption{Human audit queue status.}
+\begin{tabular}{lr}
+\toprule
+Metric & Value \\
+\midrule
+Rows prepared & 120 \\
+Rows per rule & 30 \\
+Florence/bootstrap disagreements & 118 \\
+Annotator 1 completion & 0.0\% \\
+Annotator 2 completion & 0.0\% \\
+Adjudication completion & 0.0\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Model Outputs and Answer-Level Scores}
+
+The current model-output layer contains deterministic adapters and the first real local image-grounded adapter:
+
+\begin{itemize}
+\item \textbf{Annotation bootstrap}: echoes the model-assisted label and evidence.
+\item \textbf{Manifest seed}: echoes the weak manifest label.
+\item \textbf{Majority violation}: always predicts violation with no image evidence.
+\item \textbf{Caption keyword}: uses only source captions and rule-specific keywords.
+\item \textbf{Florence grounding}: runs \texttt{microsoft/Florence-2-base-ft} through the companion local grounding pipeline, then maps detections through deterministic geometry.
+\end{itemize}
+
+\begin{table}[h]
+\centering
+\caption{Pilot model-output scores against model-assisted bootstrap labels.}
+\input{tables/pilot_baseline_scores}
+\end{table}
+
+\begin{table}[h]
+\centering
+\caption{Scale-up model-output scores against model-assisted bootstrap labels.}
+\input{tables/scaleup_baseline_scores}
+\end{table}
+
+The Florence grounding adapter produced 163 pilot outputs and 588 scale-up outputs with zero invalid normalized answers. On the pilot split it predicted 111 compliant and 52 violation answers. On scale-up it predicted 399 compliant and 189 violation answers. The low answer accuracy relative to the bootstrap labels is not hidden; it is evidence that the current local grounding proxy is not a strong safety VQA model and should be treated as a diagnostic baseline.
+
+\subsection{Scale-Up Florence Slice Diagnostics}
+
+The slice analysis shows where the current local Florence pipeline fails most strongly. The scale-up result is weakest for PPE hard-hat and struck-by equipment examples. It still predicts evidence boxes for almost every example, which means answer failure and evidence availability are distinct failure modes.
+
+\begin{table}[h]
+\centering
+\caption{Scale-up Florence rule slices.}
+\input{tables/scaleup_florence_rule_slices}
+\end{table}
+
+Additional slice files are stored as \path{pilot_florence_grounding_slices.csv} and \path{scaleup_florence_grounding_slices.csv}. They include overall, rule-level, ambiguity-level, and rule-applicability-level rows with accuracy, invalid-rate, evidence-presence, reference-evidence, mean IoU, and centroid-drift fields.
+
+\subsection{Intervention Specifications and Effects}
+
+The frozen pilot intervention file contains 948 occlusions: 158 targeted rule-evidence masks and 790 matched-random controls. There are five matched-random controls per targeted mask, using the same clipped mask width and height as the corresponding target.
+
+\begin{table}[h]
+\centering
+\caption{Pilot intervention specification counts.}
+\input{tables/pilot_intervention_counts}
+\end{table}
+
+The Florence intervention run completed all 948 masked-image reruns using beam decoding and black-box masks. It produced 649 compliant and 299 violation outputs. The intervention results show the core faithfulness pattern: targeted evidence removal changes answers and evidence locations more than same-size random-location masking.
+
+\begin{table}[h]
+\centering
+\caption{Pilot Florence intervention effects.}
+\input{tables/pilot_intervention_effects}
+\end{table}
+
+The paired answer-flip difference is 30.0 percentage points with a bootstrap 95\% interval of 22.3 to 37.7 percentage points. The paired centroid-drift difference is 0.160 with a bootstrap 95\% interval of 0.133 to 0.187. Evidence disappearance occurred in 5.1\% of targeted rows and 3.7\% of matched-random rows, so disappearance is tracked separately from ordinary evidence relocation.
+
+\subsection{Validation and Test Results}
+
+The command \path{python ./experiments/validate_all.py} currently validates:
+
+\begin{itemize}
+\item benchmark rules and prompt templates;
+\item pilot and scale-up model-assisted annotations;
+\item the 120-row human-audit batch;
+\item pilot and scale-up normalized model-output files;
+\item the 948-row Florence intervention output file;
+\item Phase 4 intervention specifications and generated score tables;
+\item the NeurIPS paper scaffold and required generated tables;
+\item the 588-row scale-up candidate manifest;
+\item 37 Python tests across \texttt{analysis/tests} and \texttt{tests}.
+\end{itemize}
+
+The latest validation run passed all checks. The release manifest hashes 158 artifacts across benchmark data, experiment scripts, paper files, frozen model outputs, intervention outputs, result tables, source code, and tests.
+
+\subsection{Regeneration Commands}
+
+The following commands regenerate the current major artifacts. Florence commands require the companion local XAI pilot environment at \path{../Explainable-AI-Mustafa-Abdallah/pilot/.venv}.
+
+{\footnotesize
 \begin{verbatim}
 python .\experiments\build_pilot_manifest.py
 python .\experiments\build_model_assisted_annotations.py
+python .\experiments\build_scaleup_candidate_manifest.py
+python .\experiments\build_scaleup_annotations.py
+
 python .\experiments\run_model_harness.py --adapter annotation_bootstrap
+python .\experiments\run_model_harness.py --adapter manifest_seed
+python .\experiments\run_model_harness.py --adapter majority_violation
+python .\experiments\run_model_harness.py --adapter caption_keyword
+
+$python = '..\Explainable-AI-Mustafa-Abdallah\pilot\.venv\Scripts\python.exe'
+& $python .\experiments\run_florence_grounding_outputs.py `
+  --manifest .\benchmark\splits\pilot_manifest.csv `
+  --output-stem pilot_florence_grounding
+& $python .\experiments\run_florence_grounding_outputs.py `
+  --manifest .\benchmark\splits\scaleup_candidate_manifest.csv `
+  --output-stem scaleup_florence_grounding
+
 python .\experiments\build_intervention_specs.py
-python .\experiments\score_model_outputs.py
-python .\experiments\validate_phase4_outputs.py
-python -m pytest .\analysis\tests .\tests -q
+& $python .\experiments\run_florence_intervention_outputs.py `
+  --interventions .\benchmark\interventions\pilot_interventions.jsonl `
+  --output-stem pilot_florence_interventions
+
+python .\experiments\score_model_outputs.py `
+  --model-output .\results\frozen_model_outputs\pilot_florence_grounding.jsonl `
+  --name pilot_florence_grounding
+python .\experiments\score_model_outputs.py `
+  --model-output .\results\frozen_model_outputs\scaleup_florence_grounding.jsonl `
+  --name scaleup_florence_grounding `
+  --annotations .\benchmark\annotations\scaleup_model_assisted_annotations.jsonl `
+  --manifest .\benchmark\splits\scaleup_candidate_manifest.csv
+python .\experiments\score_intervention_outputs.py
+python .\experiments\analyze_score_slices.py `
+  --per-example .\results\tables\scaleup_florence_grounding_per_example_scores.csv `
+  --name scaleup_florence_grounding
+python .\experiments\build_human_audit_batch.py
+python .\experiments\score_human_audit_status.py
+
+python .\experiments\make_paper_tables.py
+python .\experiments\build_release_manifest.py
+python .\experiments\validate_all.py
 \end{verbatim}
+}
+
+\subsection{Current Limits Before NeurIPS-Style Claims}
+
+The implemented results are sufficient to show a reproducible benchmark scaffold and a meaningful faithfulness-audit workflow. They are not sufficient for final NeurIPS-style empirical claims. The remaining required work is independent human/domain annotation, agreement and adjudication reporting, additional instruction-following VLM adapters, and final review under the official target conference template.
