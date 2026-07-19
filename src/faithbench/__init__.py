@@ -3,6 +3,7 @@
 from faithbench.annotation import build_model_assisted_annotations, model_assisted_annotation
 from faithbench.geometry import box_iou, clip_box, normalized_centroid_drift, same_size_random_box
 from faithbench.manifest import LEGACY_RULE_MAP, build_pilot_manifest, evidence_size_band
+from faithbench.metrics import score_model_outputs
 from faithbench.model_harness import (
     ModelInput,
     ModelOutput,
@@ -40,6 +41,7 @@ __all__ = [
     "paired_bootstrap_difference",
     "run_adapter",
     "same_size_random_box",
+    "score_model_outputs",
     "validate_output_row",
     "write_model_outputs",
 ]

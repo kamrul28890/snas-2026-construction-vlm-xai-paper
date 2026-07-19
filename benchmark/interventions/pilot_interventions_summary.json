@@ -1,0 +1,17 @@
+{
+  "intervention_spec_version": "0.1.0-pilot",
+  "source_manifest": "D:\\My Projects\\society-of-north-american-scholar-paper\\benchmark\\splits\\pilot_manifest.csv",
+  "row_count": 948,
+  "counts": {
+    "targeted_occlusion": 158,
+    "matched_random_occlusion": 790
+  },
+  "random_seeds": [
+    42,
+    43,
+    44,
+    45,
+    46
+  ],
+  "max_target_iou": 0.05
+}

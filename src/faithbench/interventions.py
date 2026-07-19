@@ -2,7 +2,10 @@
 
 from __future__ import annotations
 
+import csv
+import json
 from dataclasses import dataclass
+from pathlib import Path
 
 from faithbench.geometry import Box, IntBox, same_size_random_box
 
@@ -20,6 +23,20 @@ class InterventionSpec:
     seed: int | None = None
     mask_target_iou: float | None = None
     expected_effect: str = "unspecified"
+
+    def to_row(self) -> dict[str, str]:
+        """Serialize intervention spec for JSONL/CSV writing."""
+        return {
+            "image_id": self.image_id,
+            "rule_id": self.rule_id,
+            "intervention_id": self.intervention_id,
+            "intervention_type": self.intervention_type,
+            "target_box_xyxy": "" if self.target_box is None else json.dumps(list(self.target_box), separators=(",", ":")),
+            "mask_box_xyxy": "" if self.mask_box is None else json.dumps(list(self.mask_box), separators=(",", ":")),
+            "seed": "" if self.seed is None else str(self.seed),
+            "mask_target_iou": "" if self.mask_target_iou is None else str(float(self.mask_target_iou)),
+            "expected_effect": self.expected_effect,
+        }
 
 
 def targeted_occlusion_spec(
@@ -71,3 +88,67 @@ def matched_random_occlusion_spec(
         expected_effect="control_region_removed",
     )
 
+
+def build_intervention_specs_from_manifest(
+    manifest_rows: list[dict[str, str]],
+    *,
+    random_seeds: list[int],
+    max_target_iou: float = 0.05,
+) -> list[InterventionSpec]:
+    """Create targeted and matched-random specs for rows with target boxes."""
+    specs: list[InterventionSpec] = []
+    for row in manifest_rows:
+        if not row["target_box_xyxy"]:
+            continue
+        target_box = tuple(json.loads(row["target_box_xyxy"]))
+        image_size = (int(row["image_width"]), int(row["image_height"]))
+        specs.append(
+            targeted_occlusion_spec(
+                image_id=row["image_id"],
+                rule_id=row["rule_id"],
+                target_box=target_box,
+            )
+        )
+        for seed in random_seeds:
+            specs.append(
+                matched_random_occlusion_spec(
+                    image_id=row["image_id"],
+                    rule_id=row["rule_id"],
+                    image_size=image_size,
+                    target_box=target_box,
+                    seed=seed,
+                    max_target_iou=max_target_iou,
+                )
+            )
+    return specs
+
+
+def load_manifest_rows(path: Path) -> list[dict[str, str]]:
+    """Load benchmark manifest rows."""
+    with path.open("r", encoding="utf-8", newline="") as handle:
+        return list(csv.DictReader(handle))
+
+
+def write_intervention_specs(specs: list[InterventionSpec], *, jsonl_path: Path, csv_path: Path) -> None:
+    """Write intervention specs as JSONL and CSV."""
+    jsonl_path.parent.mkdir(parents=True, exist_ok=True)
+    csv_path.parent.mkdir(parents=True, exist_ok=True)
+    rows = [spec.to_row() for spec in specs]
+    fields = list(rows[0].keys()) if rows else [
+        "image_id",
+        "rule_id",
+        "intervention_id",
+        "intervention_type",
+        "target_box_xyxy",
+        "mask_box_xyxy",
+        "seed",
+        "mask_target_iou",
+        "expected_effect",
+    ]
+    with jsonl_path.open("w", encoding="utf-8") as handle:
+        for row in rows:
+            handle.write(json.dumps(row, separators=(",", ":")) + "\n")
+    with csv_path.open("w", encoding="utf-8", newline="") as handle:
+        writer = csv.DictWriter(handle, fieldnames=fields)
+        writer.writeheader()
+        writer.writerows(rows)

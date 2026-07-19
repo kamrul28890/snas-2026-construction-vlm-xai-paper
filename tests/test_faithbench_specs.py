@@ -11,8 +11,14 @@ sys.path.insert(0, str(ROOT / "src"))
 
 from faithbench.annotation import ANNOTATOR_ID, model_assisted_annotation, normalized_box_to_abs
 from faithbench.geometry import clip_box, normalized_centroid_drift, same_size_random_box
-from faithbench.interventions import matched_random_occlusion_spec, targeted_occlusion_spec
+from faithbench.interventions import (
+    build_intervention_specs_from_manifest,
+    load_manifest_rows,
+    matched_random_occlusion_spec,
+    targeted_occlusion_spec,
+)
 from faithbench.manifest import LEGACY_RULE_MAP, build_pilot_manifest, evidence_size_band
+from faithbench.metrics import load_annotations, load_jsonl, load_manifest_by_key, score_model_outputs
 from faithbench.model_harness import (
     MODEL_OUTPUT_FIELDS,
     adapter_by_name,
@@ -243,3 +249,43 @@ def test_image_blind_majority_baseline_emits_no_evidence():
     assert rows[0]["answer"] == "violation"
     assert rows[0]["evidence_objects"] == "[]"
     assert rows[0]["provenance"] == "deterministic_baseline_no_image_access"
+
+
+def test_intervention_specs_from_manifest_create_targeted_and_controls():
+    rows = load_manifest_rows(ROOT / "benchmark" / "splits" / "pilot_manifest.csv")[:2]
+    specs = build_intervention_specs_from_manifest(rows, random_seeds=[42, 43])
+    assert len(specs) == 6
+    assert specs[0].intervention_type == "targeted_occlusion"
+    assert specs[1].intervention_type == "matched_random_occlusion"
+    assert specs[1].seed == 42
+    assert specs[0].to_row()["mask_target_iou"] == "1.0"
+
+
+def test_score_model_outputs_compares_answers_and_evidence():
+    rows = load_jsonl(ROOT / "results" / "frozen_model_outputs" / "pilot_annotation_bootstrap.jsonl")
+    summary = score_model_outputs(
+        model_output_rows=rows,
+        annotations_by_key=load_annotations(
+            ROOT / "benchmark" / "annotations" / "pilot_model_assisted_annotations.jsonl"
+        ),
+        manifest_by_key=load_manifest_by_key(ROOT / "benchmark" / "splits" / "pilot_manifest.csv"),
+    )
+    metrics = {row["metric_id"]: row for row in summary.summary_rows}
+    assert metrics["accuracy"]["value"] == "1.0"
+    assert metrics["macro_f1"]["value"] == "1.0"
+    assert int(metrics["accuracy"]["n"]) == 163
+    assert len(summary.example_rows) == 163
+
+
+def test_majority_violation_baseline_scores_below_seed_labels():
+    rows = load_jsonl(ROOT / "results" / "frozen_model_outputs" / "pilot_majority_violation.jsonl")
+    summary = score_model_outputs(
+        model_output_rows=rows,
+        annotations_by_key=load_annotations(
+            ROOT / "benchmark" / "annotations" / "pilot_model_assisted_annotations.jsonl"
+        ),
+        manifest_by_key=load_manifest_by_key(ROOT / "benchmark" / "splits" / "pilot_manifest.csv"),
+    )
+    metrics = {row["metric_id"]: row for row in summary.summary_rows}
+    assert float(metrics["accuracy"]["value"]) < 1.0
+    assert metrics["evidence_presence_rate"]["value"] == "0.0"
