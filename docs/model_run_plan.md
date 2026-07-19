@@ -50,6 +50,7 @@ The local Florence-2 grounding pipeline can be run without API cost:
 $python = '..\Explainable-AI-Mustafa-Abdallah\pilot\.venv\Scripts\python.exe'
 & $python .\experiments\run_florence_grounding_outputs.py --manifest .\benchmark\splits\pilot_manifest.csv --output-stem pilot_florence_grounding
 & $python .\experiments\run_florence_grounding_outputs.py --manifest .\benchmark\splits\scaleup_candidate_manifest.csv --output-stem scaleup_florence_grounding
+& $python .\experiments\run_florence_intervention_outputs.py --interventions .\benchmark\interventions\pilot_interventions.jsonl --output-stem pilot_florence_interventions
 ```
 
 ## Pause Points

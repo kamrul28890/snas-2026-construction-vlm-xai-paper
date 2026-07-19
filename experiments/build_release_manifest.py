@@ -13,6 +13,7 @@ INCLUDE_ROOTS = [
     "experiments",
     "paper/neurips",
     "results/frozen_model_outputs",
+    "results/intervention_outputs",
     "results/tables",
     "src/faithbench",
     "tests",
@@ -79,4 +80,3 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-

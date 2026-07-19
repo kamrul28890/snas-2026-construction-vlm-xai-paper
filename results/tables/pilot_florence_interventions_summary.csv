@@ -1,0 +1,11 @@
+metric_id,value,n,ci_low,ci_high,notes
+targeted_answer_flip_rate,0.3924050632911392,158,,,targeted occlusion rows
+matched_random_answer_flip_rate,0.09240506329113925,790,,,matched-random occlusion rows
+targeted_evidence_disappearance_rate,0.05063291139240506,158,,,targeted rows with baseline evidence but no post-mask evidence
+matched_random_evidence_disappearance_rate,0.03670886075949367,790,,,matched-random rows with baseline evidence but no post-mask evidence
+targeted_mean_centroid_drift,0.18768434017388558,150,,,baseline-to-intervention evidence drift
+matched_random_mean_centroid_drift,0.02866629628881586,761,,,baseline-to-intervention evidence drift
+targeted_mean_iou,0.18897061676478005,150,,,best evidence IoU versus baseline
+matched_random_mean_iou,0.8853960093236438,761,,,best evidence IoU versus baseline
+paired_answer_flip_rate_difference,0.3,158,0.2227848101265823,0.37721518987341773,targeted minus per-image matched-random mean
+paired_centroid_drift_difference,0.16003292458291588,149,0.13332501479745934,0.18683684313974264,targeted minus per-image matched-random mean

@@ -61,6 +61,7 @@ def main() -> int:
     (out_dir / "scaleup_candidate_counts.tex").write_text("\n".join(lines), encoding="utf-8")
 
     write_intervention_table(out_dir / "pilot_intervention_counts.tex")
+    write_intervention_effects_table(out_dir / "pilot_intervention_effects.tex")
 
     print(f"Wrote generated paper tables to {out_dir}")
     return 0
@@ -106,6 +107,34 @@ def write_intervention_table(path: Path) -> None:
             "",
         ]
     )
+    path.write_text("\n".join(lines), encoding="utf-8")
+
+
+def write_intervention_effects_table(path: Path) -> None:
+    scores = read_score(ROOT / "results" / "tables" / "pilot_florence_interventions_summary.csv")
+    lines = [
+        "\\begin{tabular}{lrrr}",
+        "\\toprule",
+        "Metric & Targeted & Matched random & Paired diff. \\\\",
+        "\\midrule",
+        (
+            f"Answer flip rate & {pct(scores['targeted_answer_flip_rate'])} & "
+            f"{pct(scores['matched_random_answer_flip_rate'])} & "
+            f"{pct(scores['paired_answer_flip_rate_difference'])} \\\\"
+        ),
+        (
+            f"Centroid drift & {float(scores['targeted_mean_centroid_drift']):.3f} & "
+            f"{float(scores['matched_random_mean_centroid_drift']):.3f} & "
+            f"{float(scores['paired_centroid_drift_difference']):.3f} \\\\"
+        ),
+        (
+            f"Evidence disappearance & {pct(scores['targeted_evidence_disappearance_rate'])} & "
+            f"{pct(scores['matched_random_evidence_disappearance_rate'])} & -- \\\\"
+        ),
+        "\\bottomrule",
+        "\\end{tabular}",
+        "",
+    ]
     path.write_text("\n".join(lines), encoding="utf-8")
 
 

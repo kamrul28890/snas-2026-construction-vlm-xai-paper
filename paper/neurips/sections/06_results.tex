@@ -18,6 +18,15 @@ Table~\ref{tab:pilot-interventions} summarizes the frozen pilot intervention spe
 \input{tables/pilot_intervention_counts}
 \end{table}
 
+Table~\ref{tab:pilot-intervention-effects} reports the first completed intervention run for the Florence grounding adapter. Targeted rule-evidence masks produce more answer flips and larger evidence movement than same-size random-location masks.
+
+\begin{table}[h]
+\centering
+\caption{Pilot Florence intervention effects.}
+\label{tab:pilot-intervention-effects}
+\input{tables/pilot_intervention_effects}
+\end{table}
+
 The current repository therefore validates the benchmark plumbing: manifests, annotations, outputs, interventions, and score tables can be regenerated and checked automatically.
 
 Table~\ref{tab:scaleup-baselines} reports the same adapters on the scale-up candidate manifest. The Florence row is the first image-grounded local model output in the repository. The caption-keyword baseline is intentionally included as a leakage diagnostic: high performance would suggest that source captions encode too much of the label, while low performance suggests the split cannot be solved by this simple caption-only heuristic.

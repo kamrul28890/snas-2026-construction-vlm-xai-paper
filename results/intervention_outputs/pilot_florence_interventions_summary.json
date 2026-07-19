@@ -1,0 +1,17 @@
+{
+  "output_stem": "pilot_florence_interventions",
+  "row_count": 948,
+  "source_interventions": "benchmark\\interventions\\pilot_interventions.jsonl",
+  "model_id": "microsoft/Florence-2-base-ft:grounding_pipeline",
+  "prompt_id": "florence_grounding_beam_black_mask",
+  "decoding": "beam",
+  "mask_mode": "black",
+  "answer_counts": {
+    "compliant": 649,
+    "violation": 299
+  },
+  "intervention_type_counts": {
+    "targeted_occlusion": 158,
+    "matched_random_occlusion": 790
+  }
+}

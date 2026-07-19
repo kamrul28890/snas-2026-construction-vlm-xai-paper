@@ -48,6 +48,17 @@ def main() -> int:
         missing = required - metric_ids
         if missing:
             raise RuntimeError(f"{filename} missing metrics: {sorted(missing)}")
+    intervention_summary = _read_csv(ROOT / "results" / "tables" / "pilot_florence_interventions_summary.csv")
+    intervention_metrics = {row["metric_id"] for row in intervention_summary}
+    expected_intervention_metrics = {
+        "targeted_answer_flip_rate",
+        "matched_random_answer_flip_rate",
+        "paired_answer_flip_rate_difference",
+        "paired_centroid_drift_difference",
+    }
+    missing = expected_intervention_metrics - intervention_metrics
+    if missing:
+        raise RuntimeError(f"pilot_florence_interventions_summary.csv missing metrics: {sorted(missing)}")
     print("Validated Phase 4 intervention specs and score tables.")
     return 0
 

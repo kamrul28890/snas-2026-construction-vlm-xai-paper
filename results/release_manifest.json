@@ -1,12 +1,13 @@
 {
   "manifest_version": "0.1.0",
   "description": "Frozen artifact manifest for the ConstructionSafety-FaithBench scaffold.",
-  "artifact_count": 131,
+  "artifact_count": 143,
   "include_roots": [
     "benchmark",
     "experiments",
     "paper/neurips",
     "results/frozen_model_outputs",
+    "results/intervention_outputs",
     "results/tables",
     "src/faithbench",
     "tests"
@@ -164,8 +165,8 @@
     },
     {
       "path": "experiments/build_release_manifest.py",
-      "bytes": 2100,
-      "sha256": "d444fd1e9d56f881fe35d570bcbfae98a86e29c6abc83039bfefc2b24f01aba4"
+      "bytes": 2135,
+      "sha256": "246c71390eef6e6696ade11ceafb9821284a609c29dd1d178e17a64150c353e1"
     },
     {
       "path": "experiments/build_scaleup_annotations.py",
@@ -179,8 +180,8 @@
     },
     {
       "path": "experiments/make_paper_tables.py",
-      "bytes": 4147,
-      "sha256": "b07d27f0e588984d8f1c405e1f7851fc1b1b0aa382ff9a7fc750c240162cec5d"
+      "bytes": 5369,
+      "sha256": "e31827aad118570731748038a9267024612ab6ff37209ee62440cb1ed0817498"
     },
     {
       "path": "experiments/run_florence_grounding_outputs.py",
@@ -188,9 +189,19 @@
       "sha256": "9188451393984c39d13a1cb3d797e717d6a8de264ac838c75992a6de8d4c04b4"
     },
     {
+      "path": "experiments/run_florence_intervention_outputs.py",
+      "bytes": 6724,
+      "sha256": "8c2cdf5bdd7a7759100d47f1c7279c5a1116cdf6d62400ed6fd986db1cf95506"
+    },
+    {
       "path": "experiments/run_model_harness.py",
       "bytes": 2648,
       "sha256": "edc453d41e38bb2773e8798ea939de955bc60fad78db227b61ae82bf06a6586c"
+    },
+    {
+      "path": "experiments/score_intervention_outputs.py",
+      "bytes": 2148,
+      "sha256": "67f57be4b2bbf7bac12dae59d2edca912f5661978f8d560fec99094080914515"
     },
     {
       "path": "experiments/score_model_outputs.py",
@@ -199,8 +210,8 @@
     },
     {
       "path": "experiments/validate_all.py",
-      "bytes": 3028,
-      "sha256": "43e16ea3fda3750fe734648fe51e3a94dbbfbd7110179b263f83b3144a32156e"
+      "bytes": 3096,
+      "sha256": "eab717eeb4fdd3f70a1d5117014315870519eaab6b58d8986da95b71a4b0888e"
     },
     {
       "path": "experiments/validate_annotations.py",
@@ -213,19 +224,24 @@
       "sha256": "83da3a8a5591eefced3226d81347fd1428bcb95af5ed9c54b60e876cae936374"
     },
     {
+      "path": "experiments/validate_intervention_outputs.py",
+      "bytes": 1041,
+      "sha256": "6e139c3bf341c4b136d46cfa38d0d25b54bcd6ebfa90deb323e256286846250c"
+    },
+    {
       "path": "experiments/validate_model_outputs.py",
       "bytes": 1364,
       "sha256": "addc2e396900c151e553fa56493a3835f1d06660b31f7c37f977945b373a1739"
     },
     {
       "path": "experiments/validate_paper_scaffold.py",
-      "bytes": 1640,
-      "sha256": "c1e75c101c49fce6243f17e2715fb133278368289365cc900ccd237acafb8b0d"
+      "bytes": 1706,
+      "sha256": "8ed0ca59f2e5b9ecde7322c43e1f76429fbe8e6169a102b3e253473535af9f11"
     },
     {
       "path": "experiments/validate_phase4_outputs.py",
-      "bytes": 2294,
-      "sha256": "611fbfbcb1f77ea5a7cdcc060b47c018b4bc32cd2c1baa1f989fcd50f48a7f4a"
+      "bytes": 2887,
+      "sha256": "3388a53d5e3a8eb874e4c90790cc6aabc91a25ebbba8bad6a6de53104dddcb57"
     },
     {
       "path": "experiments/validate_scaleup_manifest.py",
@@ -234,8 +250,8 @@
     },
     {
       "path": "paper/neurips/ConstructionSafety-FaithBench_scaffold.pdf",
-      "bytes": 134894,
-      "sha256": "2bb165574de27a24470d961fbcce77f95f92d122e81d14fb9c8bf2946cbfe4ca"
+      "bytes": 135863,
+      "sha256": "4bb5ebb55612d0d6a0208fa593035e415706ed6a647107884df3d19b77a2b53c"
     },
     {
       "path": "paper/neurips/README.md",
@@ -284,8 +300,8 @@
     },
     {
       "path": "paper/neurips/sections/06_results.tex",
-      "bytes": 1582,
-      "sha256": "b6513b15c5d0b061b8f207572dee375067ff1b4f500f9449a7f0933398a3a949"
+      "bytes": 1998,
+      "sha256": "f7d48c6ea4430b12f7c0f3a398e377a20643582b12756cede39fc5051ecccaae"
     },
     {
       "path": "paper/neurips/sections/07_limitations_ethics.tex",
@@ -301,6 +317,11 @@
       "path": "paper/neurips/tables/pilot_intervention_counts.tex",
       "bytes": 189,
       "sha256": "2be11a7703d0296e58a99f8a42755e3916b139c2078a3d9a0e45b50d44d4d80d"
+    },
+    {
+      "path": "paper/neurips/tables/pilot_intervention_effects.tex",
+      "bytes": 263,
+      "sha256": "94237740d929ebdef5ef11558072f76dd85c52df75498196e40912f7d2ef1859"
     },
     {
       "path": "paper/neurips/tables/scaleup_baseline_scores.tex",
@@ -453,9 +474,29 @@
       "sha256": "825a7c1107aea39da86cda1a6559ca72c4ef772e90a3b13e17c9bbdc84c41113"
     },
     {
+      "path": "results/intervention_outputs/README.md",
+      "bytes": 1146,
+      "sha256": "a8864497ba8c492865e11314be100c427476fed69d78751516b49368f291c561"
+    },
+    {
+      "path": "results/intervention_outputs/pilot_florence_interventions.csv",
+      "bytes": 592327,
+      "sha256": "0364f07b5b7138beb7c3f2d50ce6fb4a1a933225c2b53b0efea828197ee01b58"
+    },
+    {
+      "path": "results/intervention_outputs/pilot_florence_interventions.jsonl",
+      "bytes": 874560,
+      "sha256": "02a02de37e322e01a7efea1a22708aee34a896ae41566121c93c5e22fbd7b095"
+    },
+    {
+      "path": "results/intervention_outputs/pilot_florence_interventions_summary.json",
+      "bytes": 507,
+      "sha256": "a0d6764ca35a411ba88153ca77f2fa8fec5a74bd1c444bf55f2d302147e06b36"
+    },
+    {
       "path": "results/tables/README.md",
-      "bytes": 2380,
-      "sha256": "edac9ee297dbd8957a05b14ec05702db0ba6adc030ddd95fb1f9e56a9ed3ef06"
+      "bytes": 2793,
+      "sha256": "396ee4d0cd502ae52cd0bd0adfd9f78671aa8c92b771050fff06c7367a80dc6b"
     },
     {
       "path": "results/tables/pilot_annotation_bootstrap_per_example_scores.csv",
@@ -476,6 +517,16 @@
       "path": "results/tables/pilot_florence_grounding_scores.csv",
       "bytes": 473,
       "sha256": "d1f4ee727613ef265b1535d84dbd3631bfb00387ca7640f4b9af0853b1e052d8"
+    },
+    {
+      "path": "results/tables/pilot_florence_interventions_per_intervention.csv",
+      "bytes": 145383,
+      "sha256": "0391bcea9f52617a4d396ee2ba90538e2ba6060ab5ef75a1ba1d7123a96c5e7e"
+    },
+    {
+      "path": "results/tables/pilot_florence_interventions_summary.csv",
+      "bytes": 1103,
+      "sha256": "53d1e409556ffabb52e9c168f552a4202bfa30f8cf273a347717d6b84cfb81dc"
     },
     {
       "path": "results/tables/pilot_majority_violation_per_example_scores.csv",
@@ -568,6 +619,11 @@
       "sha256": "088d88818b0567225f01df826111ad24506666bd51af55caa1239e2965a9edd7"
     },
     {
+      "path": "src/faithbench/__pycache__/intervention_metrics.cpython-310.pyc",
+      "bytes": 10201,
+      "sha256": "121f1bd236d8d9fecde92e35247d8c3bdc07b38b43f9663006c0dea1160bfd57"
+    },
+    {
       "path": "src/faithbench/__pycache__/interventions.cpython-310.pyc",
       "bytes": 4501,
       "sha256": "2636d8d8b28d57dbda5531018d07b31301f539a3ddc5d72dff8eb5c08f56173c"
@@ -618,6 +674,11 @@
       "sha256": "0c13ee474beba783e119cb4acc721432583fe26819f736a497751cba817f7098"
     },
     {
+      "path": "src/faithbench/intervention_metrics.py",
+      "bytes": 10837,
+      "sha256": "fb4d8a0acef457dcde38120948ab3a139499de31efd7bc198a37819e19e8c1da"
+    },
+    {
       "path": "src/faithbench/interventions.py",
       "bytes": 5063,
       "sha256": "fcd338f14a72d73791f6d883de3cc9f4c647f96b4154690271d7e1adc98d64d6"
@@ -659,13 +720,13 @@
     },
     {
       "path": "tests/__pycache__/test_faithbench_specs.cpython-310-pytest-8.4.2.pyc",
-      "bytes": 33448,
-      "sha256": "f87ab4dd50de27adc9079cb5a771edcbd879b74c67bb814c2616287afa536497"
+      "bytes": 35673,
+      "sha256": "a72df5484d577b9b85f2338aedb25b8f8d24d30bea7a8145fba68ce5b7dcd2e1"
     },
     {
       "path": "tests/test_faithbench_specs.py",
-      "bytes": 15854,
-      "sha256": "1a66f8588e1a543b440da95caa1a8176c920c51380a61ed02a1e37a9bc51fce9"
+      "bytes": 18363,
+      "sha256": "dae3c548ade4f7dfe3b773c43b02a6e2130aa6aa68ff4377da4c0e47afda6b2d"
     }
   ]
 }

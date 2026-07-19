@@ -17,6 +17,7 @@ from faithbench.interventions import (
     matched_random_occlusion_spec,
     targeted_occlusion_spec,
 )
+from faithbench.intervention_metrics import summarize_intervention_outputs, validate_intervention_row
 from faithbench.manifest import LEGACY_RULE_MAP, build_pilot_manifest, evidence_size_band
 from faithbench.metrics import load_annotations, load_jsonl, load_manifest_by_key, score_model_outputs
 from faithbench.model_harness import (
@@ -287,6 +288,71 @@ def test_intervention_specs_from_manifest_create_targeted_and_controls():
     assert specs[1].intervention_type == "matched_random_occlusion"
     assert specs[1].seed == 42
     assert specs[0].to_row()["mask_target_iou"] == "1.0"
+
+
+def test_intervention_output_summary_reports_paired_differences():
+    baseline = [
+        {
+            "image_id": "0000001",
+            "rule_id": "ppe_hard_hat",
+            "answer": "compliant",
+            "evidence_regions_xyxy": "[[10,10,20,20]]",
+        }
+    ]
+    interventions = [
+        {
+            "intervention_id": "0000001:ppe_hard_hat:targeted",
+            "image_id": "0000001",
+            "rule_id": "ppe_hard_hat",
+            "intervention_type": "targeted_occlusion",
+            "seed": "",
+            "target_box_xyxy": "[10,10,20,20]",
+            "mask_box_xyxy": "[10,10,20,20]",
+            "mask_target_iou": "1.0",
+            "model_id": "m",
+            "prompt_id": "p",
+            "answer": "violation",
+            "evidence_regions_xyxy": "[[30,10,40,20]]",
+            "worker_boxes_xyxy": "[]",
+            "object_boxes_xyxy": "[[30,10,40,20]]",
+            "confidence": "1.0",
+            "graded_score": "0.0",
+            "raw_response": "{}",
+            "provenance": "test",
+        },
+        {
+            "intervention_id": "0000001:ppe_hard_hat:matched_random:42",
+            "image_id": "0000001",
+            "rule_id": "ppe_hard_hat",
+            "intervention_type": "matched_random_occlusion",
+            "seed": "42",
+            "target_box_xyxy": "",
+            "mask_box_xyxy": "[40,40,50,50]",
+            "mask_target_iou": "0.0",
+            "model_id": "m",
+            "prompt_id": "p",
+            "answer": "compliant",
+            "evidence_regions_xyxy": "[[11,10,21,20]]",
+            "worker_boxes_xyxy": "[]",
+            "object_boxes_xyxy": "[[11,10,21,20]]",
+            "confidence": "1.0",
+            "graded_score": "1.0",
+            "raw_response": "{}",
+            "provenance": "test",
+        },
+    ]
+    for row in interventions:
+        validate_intervention_row(row)
+    summary, details = summarize_intervention_outputs(
+        intervention_rows=interventions,
+        baseline_rows=baseline,
+        manifest_by_key={("0000001", "ppe_hard_hat"): {"image_width": "100", "image_height": "100"}},
+    )
+    metrics = {row["metric_id"]: row for row in summary}
+    assert metrics["targeted_answer_flip_rate"]["value"] == "1.0"
+    assert metrics["matched_random_answer_flip_rate"]["value"] == "0.0"
+    assert metrics["paired_answer_flip_rate_difference"]["value"] == "1.0"
+    assert len(details) == 2
 
 
 def test_score_model_outputs_compares_answers_and_evidence():

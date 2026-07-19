@@ -25,6 +25,7 @@ def main() -> int:
         paper_root / "tables" / "pilot_intervention_counts.tex",
         paper_root / "tables" / "scaleup_baseline_scores.tex",
         paper_root / "tables" / "scaleup_candidate_counts.tex",
+        paper_root / "tables" / "pilot_intervention_effects.tex",
     ]
     missing = [path for path in required if not path.exists()]
     if missing:

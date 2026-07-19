@@ -70,6 +70,7 @@ COMMANDS = [
         "--csv",
         ".\\results\\frozen_model_outputs\\scaleup_majority_violation.csv",
     ],
+    ["python", ".\\experiments\\validate_intervention_outputs.py"],
     ["python", ".\\experiments\\validate_phase4_outputs.py"],
     ["python", ".\\experiments\\validate_paper_scaffold.py"],
     ["python", ".\\experiments\\validate_scaleup_manifest.py"],
