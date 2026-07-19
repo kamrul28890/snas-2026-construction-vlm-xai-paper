@@ -14,6 +14,7 @@ COMMANDS = [
     ["python", ".\\experiments\\validate_model_outputs.py"],
     ["python", ".\\experiments\\validate_phase4_outputs.py"],
     ["python", ".\\experiments\\validate_paper_scaffold.py"],
+    ["python", ".\\experiments\\validate_scaleup_manifest.py"],
     ["python", "-m", "pytest", ".\\analysis\\tests", ".\\tests", "-q"],
 ]
 
@@ -30,4 +31,3 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-

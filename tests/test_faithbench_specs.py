@@ -28,6 +28,7 @@ from faithbench.model_harness import (
     validate_output_row,
 )
 from faithbench.schema import load_prompts, load_rules
+from faithbench.scaleup import choose_rule_for_row, classify_source_row, select_scaleup_candidates
 from faithbench.scoring import compare_evidence, normalize_answer
 from faithbench.statistics import bootstrap_ci, holm_adjust, paired_bootstrap_difference
 
@@ -289,3 +290,60 @@ def test_majority_violation_baseline_scores_below_seed_labels():
     metrics = {row["metric_id"]: row for row in summary.summary_rows}
     assert float(metrics["accuracy"]["value"]) < 1.0
     assert metrics["evidence_presence_rate"]["value"] == "0.0"
+
+
+def test_scaleup_classification_and_rule_choice():
+    row = {
+        "rule_1_violation": None,
+        "rule_2_violation": {"reason": "missing harness", "bounding_box": [[0, 0, 1, 1]]},
+        "rule_3_violation": None,
+        "rule_4_violation": None,
+    }
+    primary_class, violated = classify_source_row(row)
+    assert primary_class == "fall_hazard"
+    assert violated == ["rule_2_violation"]
+    rule_id, note = choose_rule_for_row(
+        primary_class="compliant",
+        violated_fields=[],
+        compliant_index=0,
+        has_excavator=False,
+    )
+    assert rule_id == "ppe_hard_hat"
+    assert note == "compliant_context_metadata_unconfirmed"
+
+
+def test_scaleup_candidate_selection_with_fake_rows():
+    class FakeImage:
+        size = (100, 80)
+
+    rows = [
+        {
+            "image_id": "1",
+            "image": FakeImage(),
+            "image_caption": "A worker is visible.",
+            "quality_of_info": "rich info",
+            "rule_1_violation": None,
+            "rule_2_violation": None,
+            "rule_3_violation": None,
+            "rule_4_violation": None,
+            "excavator": [],
+        },
+        {
+            "image_id": "2",
+            "image": FakeImage(),
+            "image_caption": "A worker lacks a hard hat.",
+            "quality_of_info": "rich info",
+            "rule_1_violation": {"reason": "missing hard hat", "bounding_box": [[0.1, 0.1, 0.2, 0.2]]},
+            "rule_2_violation": None,
+            "rule_3_violation": None,
+            "rule_4_violation": None,
+            "excavator": [],
+        },
+    ]
+    rules = load_rules(ROOT / "benchmark" / "rules.json")
+    selected = select_scaleup_candidates(rows, rules=rules, per_class=1, seed=7)
+    assert len(selected) == 2
+    assert {row["expected_answer_seed"] for row in selected} == {"compliant", "violation"}
+    violation = next(row for row in selected if row["expected_answer_seed"] == "violation")
+    assert violation["rule_id"] == "ppe_hard_hat"
+    assert violation["source_violation_boxes_xyxy"] == "[[10,8,20,16]]"

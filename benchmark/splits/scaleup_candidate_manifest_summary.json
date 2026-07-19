@@ -1,0 +1,20 @@
+{
+  "benchmark_version": "0.2.0-scaleup-candidate",
+  "row_count": 588,
+  "source_rows_scanned": 3004,
+  "per_class_target": 250,
+  "seed": 20260719,
+  "class_counts": {
+    "compliant": 250,
+    "fall_hazard": 75,
+    "ppe_violation": 250,
+    "struck_by_risk": 13
+  },
+  "rule_counts": {
+    "guardrail_edge": 110,
+    "struck_by_equipment": 106,
+    "ppe_hard_hat": 303,
+    "fall_harness": 69
+  },
+  "provenance": "Generated from ConstructionSite test-split metadata and image dimensions; raw images are not redistributed."
+}

@@ -1,7 +1,7 @@
 {
   "manifest_version": "0.1.0",
   "description": "Frozen artifact manifest for the ConstructionSafety-FaithBench scaffold.",
-  "artifact_count": 86,
+  "artifact_count": 92,
   "include_roots": [
     "benchmark",
     "experiments",
@@ -99,8 +99,8 @@
     },
     {
       "path": "benchmark/splits/README.md",
-      "bytes": 692,
-      "sha256": "90aaab165f3a0d009ea5b2ea9752f32a4ede5200e49613c2c511b895dd60a824"
+      "bytes": 1033,
+      "sha256": "bdad89613d7d747b9f55925274518437d3c16963cc5ad7722651b8d8a7c7b259"
     },
     {
       "path": "benchmark/splits/pilot_manifest.csv",
@@ -111,6 +111,16 @@
       "path": "benchmark/splits/pilot_manifest_summary.json",
       "bytes": 789,
       "sha256": "8d1466f49197bc8845fc3c3beb92f8b31b4da8c706a1b8b09f679257bd6a3323"
+    },
+    {
+      "path": "benchmark/splits/scaleup_candidate_manifest.csv",
+      "bytes": 307089,
+      "sha256": "574a97c9e93258dd30358a82527a28a619e6d137fc3b17610d02c3b38dc216db"
+    },
+    {
+      "path": "benchmark/splits/scaleup_candidate_manifest_summary.json",
+      "bytes": 550,
+      "sha256": "79409b7abda8413d6c18de15eeb979627f4a468d06c1d6ecb58a9fbe4445cc54"
     },
     {
       "path": "experiments/build_intervention_specs.py",
@@ -133,6 +143,11 @@
       "sha256": "d444fd1e9d56f881fe35d570bcbfae98a86e29c6abc83039bfefc2b24f01aba4"
     },
     {
+      "path": "experiments/build_scaleup_candidate_manifest.py",
+      "bytes": 2701,
+      "sha256": "e4d7e7d334a16e116d3fa9ef94bdbc57d72b4dc8d3a7a87fa19812db467f8379"
+    },
+    {
       "path": "experiments/make_paper_tables.py",
       "bytes": 2518,
       "sha256": "f90c182bc00a1d5b1d3e03a0ca073a88fbd742d98254eb435b1921bec9aeaa4f"
@@ -149,8 +164,8 @@
     },
     {
       "path": "experiments/validate_all.py",
-      "bytes": 957,
-      "sha256": "7f4d2a3b0123dd3046041e83cbd80fd6d3ba651aa2374b2ee1058287db8833be"
+      "bytes": 1020,
+      "sha256": "0b745a05008daf72ce5a5cac0f745df87b53853c29f161cd89cd352d832d1543"
     },
     {
       "path": "experiments/validate_annotations.py",
@@ -176,6 +191,11 @@
       "path": "experiments/validate_phase4_outputs.py",
       "bytes": 2009,
       "sha256": "004be60677e5d9770f128ca0325ae105208b40e6ab8b58012dc2de9cedfffc2d"
+    },
+    {
+      "path": "experiments/validate_scaleup_manifest.py",
+      "bytes": 1559,
+      "sha256": "457db5d0b680df5be7c99e41801d56b6187a5f386577e152fafaf8678db43af3"
     },
     {
       "path": "paper/neurips/ConstructionSafety-FaithBench_scaffold.pdf",
@@ -334,13 +354,13 @@
     },
     {
       "path": "src/faithbench/__init__.py",
-      "bytes": 1470,
-      "sha256": "159d06864d53b1c4723e59f3ca19b77a33a5f84a0f7010abe5b5f80119b7c05e"
+      "bytes": 1608,
+      "sha256": "433b05ff10025d63a06e9a101a6d50470a921300653ec724b2655509f1c7e8e7"
     },
     {
       "path": "src/faithbench/__pycache__/__init__.cpython-310.pyc",
-      "bytes": 1378,
-      "sha256": "e6b3a48f418889761fb650bb53fb960905768acef26b50e51a2aa4447f5efe11"
+      "bytes": 1486,
+      "sha256": "9c5a2fed466830706070c0f492594415e37c8fa37cfe2323edae1726fe6f29f0"
     },
     {
       "path": "src/faithbench/__pycache__/annotation.cpython-310.pyc",
@@ -371,6 +391,11 @@
       "path": "src/faithbench/__pycache__/model_harness.cpython-310.pyc",
       "bytes": 8237,
       "sha256": "a52a6c2e4b8cb5f480879d6ab33811b2221fd542426a9ef462bb6ebd47cba1b8"
+    },
+    {
+      "path": "src/faithbench/__pycache__/scaleup.cpython-310.pyc",
+      "bytes": 7446,
+      "sha256": "21eac31884d8fea9a3fef91d683e2f12be5b947f8126425ba276b6cc69efec3b"
     },
     {
       "path": "src/faithbench/__pycache__/schema.cpython-310.pyc",
@@ -418,6 +443,11 @@
       "sha256": "8b450224efa5c15e020ae7244bb833dbf8f03b644c1ccb7c171263afdbf9e445"
     },
     {
+      "path": "src/faithbench/scaleup.py",
+      "bytes": 7689,
+      "sha256": "33ebd445ab7240d5dd7f8517801e9bda2f4db0eebab091d14ed6b24af17cef57"
+    },
+    {
       "path": "src/faithbench/schema.py",
       "bytes": 3789,
       "sha256": "e369b4f34567cd3faa02c91a06ab77baeec3c91a368628b52ea81d9f70e48664"
@@ -439,8 +469,8 @@
     },
     {
       "path": "tests/test_faithbench_specs.py",
-      "bytes": 12443,
-      "sha256": "3e32631db83b70a3dbdcfce3492cd77f6cfa9018adb8365ce86c384ac64b41f5"
+      "bytes": 14603,
+      "sha256": "9584c5541477ccc6fae977c678d5f4ee0892021adcfa5fc1defa363e9351d401"
     }
   ]
 }

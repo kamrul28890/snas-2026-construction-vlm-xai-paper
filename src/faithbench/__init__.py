@@ -14,6 +14,7 @@ from faithbench.model_harness import (
     write_model_outputs,
 )
 from faithbench.schema import BenchmarkRules, PromptSet, load_prompts, load_rules
+from faithbench.scaleup import classify_source_row, select_scaleup_candidates
 from faithbench.scoring import EvidenceComparison, compare_evidence
 from faithbench.statistics import bootstrap_ci, holm_adjust, paired_bootstrap_difference
 
@@ -29,6 +30,7 @@ __all__ = [
     "build_model_assisted_annotations",
     "build_pilot_manifest",
     "bootstrap_ci",
+    "classify_source_row",
     "clip_box",
     "compare_evidence",
     "evidence_size_band",
@@ -42,6 +44,7 @@ __all__ = [
     "run_adapter",
     "same_size_random_box",
     "score_model_outputs",
+    "select_scaleup_candidates",
     "validate_output_row",
     "write_model_outputs",
 ]

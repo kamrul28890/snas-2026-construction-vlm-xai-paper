@@ -9,6 +9,10 @@ ConstructionSafety-FaithBench.
   `analysis/outputs/sample_audit.csv`.
 - `pilot_manifest_summary.json`: counts, legacy rule mapping, and annotation
   priority counts for the pilot manifest.
+- `scaleup_candidate_manifest.csv`: larger metadata-derived candidate split for
+  future human annotation and multi-model runs.
+- `scaleup_candidate_manifest_summary.json`: class and rule counts for the
+  candidate split.
 
 ## Regeneration
 
@@ -16,12 +20,14 @@ Run:
 
 ```powershell
 python .\experiments\build_pilot_manifest.py
+python .\experiments\build_scaleup_candidate_manifest.py
 ```
 
-The script also regenerates annotation templates under `benchmark/annotations/`.
+The pilot-manifest script also regenerates annotation templates under
+`benchmark/annotations/`.
 
 ## Important Limitation
 
-The pilot manifest is not a final NeurIPS-scale benchmark split. It is the seed
-manifest for annotation workflow and model-run harness development.
-
+The pilot manifest and scale-up candidate manifest are not final
+human-validated NeurIPS-scale benchmark splits. They are seed manifests for
+annotation workflow and model-run harness development.
