@@ -1,7 +1,7 @@
 {
   "manifest_version": "0.1.0",
   "description": "Frozen artifact manifest for the ConstructionSafety-FaithBench scaffold.",
-  "artifact_count": 118,
+  "artifact_count": 120,
   "include_roots": [
     "benchmark",
     "experiments",
@@ -179,8 +179,8 @@
     },
     {
       "path": "experiments/make_paper_tables.py",
-      "bytes": 2518,
-      "sha256": "f90c182bc00a1d5b1d3e03a0ca073a88fbd742d98254eb435b1921bec9aeaa4f"
+      "bytes": 3947,
+      "sha256": "b78a9d4f425a0a53c23919a2915e739a9fee8f553f20194dec22bbb5a1d36597"
     },
     {
       "path": "experiments/run_model_harness.py",
@@ -214,8 +214,8 @@
     },
     {
       "path": "experiments/validate_paper_scaffold.py",
-      "bytes": 1514,
-      "sha256": "50e3523a817ada266aa36742b806f6be23a8287b36de405859f82817be33d572"
+      "bytes": 1640,
+      "sha256": "c1e75c101c49fce6243f17e2715fb133278368289365cc900ccd237acafb8b0d"
     },
     {
       "path": "experiments/validate_phase4_outputs.py",
@@ -229,8 +229,8 @@
     },
     {
       "path": "paper/neurips/ConstructionSafety-FaithBench_scaffold.pdf",
-      "bytes": 131371,
-      "sha256": "fcb7dc46f629bad0af395e3041cf17fa8a9b91f0f07d30a69cf6617de51a528e"
+      "bytes": 134257,
+      "sha256": "d31d8c7f7f7ad8585c6dd2921283a48b8246333a60e716734ecd4a630bc35742"
     },
     {
       "path": "paper/neurips/README.md",
@@ -239,8 +239,8 @@
     },
     {
       "path": "paper/neurips/appendix.tex",
-      "bytes": 933,
-      "sha256": "2b5c70e769c2583442a50bfe9763484ca1de7ec6724386980403ec55915e10c9"
+      "bytes": 1026,
+      "sha256": "e4e81b017dc9c47178c9b5de367e556777d749e9477c59b3896c878bf203ef7c"
     },
     {
       "path": "paper/neurips/main.tex",
@@ -264,8 +264,8 @@
     },
     {
       "path": "paper/neurips/sections/03_benchmark.tex",
-      "bytes": 963,
-      "sha256": "f71a646faf70831e69957cbd5b21d321a4c48ac48057ad03491ca0ad1755cf8d"
+      "bytes": 1440,
+      "sha256": "e8f3d313b837bff115dd98d12d3c090b4153a2838abf68115591ae42a581b891"
     },
     {
       "path": "paper/neurips/sections/04_metrics.tex",
@@ -274,13 +274,13 @@
     },
     {
       "path": "paper/neurips/sections/05_experiments.tex",
-      "bytes": 666,
-      "sha256": "436e01acaa97bce04146e6c3748ec5bbd54f2eec117ac4a42045226d0fd361ec"
+      "bytes": 777,
+      "sha256": "b4980f5bd171472881cdd72268f51efdb3aecb9e269c3360b4ef01f335092a79"
     },
     {
       "path": "paper/neurips/sections/06_results.tex",
-      "bytes": 970,
-      "sha256": "0303767d62cdabd9193b4bafc7731f6975a332780f00610138ebf36a8ecba8b3"
+      "bytes": 1531,
+      "sha256": "83fc894909534998378818b841f8fcb6cdea78d3849cda43500dc38bca568300"
     },
     {
       "path": "paper/neurips/sections/07_limitations_ethics.tex",
@@ -296,6 +296,16 @@
       "path": "paper/neurips/tables/pilot_intervention_counts.tex",
       "bytes": 189,
       "sha256": "2be11a7703d0296e58a99f8a42755e3916b139c2078a3d9a0e45b50d44d4d80d"
+    },
+    {
+      "path": "paper/neurips/tables/scaleup_baseline_scores.tex",
+      "bytes": 374,
+      "sha256": "7bb78a50fb8298357c82c234d3ddfd67542e10b21f13574c39922262f2b88867"
+    },
+    {
+      "path": "paper/neurips/tables/scaleup_candidate_counts.tex",
+      "bytes": 202,
+      "sha256": "53066025506e0e3c0d60eadf5379f7a13b62f8f4ef69d236f1d8d8b871772e65"
     },
     {
       "path": "results/frozen_model_outputs/README.md",
@@ -594,8 +604,8 @@
     },
     {
       "path": "tests/__pycache__/test_faithbench_specs.cpython-310-pytest-8.4.2.pyc",
-      "bytes": 32431,
-      "sha256": "455cc88e9be4019c7f865529ecfd74cdf7c26efe3958d6e526c1f267524a55d5"
+      "bytes": 33286,
+      "sha256": "20b4038d4b116119b390fd12073079674edb8f75057f8df0204664e25b7a9571"
     },
     {
       "path": "tests/test_faithbench_specs.py",

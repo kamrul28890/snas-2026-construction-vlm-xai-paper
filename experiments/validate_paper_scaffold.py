@@ -23,6 +23,8 @@ def main() -> int:
         paper_root / "appendix.tex",
         paper_root / "tables" / "pilot_baseline_scores.tex",
         paper_root / "tables" / "pilot_intervention_counts.tex",
+        paper_root / "tables" / "scaleup_baseline_scores.tex",
+        paper_root / "tables" / "scaleup_candidate_counts.tex",
     ]
     missing = [path for path in required if not path.exists()]
     if missing:
@@ -38,4 +40,3 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-

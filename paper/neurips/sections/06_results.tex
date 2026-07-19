@@ -20,3 +20,11 @@ Table~\ref{tab:pilot-interventions} summarizes the frozen pilot intervention spe
 
 The current repository therefore validates the benchmark plumbing: manifests, annotations, outputs, interventions, and score tables can be regenerated and checked automatically.
 
+Table~\ref{tab:scaleup-baselines} reports the same deterministic baselines on the scale-up candidate manifest. The caption-keyword baseline is intentionally included as a leakage diagnostic: high performance would suggest that source captions encode too much of the label, while low performance suggests the split cannot be solved by this simple caption-only heuristic.
+
+\begin{table}[h]
+\centering
+\caption{Scale-up baseline scores against model-assisted bootstrap annotations.}
+\label{tab:scaleup-baselines}
+\input{tables/scaleup_baseline_scores}
+\end{table}

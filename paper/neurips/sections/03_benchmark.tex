@@ -4,6 +4,14 @@ Each benchmark example consists of an image identifier, source dataset revision,
 
 The pilot manifest contains 163 image-rule pairs from the ConstructionSite test split. It preserves both legacy rule IDs and normalized benchmark rule IDs so the benchmark remains traceable to the original pilot artifacts.
 
+The scale-up candidate manifest contains 588 test-split image-rule pairs selected from source metadata without redistributing raw images. Table~\ref{tab:scaleup-counts} shows the current class counts. The split remains imbalanced because struck-by and fall-hazard cases are scarce under the priority-labeling policy.
+
+\begin{table}[h]
+\centering
+\caption{Scale-up candidate manifest class counts.}
+\label{tab:scaleup-counts}
+\input{tables/scaleup_candidate_counts}
+\end{table}
+
 \paragraph{Annotation status.}
 The current completed annotation files are model-assisted bootstrap annotations generated from ConstructionSite metadata, captions, source rule-violation records, and pilot target boxes. They are useful for pipeline validation and triage, but they are not independent human ground truth. A NeurIPS-level version must add domain-audited annotations with agreement statistics.
-
