@@ -29,6 +29,7 @@ def main() -> int:
 
     pilot_score_files = {
         "Annotation bootstrap": ROOT / "results" / "tables" / "pilot_annotation_bootstrap_scores.csv",
+        "Florence grounding": ROOT / "results" / "tables" / "pilot_florence_grounding_scores.csv",
         "Manifest seed": ROOT / "results" / "tables" / "pilot_manifest_seed_scores.csv",
         "Majority violation": ROOT / "results" / "tables" / "pilot_majority_violation_scores.csv",
     }

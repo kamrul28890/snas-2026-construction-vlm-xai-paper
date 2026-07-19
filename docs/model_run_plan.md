@@ -44,6 +44,13 @@ are clear.
 5. Compare targeted vs matched-random changes per image.
 6. Promote the harness to the larger benchmark split only after pilot outputs pass.
 
+The local Florence-2 grounding pipeline can be run without API cost:
+
+```powershell
+$python = '..\Explainable-AI-Mustafa-Abdallah\pilot\.venv\Scripts\python.exe'
+& $python .\experiments\run_florence_grounding_outputs.py --manifest .\benchmark\splits\pilot_manifest.csv --output-stem pilot_florence_grounding
+```
+
 ## Pause Points
 
 User or advisor input is needed before:

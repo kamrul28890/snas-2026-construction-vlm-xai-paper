@@ -58,6 +58,8 @@ def normalize_answer(value: object) -> str:
     normalized = str(value or "").strip().lower()
     aliases = {
         "safe": "compliant",
+        "hazard": "violation",
+        "hazardous": "violation",
         "unsafe": "violation",
         "non-compliant": "violation",
         "noncompliant": "violation",
@@ -71,4 +73,3 @@ def normalize_answer(value: object) -> str:
     if normalized in {"compliant", "violation", "uncertain", "invalid"}:
         return normalized
     return "invalid"
-

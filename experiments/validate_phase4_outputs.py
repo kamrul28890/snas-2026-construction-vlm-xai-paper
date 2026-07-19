@@ -32,6 +32,7 @@ def main() -> int:
 
     expected_score_files = [
         "pilot_annotation_bootstrap_scores.csv",
+        "pilot_florence_grounding_scores.csv",
         "pilot_manifest_seed_scores.csv",
         "pilot_majority_violation_scores.csv",
         "scaleup_annotation_bootstrap_scores.csv",

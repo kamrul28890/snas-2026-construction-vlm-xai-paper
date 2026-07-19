@@ -77,6 +77,7 @@ def test_compare_evidence_marks_large_relocation():
 
 def test_normalize_answer_aliases_and_invalids():
     assert normalize_answer("safe") == "compliant"
+    assert normalize_answer("hazard") == "violation"
     assert normalize_answer("not compliant") == "violation"
     assert normalize_answer("cannot determine") == "uncertain"
     assert normalize_answer("maybe") == "invalid"

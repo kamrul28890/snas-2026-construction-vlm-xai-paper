@@ -1,0 +1,7 @@
+metric_id,value,n,notes
+accuracy,0.4171779141104294,163,all annotated rows
+macro_f1,0.417090156220591,163,compliant and violation labels
+invalid_rate,0.0,163,normalized invalid answer rows
+evidence_presence_rate,0.9693251533742331,163,rows with at least one predicted evidence box
+nonambiguous_accuracy,0.37681159420289856,69,rows where bootstrap annotation ambiguous=no
+mean_best_evidence_iou,0.3688513580196756,158,rows with predicted and reference evidence boxes
