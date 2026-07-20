@@ -1,7 +1,7 @@
 {
   "manifest_version": "0.1.0",
   "description": "Frozen artifact manifest for the ConstructionSafety-FaithBench scaffold.",
-  "artifact_count": 158,
+  "artifact_count": 159,
   "include_roots": [
     "benchmark",
     "experiments",
@@ -22,6 +22,11 @@
       "path": "benchmark/annotations/annotation_protocol.md",
       "bytes": 2891,
       "sha256": "440a55845dc7156be157dbac04fa5a0aab53cfb5f24f7251c50afe2a0b15ad6f"
+    },
+    {
+      "path": "benchmark/annotations/human_annotation_prompt.md",
+      "bytes": 5771,
+      "sha256": "4e683f3d0d300b2d131122ad60ee64d471873f3499c9c8f3af1df7607cfcd51e"
     },
     {
       "path": "benchmark/annotations/human_audit_batch_001.csv",
