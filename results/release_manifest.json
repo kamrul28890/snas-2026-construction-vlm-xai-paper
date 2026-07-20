@@ -1,7 +1,7 @@
 {
   "manifest_version": "0.1.0",
   "description": "Frozen artifact manifest for the ConstructionSafety-FaithBench scaffold.",
-  "artifact_count": 159,
+  "artifact_count": 168,
   "include_roots": [
     "benchmark",
     "experiments",
@@ -30,18 +30,48 @@
     },
     {
       "path": "benchmark/annotations/human_audit_batch_001.csv",
-      "bytes": 66166,
-      "sha256": "defe8656e0f2502b8abfe8b029f801a5c150d994efb49b347b2fa421ba26677f"
+      "bytes": 97493,
+      "sha256": "368ad2a4dc6b5622b6def132d7449a858df61f0434120d5763e335e26a5c57eb"
     },
     {
       "path": "benchmark/annotations/human_audit_batch_001.jsonl",
-      "bytes": 159219,
-      "sha256": "55fab40135f2f3ffe3ad2e876c844cf4e55c91b491beee96c838679c0f27ee20"
+      "bytes": 189982,
+      "sha256": "0b1c0d59c1d64d4b64adc6a2151c6c8f138929a08a7fddae6433f67605de5495"
+    },
+    {
+      "path": "benchmark/annotations/human_audit_batch_001_ai_disagreement_analysis.md",
+      "bytes": 5736,
+      "sha256": "580d6d500efec81905a09ffe4d09897b9a6763d174f8dc069355e9931824ff12"
+    },
+    {
+      "path": "benchmark/annotations/human_audit_batch_001_ai_disagreements.csv",
+      "bytes": 3813,
+      "sha256": "ee6ff8bf92c4faab51ca60b0b4fd9691e5c72cecc8efd69f325baacd220c4800"
+    },
+    {
+      "path": "benchmark/annotations/human_audit_batch_001_ai_personas.md",
+      "bytes": 2839,
+      "sha256": "7b67b08ccd0a56e75be646a36ac0a1dd2c88b404473ccc642c2e09a0060d0184"
+    },
+    {
+      "path": "benchmark/annotations/human_audit_batch_001_ai_returned_package_README.md",
+      "bytes": 698,
+      "sha256": "0fac0e452308efe43ad0b5e2c289928253f1ef33158ddc0fa394d191025603ae"
+    },
+    {
+      "path": "benchmark/annotations/human_audit_batch_001_annotator_A_ai.csv",
+      "bytes": 27700,
+      "sha256": "3841bbd6f1abd10f99e47ef9083f96cf590693bbba54a6d99c624c1abda6e59b"
+    },
+    {
+      "path": "benchmark/annotations/human_audit_batch_001_annotator_B_ai.csv",
+      "bytes": 22469,
+      "sha256": "392048f1aea8156e370666f3058f1572ea01f480445dbea6a46195226d54cbf5"
     },
     {
       "path": "benchmark/annotations/human_audit_batch_001_summary.json",
-      "bytes": 1106,
-      "sha256": "5c8d4f25002542674205b32ad5e9417aa9bb5475ee74156dbdd9f2368e5ede7b"
+      "bytes": 2051,
+      "sha256": "e9a97604409ce7e40724f2f2acc6c91753702735284e8126c68bf63a844f209d"
     },
     {
       "path": "benchmark/annotations/human_audit_protocol.md",
@@ -229,6 +259,16 @@
       "sha256": "e4d7e7d334a16e116d3fa9ef94bdbc57d72b4dc8d3a7a87fa19812db467f8379"
     },
     {
+      "path": "experiments/create_human_annotation_package.py",
+      "bytes": 6349,
+      "sha256": "eda382f5e24f0ec2b860297e6893d38bce5b9ab4c1c4ef4efe34664fbaaaff6f"
+    },
+    {
+      "path": "experiments/ingest_human_audit_passes.py",
+      "bytes": 13197,
+      "sha256": "dbd56f6856ca8b44dbafb59823ea2277f880b476a28bcfa7d478b359962bb0e3"
+    },
+    {
       "path": "experiments/make_paper_tables.py",
       "bytes": 6621,
       "sha256": "bc5e92f4ca83fc0785cebc4d903f5d65c19c82a846a3e4cf3e9d0fca9e285b5e"
@@ -310,8 +350,8 @@
     },
     {
       "path": "paper/neurips/ConstructionSafety-FaithBench_scaffold.pdf",
-      "bytes": 174373,
-      "sha256": "23ae4b3329ebf9d0c7a74b074085148398755f9e40ce34c6c40cf6976fff8df1"
+      "bytes": 175334,
+      "sha256": "8354b3317da2d593756a0f701f01cebab144b69e8c3c855bb62404534445e1d0"
     },
     {
       "path": "paper/neurips/README.md",
@@ -320,8 +360,8 @@
     },
     {
       "path": "paper/neurips/appendix.tex",
-      "bytes": 11713,
-      "sha256": "f8c6437d5992109dd47ad36c89f75f675393609ef5678ddb16e7070de09fce0c"
+      "bytes": 12526,
+      "sha256": "8226bab53dbde7a333d87f18564ae97e27b92e8729a798a3d48122d1b7898adc"
     },
     {
       "path": "paper/neurips/main.tex",
@@ -560,13 +600,18 @@
     },
     {
       "path": "results/tables/README.md",
-      "bytes": 3245,
-      "sha256": "79120c45bfe822b128a08ca39edc5480196cc9c37e2166b88152d0ee7627699a"
+      "bytes": 3499,
+      "sha256": "1492a6ae8f55456a89d9023cac4d5c5e4ab94038d37892851583b01c21aefaa7"
+    },
+    {
+      "path": "results/tables/human_audit_batch_001_ai_agreement.csv",
+      "bytes": 1176,
+      "sha256": "e3db5c6848f5e68c3312620049f0d96287c9a15b195c7eaf644aa5b5a3c6bb77"
     },
     {
       "path": "results/tables/human_audit_batch_001_status.csv",
-      "bytes": 421,
-      "sha256": "422754e225c158fddbb950d727b878baede73e557937e4a8de60be57709147c3"
+      "bytes": 426,
+      "sha256": "e3c057f2f80edb096b9899eae0b6eed8ad59ddef1a5b0695c8ce0c06bd316a5d"
     },
     {
       "path": "results/tables/pilot_annotation_bootstrap_per_example_scores.csv",

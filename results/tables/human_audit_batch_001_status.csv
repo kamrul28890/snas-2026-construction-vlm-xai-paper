@@ -1,7 +1,7 @@
 metric_id,value,n,notes
 row_count,120.0,120,audit rows in batch
-annotator_1_completion_rate,0.0,120,rows with annotator 1 answer label
-annotator_2_completion_rate,0.0,120,rows with annotator 2 answer label
-dual_annotation_completion_rate,0.0,120,rows with both answer labels
+annotator_1_completion_rate,1.0,120,rows with annotator 1 answer label
+annotator_2_completion_rate,1.0,120,rows with annotator 2 answer label
+dual_annotation_completion_rate,1.0,120,rows with both answer labels
 adjudication_completion_rate,0.0,120,rows with adjudicated answer label
-raw_answer_agreement,,0,exact annotator 1/2 answer-label agreement
+raw_answer_agreement,0.9,120,exact annotator 1/2 answer-label agreement

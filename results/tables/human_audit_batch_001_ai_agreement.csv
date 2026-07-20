@@ -1,0 +1,12 @@
+metric_id,value,n,notes
+overall_answer_agreement,0.900000,120,Exact answer-label agreement between the two independent AI-generated audit passes.
+fall_harness_answer_agreement,0.966667,30,Exact answer-label agreement for fall_harness.
+guardrail_edge_answer_agreement,0.800000,30,Exact answer-label agreement for guardrail_edge.
+ppe_hard_hat_answer_agreement,0.966667,30,Exact answer-label agreement for ppe_hard_hat.
+struck_by_equipment_answer_agreement,0.866667,30,Exact answer-label agreement for struck_by_equipment.
+label_pair_compliant_vs_compliant,24,120,Count of answer-label pairings across annotator 1 and annotator 2.
+label_pair_uncertain_vs_compliant,6,120,Count of answer-label pairings across annotator 1 and annotator 2.
+label_pair_uncertain_vs_uncertain,4,120,Count of answer-label pairings across annotator 1 and annotator 2.
+label_pair_uncertain_vs_violation,1,120,Count of answer-label pairings across annotator 1 and annotator 2.
+label_pair_violation_vs_compliant,5,120,Count of answer-label pairings across annotator 1 and annotator 2.
+label_pair_violation_vs_violation,80,120,Count of answer-label pairings across annotator 1 and annotator 2.

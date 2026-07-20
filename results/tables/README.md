@@ -17,9 +17,12 @@ python .\experiments\score_model_outputs.py --model-output .\results\frozen_mode
 python .\experiments\score_intervention_outputs.py --intervention-output .\results\intervention_outputs\pilot_florence_interventions.jsonl --intervention-csv .\results\intervention_outputs\pilot_florence_interventions.csv --baseline-output .\results\frozen_model_outputs\pilot_florence_grounding.jsonl --manifest .\benchmark\splits\pilot_manifest.csv --name pilot_florence_interventions
 python .\experiments\analyze_score_slices.py --per-example .\results\tables\pilot_florence_grounding_per_example_scores.csv --name pilot_florence_grounding
 python .\experiments\analyze_score_slices.py --per-example .\results\tables\scaleup_florence_grounding_per_example_scores.csv --name scaleup_florence_grounding
+python .\experiments\ingest_human_audit_passes.py --package "D:\My Projects\human-audit-batch-001-annotation\final_package"
 python .\experiments\score_human_audit_status.py --batch .\benchmark\annotations\human_audit_batch_001.csv --name human_audit_batch_001
 ```
 
 The current scores use model-assisted annotations as reference labels. They are
 pipeline validation and intervention-behavior artifacts, not final
-human-ground-truth benchmark results.
+human-ground-truth benchmark results. The current human-audit fields are
+populated by two independent AI-generated passes and remain pending
+human/domain adjudication.

@@ -82,7 +82,7 @@ Scale-up & 588 & 250 & 338 & 415 & 173 \\
 \end{tabular}
 \end{table}
 
-The repository also contains \texttt{human\_audit\_batch\_001}, a balanced 120-row audit queue prioritized from scale-up Florence/bootstrap disagreements and weak evidence-overlap cases. It has 30 rows per rule. Among these 120 rows, 118 are Florence/bootstrap answer disagreements, 82 have nonambiguous bootstrap labels, 83 are marked as rule-applicable, 59 have low evidence IoU, and one has missing predicted evidence. Human completion is currently zero because the annotator fields are intentionally blank.
+The repository also contains \texttt{human\_audit\_batch\_001}, a balanced 120-row audit queue prioritized from scale-up Florence/bootstrap disagreements and weak evidence-overlap cases. It has 30 rows per rule. Among these 120 rows, 118 are Florence/bootstrap answer disagreements, 82 have nonambiguous bootstrap labels, 83 are marked as rule-applicable, 59 have low evidence IoU, and one has missing predicted evidence. The current annotator fields are populated by two independent AI-generated audit passes: annotator A uses a strict compliance-officer persona and annotator B uses a pragmatic site-superintendent persona. These passes are useful for adjudication workflow development and disagreement analysis, but they are not human ground truth.
 
 \begin{table}[h]
 \centering
@@ -94,12 +94,16 @@ Metric & Value \\
 Rows prepared & 120 \\
 Rows per rule & 30 \\
 Florence/bootstrap disagreements & 118 \\
-Annotator 1 completion & 0.0\% \\
-Annotator 2 completion & 0.0\% \\
+AI annotator 1 completion & 100.0\% \\
+AI annotator 2 completion & 100.0\% \\
+Raw answer agreement & 90.0\% \\
+Rows needing adjudication & 12 \\
 Adjudication completion & 0.0\% \\
 \bottomrule
 \end{tabular}
 \end{table}
+
+The 12 answer-label disagreements are concentrated in rule-scope and visibility-threshold cases: six \texttt{guardrail\_edge} rows involving graded or sloped embankments, four \texttt{struck\_by\_equipment} rows involving static-frame proximity or swing-radius uncertainty, one \texttt{ppe\_hard\_hat} row with borderline headwear visibility, and one \texttt{fall\_harness} row where the annotators differed on whether an elevated deck pour implied fall-protection need without a visible edge.
 
 \subsection{Model Outputs and Answer-Level Scores}
 

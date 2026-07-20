@@ -20,5 +20,24 @@
     "rule_applies": 83
   },
   "florence_bootstrap_disagreement_count": 118,
-  "provenance": "Prioritized for independent human/domain audit from scale-up Florence score diagnostics. Blank annotator fields are intentionally unfilled."
+  "provenance": "Prioritized for independent audit from scale-up Florence score diagnostics. Annotator fields are currently populated by two independent AI-generated passes and must not be described as human ground truth.",
+  "annotation_passes": {
+    "status": "ingested",
+    "ground_truth_status": "not_human_ground_truth",
+    "provenance": "Two independent AI-generated passes from the returned final_package. Both are useful for pipeline/adjudication analysis but require human/domain adjudication before ground-truth claims.",
+    "source_package": "D:\\My Projects\\human-audit-batch-001-annotation\\final_package",
+    "annotator_1_id": "ai_annotator_A_compliance_officer",
+    "annotator_2_id": "ai_annotator_B_site_superintendent",
+    "annotator_1_completion_count": 120,
+    "annotator_2_completion_count": 120,
+    "answer_agreement_count": 108,
+    "answer_disagreement_count": 12,
+    "answer_agreement_rate": 0.9,
+    "disagreement_rule_counts": {
+      "fall_harness": 1,
+      "guardrail_edge": 6,
+      "ppe_hard_hat": 1,
+      "struck_by_equipment": 4
+    }
+  }
 }
