@@ -32,3 +32,4 @@ desktop.ini
 
 # Local annotator handoff bundles with copied image files
 output/human_annotation_package/
+output/human_audit_adjudication_package/
