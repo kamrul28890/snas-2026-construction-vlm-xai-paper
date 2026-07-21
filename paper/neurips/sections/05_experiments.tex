@@ -1,6 +1,6 @@
 \section{Experimental Setup}
 
-The current Phase 3 harness provides deterministic baselines to validate the benchmark pipeline before expensive VLM experiments:
+The experiment suite has three parts: answer scoring, evidence scoring, and counterfactual intervention. All adapters write the same normalized fields: answer label, evidence regions, invalid-output flag, and provenance metadata.
 
 \begin{itemize}
 \item \textbf{Annotation bootstrap}: echoes the model-assisted annotation labels and evidence.
@@ -10,4 +10,4 @@ The current Phase 3 harness provides deterministic baselines to validate the ben
 \item \textbf{Caption keyword}: caption-only leakage baseline using rule-specific keywords and no image pixels.
 \end{itemize}
 
-Future experiments should add instruction-following VLM adapters and, if budget permits, closed VLM adapters behind the same normalized output schema. Each adapter must record model version, prompt ID, decoding settings, access date, and raw response provenance.
+We evaluate these adapters on the pilot manifest, scale-up candidate manifest, and 120-row final audit-label layer. The intervention study is run for Florence on the pilot set because it is the first local image-grounded adapter with box-like outputs. The frozen intervention file contains 158 targeted masks and 790 matched-random controls. The current next empirical extension is to add instruction-following VLM adapters behind the same schema, record model version and decoding settings, and rerun both answer scoring and intervention scoring for the strongest model.

@@ -1,6 +1,6 @@
 \section{Detailed Results and Reproducibility Status}
 
-This appendix records the concrete artifacts, counts, and result tables currently implemented in the repository. All numbers in this appendix are generated from checked artifacts rather than manually annotated human ground truth. The model-assisted annotation layer remains a bootstrap reference for pipeline validation and audit prioritization.
+This appendix records the concrete artifacts, counts, and result tables currently implemented in the repository. All numbers in this appendix are generated from checked artifacts. The model-assisted annotation layer remains a bootstrap reference for pipeline validation and audit prioritization; the 120-row final audit-label layer is complete but must be reported with its AI-pass and returned-adjudication provenance.
 
 \subsection{Implemented Artifact Set}
 
@@ -11,12 +11,13 @@ The current scaffold contains the following reproducible components:
 \item \path{benchmark/prompts/}: prompt templates for normalized model adapters.
 \item \path{benchmark/splits/pilot_manifest.csv}: 163 pilot image-rule pairs.
 \item \path{benchmark/splits/scaleup_candidate_manifest.csv}: 588 scale-up candidate image-rule pairs.
-\item \path{benchmark/annotations/}: pilot and scale-up model-assisted annotation layers, annotation templates, human-audit protocol, and the first human-audit queue.
+\item \path{benchmark/annotations/}: pilot and scale-up model-assisted annotation layers, annotation templates, human-audit protocol, AI audit passes, returned adjudication, and final audit labels.
 \item \path{benchmark/interventions/}: 948 frozen pilot intervention specifications.
 \item Frozen model outputs: \path{results/frozen_model_outputs/}. These include deterministic baselines and local Florence-2 grounding outputs.
 \item \path{results/intervention_outputs/}: Florence-2 outputs after targeted and matched-random occlusions.
-\item \path{results/tables/}: aggregate score tables, per-example score files, slice diagnostics, intervention summaries, and human-audit status.
-\item \path{results/release_manifest.json}: SHA-256 manifest for 158 checked artifacts.
+\item \path{results/tables/}: aggregate score tables, per-example score files, slice diagnostics, intervention summaries, human-audit status, and final-audit score tables.
+\item \path{paper/neurips/figures/}: generated compact pipeline, audit-dashboard, intervention-effect, and rule-slice figures.
+\item \path{results/release_manifest.json}: SHA-256 manifest for checked artifacts.
 \end{itemize}
 
 \subsection{Benchmark Manifests}
@@ -177,22 +178,22 @@ The command \path{python ./experiments/validate_all.py} currently validates:
 \begin{itemize}
 \item benchmark rules and prompt templates;
 \item pilot and scale-up model-assisted annotations;
-\item the 120-row human-audit batch;
+\item the 120-row human-audit batch, returned adjudication files, and final-label layer;
 \item pilot and scale-up normalized model-output files;
 \item the 948-row Florence intervention output file;
 \item Phase 4 intervention specifications and generated score tables;
-\item the NeurIPS paper scaffold and required generated tables;
+\item the NeurIPS paper scaffold, required generated tables, and generated figures;
 \item the 588-row scale-up candidate manifest;
 \item 37 Python tests across \texttt{analysis/tests} and \texttt{tests}.
 \end{itemize}
 
-The latest validation run passed all checks. The release manifest hashes 158 artifacts across benchmark data, experiment scripts, paper files, frozen model outputs, intervention outputs, result tables, source code, and tests.
+The latest validation run passed all checks. The release manifest hashes benchmark data, experiment scripts, paper files, generated figures, frozen model outputs, intervention outputs, result tables, source code, and tests.
 
 \subsection{Regeneration Commands}
 
 The following commands regenerate the current major artifacts. Florence commands require the companion local XAI pilot environment at \path{../Explainable-AI-Mustafa-Abdallah/pilot/.venv}.
 
-{\footnotesize
+{\scriptsize
 \begin{verbatim}
 python .\experiments\build_pilot_manifest.py
 python .\experiments\build_model_assisted_annotations.py
@@ -230,9 +231,17 @@ python .\experiments\analyze_score_slices.py `
   --per-example .\results\tables\scaleup_florence_grounding_per_example_scores.csv `
   --name scaleup_florence_grounding
 python .\experiments\build_human_audit_batch.py
+python .\experiments\ingest_human_audit_passes.py `
+  --package "D:\My Projects\human-audit-batch-001-annotation\final_package"
+$adjPackage = "D:\My Projects\human-audit-batch-001-annotation\adjudication\" + `
+  "human_audit_batch_001_adjudication_package"
+python .\experiments\ingest_human_audit_adjudication.py `
+  --package $adjPackage
 python .\experiments\score_human_audit_status.py
+python .\experiments\score_human_audit_final_labels.py
 
 python .\experiments\make_paper_tables.py
+python .\experiments\make_paper_figures.py
 python .\experiments\build_release_manifest.py
 python .\experiments\validate_all.py
 \end{verbatim}
@@ -240,4 +249,4 @@ python .\experiments\validate_all.py
 
 \subsection{Current Limits Before NeurIPS-Style Claims}
 
-The implemented results are sufficient to show a reproducible benchmark scaffold and a meaningful faithfulness-audit workflow. They are not sufficient for final NeurIPS-style empirical claims. The remaining required work is independent human/domain annotation, agreement and adjudication reporting, additional instruction-following VLM adapters, and final review under the official target conference template.
+The implemented results are sufficient for a compact, reproducible audit study. They are not yet sufficient for broad model-ranking claims. The remaining required work is independent human/domain replacement or verification of the AI-pass audit layer, additional instruction-following VLM adapters, larger balanced splits, and final review under the official target conference template.

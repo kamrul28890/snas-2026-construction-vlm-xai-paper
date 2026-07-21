@@ -1,6 +1,24 @@
-\section{Current Pilot Results}
+\section{Results}
 
-Table~\ref{tab:pilot-baselines} reports the current pilot scores against the model-assisted bootstrap annotation layer. These are pipeline-validation numbers, not final benchmark claims.
+\paragraph{Final audit-label layer.}
+The 120-row audit set is intentionally difficult: it over-samples Florence/bootstrap disagreements and weak evidence overlap. Figure~\ref{fig:audit-dashboard} summarizes the label distribution and answer scores. The final labels contain 83 violation, 31 compliant, and 6 uncertain rows. Florence grounding reaches only 18.3\% accuracy and 12.5\% macro-F1, while the metadata-assisted bootstrap reaches 78.3\% accuracy and 50.5\% macro-F1. This gap is useful: the bootstrap layer remains a scaling aid, but the audit layer exposes visually grounded failure modes that bootstrap validation alone would miss.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\linewidth]{figures/audit_result_dashboard.pdf}
+\caption{Audit-final label distribution and answer scores. The final layer combines 108 A/B consensus labels with 12 returned adjudication decisions; it is complete but reported with explicit AI-pass provenance.}
+\label{fig:audit-dashboard}
+\end{figure}
+
+\begin{table}[h]
+\centering
+\caption{Audit-final answer scores against the 120-row final-label layer.}
+\label{tab:audit-final-scores}
+\input{tables/human_audit_final_scores}
+\end{table}
+
+\paragraph{Bootstrap validation.}
+Table~\ref{tab:pilot-baselines} reports pilot scores against model-assisted bootstrap annotations. These numbers validate the harness and make baselines comparable, but they are not final benchmark claims. The annotation-bootstrap row is an upper-bound sanity check because it echoes the reference layer.
 
 \begin{table}[h]
 \centering
@@ -9,7 +27,8 @@ Table~\ref{tab:pilot-baselines} reports the current pilot scores against the mod
 \input{tables/pilot_baseline_scores}
 \end{table}
 
-Table~\ref{tab:pilot-interventions} summarizes the frozen pilot intervention specifications. These specs can be consumed by future model runners to produce targeted-versus-control faithfulness results.
+\paragraph{Counterfactual faithfulness.}
+Table~\ref{tab:pilot-interventions} summarizes the frozen pilot intervention specifications. Figure~\ref{fig:intervention-effects} and Table~\ref{tab:pilot-intervention-effects} show that targeted rule-evidence masks affect Florence much more than matched random masks. Targeted occlusion flips answers in 39.2\% of rows versus 9.2\% for random controls; the paired answer-flip gap is 30.0 points with a bootstrap 95\% interval of 22.3 to 37.7 points. Targeted masks also cause much larger centroid drift, indicating evidence relocation rather than only answer instability.
 
 \begin{table}[h]
 \centering
@@ -18,7 +37,12 @@ Table~\ref{tab:pilot-interventions} summarizes the frozen pilot intervention spe
 \input{tables/pilot_intervention_counts}
 \end{table}
 
-Table~\ref{tab:pilot-intervention-effects} reports the first completed intervention run for the Florence grounding adapter. Targeted rule-evidence masks produce more answer flips and larger evidence movement than same-size random-location masks.
+\begin{figure}[t]
+\centering
+\includegraphics[width=\linewidth]{figures/intervention_effects_chart.pdf}
+\caption{Florence intervention behavior. Rule-evidence masks induce more answer flips and evidence drift than matched random masks, supporting the need for counterfactual faithfulness metrics beyond answer accuracy.}
+\label{fig:intervention-effects}
+\end{figure}
 
 \begin{table}[h]
 \centering
@@ -27,9 +51,8 @@ Table~\ref{tab:pilot-intervention-effects} reports the first completed intervent
 \input{tables/pilot_intervention_effects}
 \end{table}
 
-The current repository therefore validates the benchmark plumbing: manifests, annotations, outputs, interventions, and score tables can be regenerated and checked automatically.
-
-Table~\ref{tab:scaleup-baselines} reports the same adapters on the scale-up candidate manifest. The Florence row is the first image-grounded local model output in the repository. The caption-keyword baseline is intentionally included as a leakage diagnostic: high performance would suggest that source captions encode too much of the label, while low performance suggests the split cannot be solved by this simple caption-only heuristic.
+\paragraph{Scale-up diagnostics.}
+Table~\ref{tab:scaleup-baselines} reports adapters on the 588-row scale-up candidate manifest against bootstrap annotations. The caption-keyword baseline is a leakage diagnostic; its poor performance indicates that this simple caption-only heuristic cannot solve the split. Figure~\ref{fig:rule-slices} shows that Florence usually emits some evidence, yet answer accuracy remains weak, especially for PPE hard-hat and struck-by equipment rules. This separation between evidence presence and answer correctness is the central empirical reason for reporting answer, grounding, and counterfactual metrics separately.
 
 \begin{table}[h]
 \centering
@@ -38,7 +61,12 @@ Table~\ref{tab:scaleup-baselines} reports the same adapters on the scale-up cand
 \input{tables/scaleup_baseline_scores}
 \end{table}
 
-Table~\ref{tab:scaleup-florence-slices} breaks the scale-up Florence result down by safety rule. The current local grounding pipeline is weakest on PPE and struck-by examples, showing where adapter and annotation work should be prioritized next.
+\begin{figure}[t]
+\centering
+\includegraphics[width=\linewidth]{figures/scaleup_rule_slice_chart.pdf}
+\caption{Scale-up Florence rule slices. Evidence regions are usually present, but answer accuracy remains rule-dependent and weak on PPE and struck-by examples.}
+\label{fig:rule-slices}
+\end{figure}
 
 \begin{table}[h]
 \centering

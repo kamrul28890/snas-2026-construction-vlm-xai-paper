@@ -13,7 +13,7 @@
 \maketitle
 
 \begin{abstract}
-Construction-safety vision-language models are commonly evaluated by final answers, textual rationales, or grounding overlap. These signals can overstate whether a system uses rule-relevant visual evidence. We introduce the working scaffold for ConstructionSafety-FaithBench, a benchmark and audit protocol for separating answer correctness from visual-evidence faithfulness under targeted and matched-control interventions. The current repository implements the pilot benchmark manifest, model-assisted bootstrap annotations, normalized model-output schema, deterministic baselines, intervention specifications, and scoring code. The current annotation layer is not human ground truth; it is a source-metadata-assisted bootstrap used to validate the pipeline before independent domain annotation and multi-model VLM experiments.
+Construction-safety vision-language models are often evaluated by final answers or plausible rationales, but neither shows whether a model used the rule-relevant visual evidence. We present ConstructionSafety-FaithBench, a compact benchmark and counterfactual audit pipeline for construction-safety VLMs. Each example pairs a site image with a normalized safety rule, an answer label, and localizable visual evidence. The implemented artifact includes 163 pilot image-rule pairs, 588 scale-up candidates, four safety-rule families, normalized model-output schemas, deterministic baselines, a Florence-2 grounding adapter, 948 targeted/matched-random occlusion runs, and a 120-row final audit-label layer. On the audit set, the current Florence grounding adapter reaches only 18.3\% answer accuracy, while a metadata-assisted bootstrap reaches 78.3\%, showing that the prioritized audit split exposes substantial model weakness hidden by scaffold-level validation. Targeted evidence occlusion changes Florence answers 39.2\% of the time versus 9.2\% for matched random masks, with a paired answer-flip gap of 30.0 points. The current final-label layer combines two independent AI-generated audit passes with returned adjudication for all 12 disagreements; we therefore report it with explicit provenance rather than as unqualified human ground truth.
 \end{abstract}
 
 \input{sections/01_introduction}
@@ -24,6 +24,7 @@ Construction-safety vision-language models are commonly evaluated by final answe
 \input{sections/06_results}
 \input{sections/07_limitations_ethics}
 
+\clearpage
 \bibliographystyle{plainnat}
 \bibliography{references}
 
@@ -31,4 +32,3 @@ Construction-safety vision-language models are commonly evaluated by final answe
 \input{appendix}
 
 \end{document}
-

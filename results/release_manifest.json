@@ -1,7 +1,7 @@
 {
   "manifest_version": "0.1.0",
   "description": "Frozen artifact manifest for the ConstructionSafety-FaithBench scaffold.",
-  "artifact_count": 181,
+  "artifact_count": 186,
   "include_roots": [
     "benchmark",
     "experiments",
@@ -314,6 +314,11 @@
       "sha256": "dbd56f6856ca8b44dbafb59823ea2277f880b476a28bcfa7d478b359962bb0e3"
     },
     {
+      "path": "experiments/make_paper_figures.py",
+      "bytes": 9578,
+      "sha256": "93f233ae64ff55a7e248c633489e4b073e33343b2c2f866076b9c883c2413fbe"
+    },
+    {
       "path": "experiments/make_paper_tables.py",
       "bytes": 7747,
       "sha256": "95967d3ff82cebeac691e2b635e6a960a33c0a9f75a93e14d9319136077137b3"
@@ -385,8 +390,8 @@
     },
     {
       "path": "experiments/validate_paper_scaffold.py",
-      "bytes": 1838,
-      "sha256": "d71c0693f7c35f822176d4437b5a00a2afd1d32d2f6012049b7410f0d6988b7d"
+      "bytes": 2095,
+      "sha256": "d9b761c27abea6d38a6cd84b11e5c99150dba4161be991a39cf1aa2a6a5aee2e"
     },
     {
       "path": "experiments/validate_phase4_outputs.py",
@@ -400,23 +405,43 @@
     },
     {
       "path": "paper/neurips/ConstructionSafety-FaithBench_scaffold.pdf",
-      "bytes": 176018,
-      "sha256": "fa21416558fc57dd29f780723b22d117283d3f5a9a07c049d3ffb41530143aa2"
+      "bytes": 284543,
+      "sha256": "c892618a62fb91eeba2b9675869c9fe8046373451d9be64e02f9d56e6127f766"
     },
     {
       "path": "paper/neurips/README.md",
-      "bytes": 824,
-      "sha256": "d5158873fa4f733f916f1447fee6b7862d7b55df2ac945b5b188e95f37f23675"
+      "bytes": 1179,
+      "sha256": "4cff9e96eac266242f08392bd2b766ed1aeba664aab1ae2edfac68618ec7fdd8"
     },
     {
       "path": "paper/neurips/appendix.tex",
-      "bytes": 12977,
-      "sha256": "5c4520f1c2bd4ce929458779245d33d645fb847611883929b798076a15496614"
+      "bytes": 13713,
+      "sha256": "1ff7241caf2ecf3cb20b8b99b34dadc7074e0f0c214085e1379b100b0387b054"
+    },
+    {
+      "path": "paper/neurips/figures/audit_result_dashboard.pdf",
+      "bytes": 17271,
+      "sha256": "c575e31092c12f3220da3727860f68ef41998f69a21820ecf53cbb9ccac23bb7"
+    },
+    {
+      "path": "paper/neurips/figures/intervention_effects_chart.pdf",
+      "bytes": 16953,
+      "sha256": "7db057cbc6fa7ba8fb8a00c6e8d1335880bf34c021684c25e5466bdcf040234f"
+    },
+    {
+      "path": "paper/neurips/figures/pipeline_architecture.pdf",
+      "bytes": 19212,
+      "sha256": "89050044acaa6409aaffbdfcfff1562fd33eb315b1f5f917fe7cf2701a07108f"
+    },
+    {
+      "path": "paper/neurips/figures/scaleup_rule_slice_chart.pdf",
+      "bytes": 14391,
+      "sha256": "a8b46e0c9cebfca4184217a2c0b0ccfefceab9111723d1e9ac0b391b80d72ab0"
     },
     {
       "path": "paper/neurips/main.tex",
-      "bytes": 1546,
-      "sha256": "2a9684dce856967f133d704f49d1ac73c27b6358647a58b1752f349c8bd8669a"
+      "bytes": 2076,
+      "sha256": "3391b25ba1c2a98831a9128a62b7bc5c4881012cf67827e0efed4782de7d0e93"
     },
     {
       "path": "paper/neurips/references.bib",
@@ -425,38 +450,38 @@
     },
     {
       "path": "paper/neurips/sections/01_introduction.tex",
-      "bytes": 1513,
-      "sha256": "6f063456332f8e9067cff80ea4d9b2ca2f2c826bdc7c0dc81f4c5b62f20634e6"
+      "bytes": 2450,
+      "sha256": "3a6ce655a5d88628af75c0946f45f1cd279b805069f20614651c14a637f9fed2"
     },
     {
       "path": "paper/neurips/sections/02_related_work.tex",
-      "bytes": 1420,
-      "sha256": "e90fb3df27f1df922c7cde738e872e9e250a21c1c3a6d6d0659772abe0e5df21"
+      "bytes": 1673,
+      "sha256": "57a307f4e38efcf0ef0529a6285a51f4051eba1a76c04bc7edd68efc243cb921"
     },
     {
       "path": "paper/neurips/sections/03_benchmark.tex",
-      "bytes": 1599,
-      "sha256": "bc16c51cb327ca4060e2788a2457072824fd7d2d81d86ceb0f7f6e9b1089d8ed"
+      "bytes": 2244,
+      "sha256": "1ff2d2cd539d37636050ff0a4faaecd5e582431d8d26e9e1fb08ccbd3dc7efdf"
     },
     {
       "path": "paper/neurips/sections/04_metrics.tex",
-      "bytes": 836,
-      "sha256": "369775556772c66792789c2f6613488de3c1d4fb339df01f167856c0cfaaf92e"
+      "bytes": 1388,
+      "sha256": "7d58d028f710525264ab1ab977be0dea028b4625afb9bc89ec89f4ea4ec82bc5"
     },
     {
       "path": "paper/neurips/sections/05_experiments.tex",
-      "bytes": 1015,
-      "sha256": "b75fd87a368a77e0b3f8d6be20d17f75aedc5813b0c606345c8fbaabc808d2f6"
+      "bytes": 1424,
+      "sha256": "8746159949feded2c54cd3e086c5a962a95f581274ca22dae6e98fc617592ca1"
     },
     {
       "path": "paper/neurips/sections/06_results.tex",
-      "bytes": 2407,
-      "sha256": "faecd52352e0efc685e1febca2bca3277e2387d8dfec7c05b367fdfadf16e036"
+      "bytes": 4351,
+      "sha256": "431ac67ef9c7f8cd15bb845b296bce88f32033ffbf4c455fbf005177d2081950"
     },
     {
       "path": "paper/neurips/sections/07_limitations_ethics.tex",
-      "bytes": 775,
-      "sha256": "a2928590fd7e32187617d5b2b4c3a971017a5dadd339f2eb39cb47d4256c3f31"
+      "bytes": 1235,
+      "sha256": "776cfc4d415b646a003186cd51114e38616f6e6488aaf7983f87dd4b36d3836a"
     },
     {
       "path": "paper/neurips/tables/human_audit_final_scores.tex",

@@ -1,11 +1,17 @@
 \section{Introduction}
 
-Vision-language models may support construction-safety review by linking site imagery to natural-language safety rules. However, a correct or stable final answer does not establish that the model relied on the right visual evidence. This gap matters in safety inspection: a warning is less useful if the cited evidence moves from a hard hat to unrelated background scaffolding, or if the model ignores a counterfactual edit to the rule-relevant object.
+Vision-language models (VLMs) could help screen construction imagery for safety-rule violations, but answer accuracy alone is too weak for this setting. A model may answer ``violation'' while grounding its decision on background scaffolding instead of a missing hard hat, or it may keep the same answer after the rule-relevant worker is masked. In safety inspection, this distinction matters: explanations are useful only when the answer, evidence, and intervention behavior agree.
 
-The current pilot study found that targeted occlusion changed answers more often than same-size random controls and that IoU-based drift can be distorted by object size. These observations motivate a broader benchmark contribution rather than a single-model feasibility report.
+ConstructionSafety-FaithBench operationalizes this distinction as a compact, reproducible audit suite. Each row binds an image, a natural-language safety question, a normalized rule, an answer label, and evidence boxes. Models must output both an answer and evidence regions. We then compare ordinary answer scores with evidence overlap and counterfactual sensitivity under targeted and same-size random masks.
 
-ConstructionSafety-FaithBench is designed to evaluate whether model answers, evidence regions, and rationales remain aligned under counterfactual interventions. The benchmark is currently implemented as a reproducible pilot scaffold; the next research step is to expand it to multiple VLMs, larger splits, and independent human/domain annotation.
+The current implementation is intentionally small but end-to-end. It includes a 163-row pilot manifest, a 588-row scale-up candidate split, a 120-row prioritized audit set, deterministic baselines, a local Florence-2 grounding adapter, and a completed targeted-versus-random occlusion study. The final audit-label layer combines 108 A/B consensus rows with 12 returned adjudication decisions. Because the two audit passes were AI-generated, we preserve the provenance explicitly and avoid claiming unqualified human ground truth.
 
-\paragraph{Current contributions in this repository.}
-The repository currently provides: (i) a normalized construction-safety rule specification, (ii) a 163-example pilot manifest, (iii) model-assisted bootstrap annotations, (iv) normalized model-output schema and deterministic baselines, (v) frozen targeted and matched-random intervention specs, and (vi) scoring scripts for answer and evidence metrics.
+\paragraph{Contributions.}
+This repository contributes: (i) a normalized four-rule construction-safety benchmark schema; (ii) pilot, scale-up, audit, intervention, and final-label artifacts with validation scripts; (iii) a model-output and scoring interface that separates answer correctness, evidence overlap, and counterfactual faithfulness; (iv) a 948-run Florence-2 occlusion study showing larger changes under rule-evidence masking than matched random masking; and (v) a compact paper/reproducibility package with generated figures, tables, checks, and SHA-256 artifact manifests.
 
+\begin{figure}[t]
+\centering
+\includegraphics[width=\linewidth]{figures/pipeline_architecture.pdf}
+\caption{ConstructionSafety-FaithBench pipeline. Source metadata and images are normalized into rule-specific manifests, scored through common model-output schemas, audited through two-pass/adjudicated final labels, and evaluated with answer, evidence, and intervention metrics.}
+\label{fig:pipeline}
+\end{figure}

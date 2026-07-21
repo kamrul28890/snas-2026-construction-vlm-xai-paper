@@ -28,6 +28,10 @@ def main() -> int:
         paper_root / "tables" / "pilot_intervention_effects.tex",
         paper_root / "tables" / "scaleup_florence_rule_slices.tex",
         paper_root / "tables" / "human_audit_final_scores.tex",
+        paper_root / "figures" / "pipeline_architecture.pdf",
+        paper_root / "figures" / "audit_result_dashboard.pdf",
+        paper_root / "figures" / "intervention_effects_chart.pdf",
+        paper_root / "figures" / "scaleup_rule_slice_chart.pdf",
     ]
     missing = [path for path in required if not path.exists()]
     if missing:
