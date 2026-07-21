@@ -11,19 +11,19 @@ model is using the right visual evidence.
 
 The evaluation does not certify deployment readiness.
 
-## Recommended Track Framing
+## Recommended Paper Framing
 
-The strongest publication framing is NeurIPS Evaluations & Datasets:
+The strongest current framing is a compact empirical audit study:
 
 - evaluation protocol;
 - benchmark artifact;
-- metric validity analysis;
+- metric-validity analysis;
 - use-case-inspired audit;
 - failure taxonomy;
 - reproducible scoring suite.
 
-Main-track Use-Inspired is viable only if the project adds a method that
-improves faithfulness, not just an audit.
+Stronger model-ranking or deployment claims require additional independent
+model runs and human/domain annotation.
 
 ## Model Types
 
@@ -132,4 +132,3 @@ Unsupported without additional studies:
 - demographic fairness;
 - faithful internal model reasoning;
 - autonomous compliance enforcement.
-

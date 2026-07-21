@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import csv
+import argparse
 import json
 from pathlib import Path
 
@@ -10,7 +11,15 @@ import matplotlib.pyplot as plt
 from matplotlib.patches import FancyArrowPatch, FancyBboxPatch
 
 ROOT = Path(__file__).resolve().parents[1]
-FIG_DIR = ROOT / "paper" / "neurips" / "figures"
+FIG_DIR = ROOT / "paper" / "snas" / "figures"
+
+plt.rcParams.update(
+    {
+        "font.family": "Times New Roman",
+        "pdf.fonttype": 42,
+        "ps.fonttype": 42,
+    }
+)
 
 
 COLORS = {
@@ -99,7 +108,7 @@ def make_pipeline_figure() -> None:
 
     audit_nodes = [
         ((0.21, 0.14), 0.16, 0.24, "Prioritized audit\n120 rows", COLORS["annotation"]),
-        ((0.41, 0.14), 0.16, 0.24, "Two independent\nAI audit passes", COLORS["annotation"]),
+        ((0.41, 0.14), 0.16, 0.24, "Role-conditioned\nA/B audit passes", COLORS["annotation"]),
         ((0.61, 0.14), 0.14, 0.24, "12 disagreements\nadjudicated", COLORS["intervention"]),
         ((0.79, 0.14), 0.16, 0.24, "Final labels\n108 consensus + 12 adjud.", COLORS["score"]),
     ]
@@ -139,8 +148,8 @@ def make_audit_dashboard() -> None:
     order = [
         ("model_assisted_bootstrap", "Bootstrap"),
         ("florence_grounding", "Florence"),
-        ("ai_annotator_1", "AI A"),
-        ("ai_annotator_2", "AI B"),
+        ("ai_annotator_1", "Audit A"),
+        ("ai_annotator_2", "Audit B"),
     ]
     x = range(len(order))
     accuracy = [float(score_by_model[key]["accuracy"]) * 100 for key, _ in order]
@@ -230,6 +239,12 @@ def make_rule_slice_figure() -> None:
 
 
 def main() -> int:
+    global FIG_DIR
+    parser = argparse.ArgumentParser(description="Generate compact paper figures from checked benchmark artifacts.")
+    parser.add_argument("--output-dir", default=str(FIG_DIR), help="Directory where figure PDFs are written.")
+    args = parser.parse_args()
+    FIG_DIR = Path(args.output_dir)
+
     make_pipeline_figure()
     make_audit_dashboard()
     make_intervention_figure()

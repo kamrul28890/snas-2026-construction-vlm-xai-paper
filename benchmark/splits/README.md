@@ -28,6 +28,6 @@ The pilot-manifest script also regenerates annotation templates under
 
 ## Important Limitation
 
-The pilot manifest and scale-up candidate manifest are not final
-human-validated NeurIPS-scale benchmark splits. They are seed manifests for
-annotation workflow and model-run harness development.
+The pilot manifest and scale-up candidate manifest are not final deployment
+validation splits. They are seed manifests for annotation workflow and model-run
+harness development.

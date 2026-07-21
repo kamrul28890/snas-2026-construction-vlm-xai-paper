@@ -1,0 +1,38 @@
+% SNAS 2026 double-blind abstract submission candidate.
+\documentclass[12pt,letterpaper,twoside]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{fontspec}
+\setmainfont{Times New Roman}
+\usepackage{setspace}
+\doublespacing
+\usepackage{fancyhdr}
+\usepackage[hidelinks]{hyperref}
+\hypersetup{
+  pdftitle={ConstructionSafety-FaithBench Abstract},
+  pdfauthor={},
+  pdfsubject={Double-blind abstract submission candidate for the 5th SNAS Interdisciplinary Research Conference},
+  pdfkeywords={trustworthy AI, explainable AI, vision-language models, construction safety}
+}
+
+\setlength{\parindent}{0.5in}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[LE,LO]{\textit{ConstructionSafety-FaithBench}}
+\fancyhead[RE,RO]{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\setlength{\headheight}{15pt}
+
+\begin{document}
+
+\begin{center}
+\textbf{ConstructionSafety-FaithBench: Auditing Visual-Evidence Faithfulness in Construction-Safety Vision-Language Models}
+\end{center}
+
+\begin{center}
+\textbf{Abstract}
+\end{center}
+
+Construction-safety vision-language models (VLMs) are often evaluated by final answers or plausible rationales, but neither shows whether the model used rule-relevant visual evidence. This paper presents ConstructionSafety-FaithBench, a compact audit benchmark for trustworthy construction-safety AI. Each example pairs a site image with a safety rule, answer label, evidence regions, and provenance fields. The current artifact includes 163 pilot image-rule pairs, 588 scale-up candidates, four safety-rule families, deterministic baselines, a Florence-2 grounding adapter, 948 targeted and matched-random occlusion runs, and a 120-row final audit-label layer. The audit set is intentionally difficult: it prioritizes Florence/bootstrap disagreements and weak evidence overlap. On this set, Florence grounding reaches only 18.3\% answer accuracy, while a metadata-assisted bootstrap reaches 78.3\%, showing that scaffold-level validation can hide visually grounded failures. Targeted evidence occlusion changes Florence answers 39.2\% of the time versus 9.2\% for matched random masks, with a paired answer-flip gap of 30.0 percentage points. The final audit labels combine 108 role-conditioned A/B consensus rows with 12 returned adjudication decisions, so results are reported with explicit provenance rather than as unqualified human ground truth. The contribution is a reproducible measurement pipeline for evidence faithfulness, not an autonomous inspection system.
+
+\end{document}

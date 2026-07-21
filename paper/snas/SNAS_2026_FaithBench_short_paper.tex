@@ -1,0 +1,185 @@
+% SNAS 2026 double-blind short-paper submission candidate.
+% Compile with XeLaTeX so the document uses Times New Roman.
+\documentclass[12pt,letterpaper,twoside]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{fontspec}
+\setmainfont{Times New Roman}
+\usepackage{setspace}
+\doublespacing
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{xurl}
+\urlstyle{same}
+\usepackage[hidelinks]{hyperref}
+\hypersetup{
+  pdftitle={ConstructionSafety-FaithBench: Auditing Visual-Evidence Faithfulness in Construction-Safety Vision-Language Models},
+  pdfauthor={},
+  pdfsubject={Double-blind submission candidate for the 5th SNAS Interdisciplinary Research Conference},
+  pdfkeywords={trustworthy AI, explainable AI, vision-language models, construction safety, evidence faithfulness}
+}
+
+\setlength{\parindent}{0.5in}
+\setlength{\parskip}{0pt}
+\setlength{\emergencystretch}{3em}
+\setlength{\textfloatsep}{8pt plus 2pt minus 2pt}
+\setlength{\floatsep}{6pt plus 2pt minus 2pt}
+\captionsetup{font=small,skip=3pt}
+\raggedbottom
+
+\titleformat{\section}
+  {\normalfont\bfseries\centering}
+  {\thesection.}{0.5em}{}
+\titlespacing*{\section}{0pt}{8pt}{4pt}
+\titleformat{\subsection}
+  {\normalfont\bfseries}
+  {\thesubsection.}{0.5em}{}
+\titlespacing*{\subsection}{0pt}{6pt}{2pt}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[LE,LO]{\textit{ConstructionSafety-FaithBench}}
+\fancyhead[RE,RO]{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\setlength{\headheight}{15pt}
+
+\newenvironment{apareferences}
+  {\begin{list}{}{%
+    \setlength{\leftmargin}{0.5in}%
+    \setlength{\itemindent}{-0.5in}%
+    \setlength{\itemsep}{0pt}%
+    \setlength{\parsep}{0pt}%
+    \setlength{\topsep}{0pt}}}
+  {\end{list}}
+
+\begin{document}
+
+\begin{center}
+\textbf{ConstructionSafety-FaithBench: Auditing Visual-Evidence Faithfulness in Construction-Safety Vision-Language Models}
+\end{center}
+
+\begin{center}
+\textbf{Abstract}
+\end{center}
+
+Construction-safety vision-language models (VLMs) are often evaluated by final answers or plausible rationales, but neither shows whether the model used rule-relevant visual evidence. This paper presents ConstructionSafety-FaithBench, a compact audit benchmark for trustworthy construction-safety AI. Each example pairs a site image with a safety rule, answer label, evidence regions, and provenance fields. The current artifact includes 163 pilot image-rule pairs, 588 scale-up candidates, four safety-rule families, deterministic baselines, a Florence-2 grounding adapter, 948 targeted and matched-random occlusion runs, and a 120-row final audit-label layer. The audit set is intentionally difficult: it prioritizes Florence/bootstrap disagreements and weak evidence overlap. On this set, Florence grounding reaches only 18.3\% answer accuracy, while a metadata-assisted bootstrap reaches 78.3\%, showing that scaffold-level validation can hide visually grounded failures. Targeted evidence occlusion changes Florence answers 39.2\% of the time versus 9.2\% for matched random masks, with a paired answer-flip gap of 30.0 percentage points. The final audit labels combine 108 role-conditioned A/B consensus rows with 12 returned adjudication decisions, so results are reported with explicit provenance rather than as unqualified human ground truth. The contribution is a reproducible measurement pipeline for evidence faithfulness, not an autonomous inspection system.
+
+\noindent\textit{Keywords:} trustworthy AI; explainable AI; vision-language models; construction safety; evidence faithfulness; AI risk assessment
+
+\section{Introduction}
+
+Vision-language models may help safety professionals screen construction imagery, but a correct answer is not enough for trustworthy use. A model can answer that a scene violates a hard-hat rule while grounding its decision on background scaffolding, or it can keep the same answer after the relevant worker or protective equipment is masked. In a high-stakes setting, the question is not only whether the answer is correct, but whether the answer, cited evidence, and counterfactual behavior are aligned.
+
+ConstructionSafety-FaithBench addresses this problem as an evaluation artifact for the 5th SNAS conference theme of trustworthy innovation and human development in intelligent systems. The benchmark focuses on four safety-rule families: hard-hat/PPE compliance, harness/fall protection, guardrail/edge protection, and struck-by/equipment proximity. It separates answer correctness, evidence localization, and intervention sensitivity. The current repository is small but end-to-end: it includes manifests, annotations, final audit labels, model outputs, occlusion specifications, score tables, generated figures, validation scripts, and an artifact manifest.
+
+The central claim is deliberately narrow. The current Florence-2 grounding adapter is not a strong construction-safety VQA model. Instead, it is useful because its failures expose why answer-only evaluation is insufficient. The study shows that a prioritized audit set can reveal poor answer performance, while targeted occlusion can test whether a model is more sensitive to rule-relevant evidence than to same-size random regions.
+
+\section{Benchmark and Audit Pipeline}
+
+Each row contains an image identifier, source split, natural-language safety question, normalized rule identifier, answer label, evidence boxes, and provenance metadata. Raw images and model weights are not redistributed in the repository; reproducible scripts load source images only when local dataset access is available.
+
+Figure~\ref{fig:pipeline} summarizes the architecture. ConstructionSite-derived metadata and images are converted into pilot and scale-up manifests. Model adapters write normalized CSV/JSONL outputs. Scores are computed against either model-assisted bootstrap labels or the completed final audit-label layer. Intervention specifications reuse evidence boxes to compare targeted rule-evidence masks with same-size matched-random masks.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\linewidth]{figures/pipeline_architecture.pdf}
+\caption{Benchmark architecture. The same schema supports manifests, model outputs, audit labels, interventions, score tables, and release manifests.}
+\label{fig:pipeline}
+\end{figure}
+
+The annotation stack has three layers. First, model-assisted bootstrap annotations use source metadata, captions, rule-violation records, and available boxes. These labels support scaling and triage, but they are not ground truth. Second, a balanced 120-row audit queue samples 30 rows per rule from difficult scale-up cases: 118 of 120 rows are Florence/bootstrap disagreements. Third, the final audit-label layer resolves the queue. It contains 108 rows where two independent role-conditioned audit passes agreed and 12 rows resolved by returned adjudication. Final labels are 83 violation, 31 compliant, and 6 uncertain.
+
+\section{Metrics and Experimental Setup}
+
+The benchmark reports three metric families. Answer metrics include accuracy and macro-F1 across compliant, violation, and uncertain labels. Evidence metrics include evidence presence, best IoU, normalized centroid drift, and evidence disappearance. Intervention metrics compare a targeted mask over rule-relevant evidence against five same-size random masks sampled per image. The paired statistic is the targeted effect minus the within-image matched-random mean.
+
+The implemented adapters are intentionally simple and auditable. The annotation bootstrap echoes the metadata-assisted label. Manifest seed and majority-violation baselines test weak-label and class-prior behavior. A caption-keyword baseline checks whether captions alone leak the labels. The Florence grounding adapter runs \textit{microsoft/Florence-2-base-ft} and maps grounded detections through deterministic geometry. Each adapter records normalized outputs and provenance.
+
+The intervention study contains 948 Florence reruns: 158 targeted occlusions and 790 matched-random controls. Random masks use the same clipped width and height as the target mask, preserving mask area while changing location. Bootstrap intervals and paired tests are computed at the image level.
+
+\section{Results}
+
+Figure~\ref{fig:audit} shows the completed audit layer and answer scores. The final-label layer exposes a sharp difference between scaffold validation and visually grounded audit behavior. The metadata-assisted bootstrap reaches 78.3\% accuracy against final labels, while Florence grounding reaches only 18.3\% accuracy and 12.5\% macro-F1. The two role-conditioned passes are high against the final layer because most final labels are consensus rows and the remaining disagreement rows were adjudicated.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\linewidth]{figures/audit_result_dashboard.pdf}
+\caption{Final audit labels and answer scores. The audit split intentionally over-samples difficult disagreement and weak-overlap cases.}
+\label{fig:audit}
+\end{figure}
+
+\begin{table}[h]
+\centering
+\caption{Headline results from the current audit and intervention study.}
+\label{tab:headline}
+\begin{tabular}{lr}
+\toprule
+Quantity & Value \\
+\midrule
+Final audit rows & 120 \\
+Final audit label counts & 83 V / 31 C / 6 U \\
+A/B agreement rows & 108 \\
+Returned adjudication rows & 12 \\
+Florence accuracy on final audit labels & 18.3\% \\
+Bootstrap accuracy on final audit labels & 78.3\% \\
+Targeted answer-flip rate & 39.2\% \\
+Matched-random answer-flip rate & 9.2\% \\
+Paired answer-flip difference & 30.0 points \\
+Paired centroid-drift difference & 0.160 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Figure~\ref{fig:intervention} summarizes the counterfactual faithfulness result. Targeted rule-evidence occlusion flips Florence answers 39.2\% of the time, compared with 9.2\% for same-size random masks. The paired answer-flip gap is 30.0 percentage points with a bootstrap 95\% interval of 22.3 to 37.7 points. Targeted masks also produce larger evidence relocation: the paired centroid-drift difference is 0.160 with a 95\% interval of 0.133 to 0.187. Evidence disappearance is tracked separately because a missing post-mask box cannot be treated as ordinary IoU drift.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\linewidth]{figures/intervention_effects_chart.pdf}
+\caption{Targeted rule-evidence masking affects answers and evidence more than same-size random masking.}
+\label{fig:intervention}
+\end{figure}
+
+The scale-up results add a diagnostic pattern. Florence often returns some evidence region, yet answer accuracy remains weak and rule-dependent. This means evidence presence alone is not enough; a model can emit boxes without using the right safety cue or producing the right answer. The strongest paper-level finding is therefore not that Florence is reliable, but that the benchmark separates failure modes that ordinary answer scoring would merge.
+
+\section{Discussion and Implications}
+
+The results support a compact but useful measurement claim. Answer correctness, visual evidence, and counterfactual sensitivity should be reported separately for construction-safety VLMs. The final audit set shows that a model can look superficially functional under bootstrap labels yet fail badly on cases selected for disagreement and weak evidence overlap. The intervention study shows that targeted evidence masks have larger effects than same-size random masks, suggesting location-specific dependence but not proving recovery of internal reasoning.
+
+For trustworthy innovation, the practical implication is governance rather than automation. A safety-support interface should show the cited region, state when evidence is missing or unstable, preserve uncertainty, and keep final authority with qualified safety personnel. The benchmark can support model comparison, regression testing, and audit documentation, but it cannot justify worker discipline, surveillance, or autonomous inspection.
+
+\section{Limitations and Ethics}
+
+The current study is not a deployment validation. The final audit labels are complete, but the A/B passes are role-conditioned audit passes and the adjudication package must be reported with that provenance. Future work should replace or verify this layer with independent domain-expert human annotation. The model set is also limited: Florence-2 is the only image-grounded adapter, and stronger instruction-following VLMs should be added before broad model-ranking claims. The scale-up split remains imbalanced because struck-by and fall-hazard examples are scarce.
+
+Construction imagery raises privacy, surveillance, and labor-governance concerns. The benchmark does not infer identity, intent, competence, or blame. It should not be used for autonomous inspection or disciplinary monitoring. Appropriate use is research evaluation under documented scope limits, data minimization, source-license compliance, and human professional review.
+
+\section{Conclusion}
+
+ConstructionSafety-FaithBench turns construction-safety VLM evaluation from answer checking into an evidence-faithfulness audit. The current results show that Florence grounding performs poorly on a difficult final-label audit set and that targeted evidence masks affect answers more than matched random masks. The benchmark is therefore useful as a compact, reproducible testbed for trustworthy visual-evidence evaluation, while remaining explicitly outside autonomous safety deployment.
+
+\label{bodyend}
+\clearpage
+\section*{References}
+
+\begin{apareferences}
+\item Chen, X., \& Zou, Z. (2025). Are large pre-trained vision language models effective construction safety inspectors? \textit{arXiv}. \url{https://arxiv.org/abs/2508.11011}
+
+\item Howard, J., \& Schulte, P. A. (2024). Exploring approaches to keep an AI-enabled workplace safe for workers. \textit{National Institute for Occupational Safety and Health}. \url{https://www.cdc.gov/niosh/bulletin/2024/ai-risk-management.html}
+
+\item Jain, S., \& Wallace, B. C. (2019). Attention is not explanation. In \textit{Proceedings of NAACL-HLT 2019} (pp. 3543--3556). \url{https://doi.org/10.18653/v1/N19-1357}
+
+\item Li, K., Vosselman, G., \& Yang, M. Y. (2025). Multimodal rationales for explainable visual question answering. In \textit{Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition Workshops} (pp. 191--201).
+
+\item National Institute of Standards and Technology. (2023). \textit{Artificial Intelligence Risk Management Framework (AI RMF 1.0)}. \url{https://doi.org/10.6028/NIST.AI.100-1}
+
+\item Phillips, P. J., Hahn, C. A., Fontana, P. C., Yates, A. N., Greene, K., Broniatowski, D. A., \& Przybocki, M. A. (2021). \textit{Four principles of explainable artificial intelligence} (NISTIR 8312). National Institute of Standards and Technology. \url{https://doi.org/10.6028/NIST.IR.8312}
+
+\item Wu, J., Kang, W., Tang, H., Hong, Y., \& Yan, Y. (2024). On the faithfulness of Vision Transformer explanations. In \textit{Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition} (pp. 10936--10945).
+
+\item Xiao, B., Wu, H., Xu, W., Dai, X., Hu, H., Lu, Y., Zeng, M., Liu, C., \& Yuan, L. (2024). Florence-2: Advancing a unified representation for a variety of vision tasks. In \textit{Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition} (pp. 4818--4829).
+\end{apareferences}
+
+\end{document}

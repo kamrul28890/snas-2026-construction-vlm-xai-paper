@@ -1,8 +1,8 @@
 # ConstructionSafety-FaithBench
 
-ConstructionSafety-FaithBench is the planned NeurIPS-style benchmark layer for
-the construction-safety VLM/XAI paper. It reframes the current SNAS feasibility
-study as a reusable evaluation protocol for visual-evidence faithfulness.
+ConstructionSafety-FaithBench is the benchmark layer for the construction-safety
+VLM/XAI paper. It frames the SNAS study as a reusable evaluation protocol for
+visual-evidence faithfulness.
 
 The benchmark asks whether a vision-language model or VLM-grounded decision
 pipeline answers construction-safety questions using rule-relevant visual
@@ -12,17 +12,16 @@ post hoc rationales.
 ## Current Status
 
 This folder currently contains the benchmark specification, documentation
-contract, and a generated pilot manifest from the 163-image SNAS audit. It does
-not yet contain a full NeurIPS-scale image manifest, completed human
-annotations, or multi-model outputs. A completed model-assisted bootstrap
-annotation pass is available under `benchmark/annotations/` and is explicitly
-not human ground truth.
+contract, generated manifests, model-assisted labels, model outputs, and the
+120-row final audit-label layer used in the SNAS submission. The final audit
+labels must be reported with their explicit A/B audit-pass and adjudication
+provenance, not as unqualified human ground truth.
 
 Existing validated pilot artifacts remain under `analysis/`. Those files are
 the seed evidence for this benchmark, but the benchmark is intentionally
-structured as a broader artifact that can support 1,000+ images, multiple VLMs,
-counterfactual interventions, human/domain audits, and NeurIPS E&D-style
-reproducibility.
+structured as a broader artifact that can support larger image manifests,
+multiple VLMs, counterfactual interventions, human/domain audits, and
+conference-grade reproducibility.
 
 ## Intended Contribution
 

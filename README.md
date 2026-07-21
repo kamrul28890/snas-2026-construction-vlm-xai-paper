@@ -1,104 +1,87 @@
-# SNAS 2026 Construction VLM-XAI Paper
+# ConstructionSafety-FaithBench SNAS 2026 Package
 
-Research workspace for the SNAS 2026 short paper:
+This repository contains the working materials for the SNAS 2026 short-paper
+submission:
 
-**Beyond Stable Answers: Auditing Explanation Faithfulness in a
-Construction-Safety Vision-Language Pipeline**
+**ConstructionSafety-FaithBench: Auditing Visual-Evidence Faithfulness in
+Construction-Safety Vision-Language Models**
 
-This repository preserves the paper sources, research plan, literature matrix,
-analysis scripts, frozen protocol, statistical outputs, generated tables and
-figures, compiled PDFs, submission packages, and reproducibility records.
+The paper studies whether a construction-safety vision-language pipeline uses
+rule-relevant visual evidence, rather than only producing plausible final
+answers. It includes manifests, safety-rule prompts, model-output schemas,
+Florence-2 grounding outputs, targeted and matched-random visual interventions,
+audit labels with explicit provenance, scoring scripts, result tables, generated
+figures, and SNAS-ready manuscript files.
 
-GitHub archive:
-https://github.com/kamrul28890/snas-2026-construction-vlm-xai-paper
+## Submission Files
 
-Visibility is intentionally private while the double-blind paper is unpublished.
+- Blind short-paper PDF:
+  `output/snas_submission_ready/SNAS_2026_FaithBench_short_paper_blind.pdf`
+- Blind standalone abstract PDF:
+  `output/snas_submission_ready/SNAS_2026_FaithBench_abstract_blind.pdf`
+- Copy-paste submission text:
+  `paper/snas/SUBMISSION_TEXTS.md`
+- Submission risks and final checks:
+  `paper/snas/SUBMISSION_RISKS_AND_FIXES.md`
+- Clean reproducibility export:
+  `output/snas_submission_ready/reproducibility_repo/`
+- Zip package:
+  `output/snas_submission_ready/SNAS_2026_FaithBench_submission_package.zip`
 
-## Current Status
+The review PDFs are double-blind. Author names, affiliations, and a public
+repository link should be entered only where SNAS/EasyChair allows them.
 
-- Submission candidate: complete and double-blind
-- Paper length: 8 body pages; references begin on page 9
-- Standalone abstract: 250 words
-- Source test suite: 179 passed
-- Paper-analysis test suite: 7 passed
-- Remaining work: coauthor approval, author metadata, and EasyChair submission
+## Current Results
 
-The authoritative task list is
-[SNAS_2026_submission_todo.md](SNAS_2026_submission_todo.md).
+- 163 pilot image-rule pairs and 588 scale-up candidate pairs.
+- Four safety-rule families: PPE hard-hat compliance, fall harness protection,
+  guardrail/edge protection, and struck-by/equipment proximity.
+- 120-row final audit-label layer: 108 A/B consensus rows plus 12 returned
+  adjudication decisions.
+- Florence grounding accuracy on the audit layer: 18.3%.
+- Metadata-assisted bootstrap accuracy on the audit layer: 78.3%.
+- Targeted evidence occlusion answer flip rate: 39.2%.
+- Matched-random answer flip rate: 9.2%.
+- Paired answer-flip difference: 30.0 percentage points.
 
-## Primary Deliverables
+These numbers support a measurement claim about visual-evidence faithfulness.
+They do not establish deployment readiness or recover a model's internal
+reasoning.
 
-- [Submission-candidate paper PDF](output/submission/SNAS_2026_paper_submission_candidate.pdf)
-- [Standalone abstract PDF](output/submission/SNAS_2026_abstract_submission_candidate.pdf)
-- [Submission files ZIP](output/submission/SNAS_2026_submission_files.zip)
-- [Reproducibility bundle ZIP](output/submission/SNAS_2026_reproducibility_bundle.zip)
-- [EasyChair metadata](SNAS_2026_submission_metadata.md)
-- [Blind-review checklist](SNAS_2026_blind_review_checklist.md)
+## Annotation Provenance
 
-## Headline Results
+The final audit labels must not be described as unqualified human ground truth.
+The safe submission wording is:
 
-- Targeted answer change: 39.2%
-- Five-seed, same-size matched-random answer change: 9.2%
-- Paired difference: 30.0 percentage points, 95% CI [22.3, 37.7]
-- Targeted normalized centroid drift: 0.196
-- Matched-random normalized centroid drift: 0.031
-- Paired drift difference: 0.166, 95% CI [0.140, 0.193]
+`two independent role-conditioned audit passes plus returned adjudication`
 
-These results support location-specific intervention sensitivity. They do not
-establish recovery of internal model reasoning or deployment readiness.
+or:
 
-## Repository Map
+`adjudicated audit labels with AI-pass provenance`
 
-- analysis/: protocol, analysis code, tests, CSV/JSON results, and manifest
-- figures/: publication figures in PDF and PNG formats
-- generated/: generated LaTeX tables
-- output/pdf/: draft and submission-candidate PDFs
-- output/submission/: upload-ready PDFs and archival ZIP packages
-- SNAS_2026_*: plans, drafts, LaTeX sources, metadata, and checklists
+The stronger claim that two actual human annotators labeled all rows would
+require a new independent human/domain audit and replacement labels.
 
-Temporary LaTeX output, rendered QA pages, caches, and local virtual
-environments are intentionally excluded from version control.
+## Rebuild
 
-## Resume the Work
+From the repository root:
 
-Clone this repository and the XAI source repository as sibling directories:
+```powershell
+python .\experiments\make_paper_figures.py --output-dir .\paper\snas\figures
+$out = (Resolve-Path .\tmp\snas).Path
+Push-Location .\paper\snas
+xelatex -interaction=nonstopmode -halt-on-error -output-directory $out .\SNAS_2026_FaithBench_short_paper.tex
+xelatex -interaction=nonstopmode -halt-on-error -output-directory $out .\SNAS_2026_FaithBench_short_paper.tex
+xelatex -interaction=nonstopmode -halt-on-error -output-directory $out .\SNAS_2026_FaithBench_abstract_blind.tex
+xelatex -interaction=nonstopmode -halt-on-error -output-directory $out .\SNAS_2026_FaithBench_abstract_blind.tex
+Pop-Location
+python .\experiments\create_snas_submission_package.py
+```
 
-    git clone https://github.com/kamrul28890/snas-2026-construction-vlm-xai-paper.git
-    git clone https://github.com/kamrul28890/Explainable-AI-Mustafa-Abdallah.git
-    cd .\snas-2026-construction-vlm-xai-paper
+Run the lightweight checks:
 
-The paper analysis used XAI source commit
-84ec95177fab618f7168f4139b06138c700eabab. The exact source files used in
-the completed run are additionally protected by SHA-256 hashes in
-analysis/outputs/artifact_manifest.json.
+```powershell
+python .\experiments\validate_all.py
+```
 
-Use the validated XAI pilot environment:
-
-    $python = '..\Explainable-AI-Mustafa-Abdallah\pilot\.venv\Scripts\python.exe'
-    & $python -m pytest .\analysis\tests -q
-    & $python .\analysis\run_matched_random_occlusion.py
-    & $python .\analysis\generate_paper_results.py
-    powershell -ExecutionPolicy Bypass -File .\build_latex.ps1
-
-The intervention runner is resumable. Use --force only when intentionally
-discarding and recomputing the paper-owned intervention output.
-
-## Frozen Research Inputs
-
-- Dataset: LouisChen15/ConstructionSite
-- Dataset revision: ca3d9b885b45cbec956817edc42253664c7faf3f
-- Dataset license: CC BY-NC 4.0
-- Model: microsoft/Florence-2-base-ft
-- Model revision: f6c1a25888ffc1d945ee8a1a77ac833c7303d46e
-- Protocol: analysis/protocol.json
-
-The repository does not contain raw dataset images or model weights. One
-qualitative figure contains transformed dataset imagery and is retained for
-private research continuity. Review dataset attribution and redistribution
-rights before changing this repository to public visibility.
-
-## Submission Safety
-
-The paper and abstract PDFs are double-blind. Keep author names and affiliations
-in EasyChair rather than in the review files. Before uploading, complete the
-human checks in [SNAS_2026_blind_review_checklist.md](SNAS_2026_blind_review_checklist.md).
+Raw dataset images and model weights are not redistributed in this repository.

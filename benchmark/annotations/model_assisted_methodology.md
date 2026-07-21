@@ -50,5 +50,5 @@ provenance. It cannot replace independent annotation because it inherits source
 dataset errors, caption incompleteness, and the pilot model's target-box
 selection for compliant examples.
 
-Before using these rows as evidence in a NeurIPS-scale paper, complete an
+Before using these rows as evidence in a stronger benchmark paper, complete an
 independent human/domain audit on a stratified subset and report agreement.

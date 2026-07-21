@@ -47,9 +47,12 @@ Rules are formally defined in `rules.json`.
 
 ## Annotation Plan
 
-The NeurIPS-level version needs a human/domain-audited subset.
+The current 120-row audit layer combines role-conditioned A/B audit passes with
+returned adjudication for the 12 A/B disagreements. It should be treated as an
+audited-label layer with explicit provenance, not as unqualified human ground
+truth.
 
-Minimum target:
+Recommended next human/domain-audit target:
 
 - 300 to 500 audited examples;
 - at least two annotators per example;
