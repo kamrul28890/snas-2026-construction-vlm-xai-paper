@@ -4,7 +4,9 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
 import shutil
+import zipfile
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -160,6 +162,22 @@ def copy_file(src_rel: str, dst_rel: str | None = None) -> None:
     shutil.copy2(src, dst)
 
 
+def reset_export_dir() -> None:
+    REPRO.mkdir(parents=True, exist_ok=True)
+    for child in REPRO.iterdir():
+        if child.name == ".git":
+            continue
+        if child.is_dir():
+            shutil.rmtree(child, onerror=make_writable)
+        else:
+            child.unlink()
+
+
+def make_writable(function, path, _exc_info) -> None:
+    os.chmod(path, 0o700)
+    function(path)
+
+
 def sha256(path: Path) -> str:
     digest = hashlib.sha256()
     with path.open("rb") as handle:
@@ -246,6 +264,8 @@ def assert_clean_text() -> None:
     blocked = ["NeurIPS", "neurips ready", "top-tier neurips"]
     offenders: list[str] = []
     for path in REPRO.rglob("*"):
+        if ".git" in path.parts:
+            continue
         if not path.is_file() or path.suffix.lower() not in {".md", ".tex", ".py", ".json", ".csv", ".jsonl", ".txt"}:
             continue
         text = path.read_text(encoding="utf-8", errors="ignore")
@@ -255,10 +275,18 @@ def assert_clean_text() -> None:
         raise RuntimeError("Blocked venue wording found in export: " + ", ".join(offenders))
 
 
+def write_zip() -> Path:
+    zip_path = ZIP_BASE.with_suffix(".zip")
+    if zip_path.exists():
+        zip_path.unlink()
+    with zipfile.ZipFile(zip_path, "w", compression=zipfile.ZIP_DEFLATED) as archive:
+        for path in sorted(p for p in REPRO.rglob("*") if p.is_file() and ".git" not in p.parts):
+            archive.write(path, path.relative_to(REPRO).as_posix())
+    return zip_path
+
+
 def main() -> int:
-    if REPRO.exists():
-        shutil.rmtree(REPRO)
-    REPRO.mkdir(parents=True)
+    reset_export_dir()
 
     for src_rel in FILES:
         copy_file(src_rel)
@@ -270,7 +298,7 @@ def main() -> int:
     assert_clean_text()
     write_manifest()
 
-    archive = shutil.make_archive(str(ZIP_BASE), "zip", root_dir=REPRO)
+    archive = write_zip()
     print(f"Wrote clean reproducibility export: {REPRO}")
     print(f"Wrote zip package: {archive}")
     return 0

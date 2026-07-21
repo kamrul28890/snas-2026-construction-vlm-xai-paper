@@ -84,7 +84,7 @@ def arrow(ax, start, end, color="#67727E"):
 
 
 def make_pipeline_figure() -> None:
-    fig, ax = plt.subplots(figsize=(7.1, 2.35))
+    fig, ax = plt.subplots(figsize=(7.1, 2.55))
     ax.set_xlim(0, 1)
     ax.set_ylim(0, 1)
     ax.axis("off")
@@ -107,22 +107,22 @@ def make_pipeline_figure() -> None:
         arrow(ax, (x1, y1), (x2, y2))
 
     audit_nodes = [
-        ((0.21, 0.14), 0.16, 0.24, "Prioritized audit\n120 rows", COLORS["annotation"]),
-        ((0.41, 0.14), 0.16, 0.24, "Role-conditioned\nA/B audit passes", COLORS["annotation"]),
-        ((0.61, 0.14), 0.14, 0.24, "12 disagreements\nadjudicated", COLORS["intervention"]),
-        ((0.79, 0.14), 0.16, 0.24, "Final labels\n108 consensus + 12 adjud.", COLORS["score"]),
+        ((0.18, 0.17), 0.18, 0.23, "Prioritized audit\n120 rows", COLORS["annotation"], 7.2),
+        ((0.40, 0.17), 0.18, 0.23, "Role-conditioned\nA/B audit passes", COLORS["annotation"], 7.2),
+        ((0.62, 0.17), 0.15, 0.23, "12 disagreements\nadjudicated", COLORS["intervention"], 7.0),
+        ((0.81, 0.17), 0.17, 0.23, "Final labels\n108 consensus\n12 adjudicated", COLORS["score"], 6.8),
     ]
-    for xy, width, height, text, color in audit_nodes:
-        box(ax, xy, width, height, text, color)
+    for xy, width, height, text, color, fontsize in audit_nodes:
+        box(ax, xy, width, height, text, color, fontsize=fontsize)
     for i in range(len(audit_nodes) - 1):
         x1 = audit_nodes[i][0][0] + audit_nodes[i][1]
         y1 = audit_nodes[i][0][1] + audit_nodes[i][2] / 2
         x2 = audit_nodes[i + 1][0][0]
         y2 = audit_nodes[i + 1][0][1] + audit_nodes[i + 1][2] / 2
         arrow(ax, (x1, y1), (x2, y2))
-    arrow(ax, (0.43, 0.58), (0.29, 0.38), "#8A6F3D")
-    arrow(ax, (0.87, 0.38), (0.91, 0.58), "#8A6F3D")
-    ax.text(0.02, 0.04, "All outputs use normalized JSONL/CSV schemas and SHA-256 release manifests.", fontsize=7, color="#4B5563")
+    arrow(ax, (0.43, 0.58), (0.27, 0.40), "#8A6F3D")
+    arrow(ax, (0.895, 0.40), (0.92, 0.58), "#8A6F3D")
+    ax.text(0.02, 0.045, "All outputs use normalized JSONL/CSV schemas and SHA-256 release manifests.", fontsize=7, color="#4B5563")
     save(fig, "pipeline_architecture.pdf")
 
 
