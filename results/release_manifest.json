@@ -1,7 +1,7 @@
 {
   "manifest_version": "0.1.0",
   "description": "Frozen artifact manifest for the ConstructionSafety-FaithBench scaffold.",
-  "artifact_count": 169,
+  "artifact_count": 181,
   "include_roots": [
     "benchmark",
     "experiments",
@@ -30,13 +30,23 @@
     },
     {
       "path": "benchmark/annotations/human_audit_batch_001.csv",
-      "bytes": 97493,
-      "sha256": "368ad2a4dc6b5622b6def132d7449a858df61f0434120d5763e335e26a5c57eb"
+      "bytes": 100136,
+      "sha256": "cfc2f931aabb99c3867cbc1e199b126dff810d3af852dafc393ac83adb4bb117"
     },
     {
       "path": "benchmark/annotations/human_audit_batch_001.jsonl",
-      "bytes": 189982,
-      "sha256": "0b1c0d59c1d64d4b64adc6a2151c6c8f138929a08a7fddae6433f67605de5495"
+      "bytes": 195683,
+      "sha256": "66c1f128dfdd322767ad48400408d1f26a6b1731130b3a218225bdefbeed9be8"
+    },
+    {
+      "path": "benchmark/annotations/human_audit_batch_001_adjudication.csv",
+      "bytes": 3160,
+      "sha256": "d65a6da7885bf8cf5c6fb09176afa23bbf23f1ffb65026188d7ae2553ad38477"
+    },
+    {
+      "path": "benchmark/annotations/human_audit_batch_001_adjudication.jsonl",
+      "bytes": 4865,
+      "sha256": "5b71a47be8975bc2b1ece0b5966c8b29e109f9ce3080fc4a0d57c69fb6252ad9"
     },
     {
       "path": "benchmark/annotations/human_audit_batch_001_ai_disagreement_analysis.md",
@@ -45,8 +55,8 @@
     },
     {
       "path": "benchmark/annotations/human_audit_batch_001_ai_disagreements.csv",
-      "bytes": 3813,
-      "sha256": "ee6ff8bf92c4faab51ca60b0b4fd9691e5c72cecc8efd69f325baacd220c4800"
+      "bytes": 6450,
+      "sha256": "b2c0d49a5e9bec187b069fe2df04c483fc0642e775468c477a2a2c73f5ee7aeb"
     },
     {
       "path": "benchmark/annotations/human_audit_batch_001_ai_personas.md",
@@ -69,9 +79,34 @@
       "sha256": "392048f1aea8156e370666f3058f1572ea01f480445dbea6a46195226d54cbf5"
     },
     {
+      "path": "benchmark/annotations/human_audit_batch_001_final_labels.csv",
+      "bytes": 39809,
+      "sha256": "f9779880c11dd9b599b007fe6c47e7f2a5650120d5d09f9ddb6f16783b07acc8"
+    },
+    {
+      "path": "benchmark/annotations/human_audit_batch_001_final_labels.jsonl",
+      "bytes": 72970,
+      "sha256": "b8d2bb8ba00f0f15f92791a5dbf049567f7d267a32099109068482e682608522"
+    },
+    {
+      "path": "benchmark/annotations/human_audit_batch_001_final_labels_summary.json",
+      "bytes": 623,
+      "sha256": "be5df9ff14794f755f41daf481670ca781ddef944d70925b54cefdc7aef16fb4"
+    },
+    {
+      "path": "benchmark/annotations/human_audit_batch_001_returned_adjudication_README.md",
+      "bytes": 643,
+      "sha256": "146d5b08548d2d38b1b8b33a7ee820b6d0420f3d6ed389ad156801b98b3df918"
+    },
+    {
+      "path": "benchmark/annotations/human_audit_batch_001_returned_adjudication_manifest.json",
+      "bytes": 348,
+      "sha256": "255c338869542792b6109a542c40f429f4f1e301fdadabe30d630293d3a420ac"
+    },
+    {
       "path": "benchmark/annotations/human_audit_batch_001_summary.json",
-      "bytes": 2051,
-      "sha256": "e9a97604409ce7e40724f2f2acc6c91753702735284e8126c68bf63a844f209d"
+      "bytes": 2970,
+      "sha256": "8438dc8b9c9bab7a6e079feebdbd7c77ad5191c69350c027aa47758dc68bacba"
     },
     {
       "path": "benchmark/annotations/human_audit_protocol.md",
@@ -210,13 +245,13 @@
     },
     {
       "path": "experiments/__pycache__/build_human_audit_batch.cpython-310.pyc",
-      "bytes": 7798,
-      "sha256": "3934f651e1dc347af651ee32486276df83b721be253e5cc28f5d60afc7b67f75"
+      "bytes": 7830,
+      "sha256": "8370bba3f71f482d7fda67d95b4a075505ce4e42acae5cd506a545d344e8340d"
     },
     {
       "path": "experiments/__pycache__/score_human_audit_status.cpython-310.pyc",
-      "bytes": 4035,
-      "sha256": "7171fad198dd33e91d721b7aec36ca038318a8347e00dca6d548dcc3eebdf436"
+      "bytes": 4771,
+      "sha256": "f03badb1ed6dc60472a139a67f20a34f8d1ef3cab8c2bb6f21d8ae8ff035dfaf"
     },
     {
       "path": "experiments/analyze_score_slices.py",
@@ -225,8 +260,8 @@
     },
     {
       "path": "experiments/build_human_audit_batch.py",
-      "bytes": 9640,
-      "sha256": "7421a1f88d2aab56cce3b05557f02eea40ccb49d838bed8e8c7ebedf8b79642b"
+      "bytes": 9714,
+      "sha256": "14254cf7ef7806f7228d42ba789d8fd6d4e16020952d1b579cbfdd857df295f9"
     },
     {
       "path": "experiments/build_intervention_specs.py",
@@ -269,14 +304,19 @@
       "sha256": "e1cf84e06130d48901de71e6be09eb7a777560703788c03030f2ea0a77ecee66"
     },
     {
+      "path": "experiments/ingest_human_audit_adjudication.py",
+      "bytes": 16644,
+      "sha256": "abc909d49f8d71b9194e4e6fc5e2242aa62d3edb0a049abfda690041d99f0192"
+    },
+    {
       "path": "experiments/ingest_human_audit_passes.py",
       "bytes": 13197,
       "sha256": "dbd56f6856ca8b44dbafb59823ea2277f880b476a28bcfa7d478b359962bb0e3"
     },
     {
       "path": "experiments/make_paper_tables.py",
-      "bytes": 6621,
-      "sha256": "bc5e92f4ca83fc0785cebc4d903f5d65c19c82a846a3e4cf3e9d0fca9e285b5e"
+      "bytes": 7747,
+      "sha256": "95967d3ff82cebeac691e2b635e6a960a33c0a9f75a93e14d9319136077137b3"
     },
     {
       "path": "experiments/run_florence_grounding_outputs.py",
@@ -294,9 +334,14 @@
       "sha256": "edc453d41e38bb2773e8798ea939de955bc60fad78db227b61ae82bf06a6586c"
     },
     {
+      "path": "experiments/score_human_audit_final_labels.py",
+      "bytes": 6685,
+      "sha256": "ea3a5ec732bcc0a53cafe6b37c73314457e71e0e0e551d639a5d3605082456bf"
+    },
+    {
       "path": "experiments/score_human_audit_status.py",
-      "bytes": 3231,
-      "sha256": "28932befef4aa2a7c55a716f2dbefd61999d57fdbfc7a4713e7615a4e921804c"
+      "bytes": 4297,
+      "sha256": "4b470560c4cd1caaae7fe76d41ce893f046e4fc82b7ac543c6c4657de0d5900c"
     },
     {
       "path": "experiments/score_intervention_outputs.py",
@@ -325,8 +370,8 @@
     },
     {
       "path": "experiments/validate_human_audit_batch.py",
-      "bytes": 3513,
-      "sha256": "d0e20a4c778897db873e08ecbc47ee14f75cbb33d3faf6d97d3cc226b9e9b0d1"
+      "bytes": 5917,
+      "sha256": "762fe1fbbf667bc809f0ad1be44f191883da307fbcb293e3bfb06ac80ef04b78"
     },
     {
       "path": "experiments/validate_intervention_outputs.py",
@@ -340,8 +385,8 @@
     },
     {
       "path": "experiments/validate_paper_scaffold.py",
-      "bytes": 1774,
-      "sha256": "ef26b65cf288fdb44aeb0df3c390cf77f3c30aae6b5b9de935967603fd322cb7"
+      "bytes": 1838,
+      "sha256": "d71c0693f7c35f822176d4437b5a00a2afd1d32d2f6012049b7410f0d6988b7d"
     },
     {
       "path": "experiments/validate_phase4_outputs.py",
@@ -355,8 +400,8 @@
     },
     {
       "path": "paper/neurips/ConstructionSafety-FaithBench_scaffold.pdf",
-      "bytes": 175334,
-      "sha256": "8354b3317da2d593756a0f701f01cebab144b69e8c3c855bb62404534445e1d0"
+      "bytes": 176018,
+      "sha256": "fa21416558fc57dd29f780723b22d117283d3f5a9a07c049d3ffb41530143aa2"
     },
     {
       "path": "paper/neurips/README.md",
@@ -365,8 +410,8 @@
     },
     {
       "path": "paper/neurips/appendix.tex",
-      "bytes": 12526,
-      "sha256": "8226bab53dbde7a333d87f18564ae97e27b92e8729a798a3d48122d1b7898adc"
+      "bytes": 12977,
+      "sha256": "5c4520f1c2bd4ce929458779245d33d645fb847611883929b798076a15496614"
     },
     {
       "path": "paper/neurips/main.tex",
@@ -412,6 +457,11 @@
       "path": "paper/neurips/sections/07_limitations_ethics.tex",
       "bytes": 775,
       "sha256": "a2928590fd7e32187617d5b2b4c3a971017a5dadd339f2eb39cb47d4256c3f31"
+    },
+    {
+      "path": "paper/neurips/tables/human_audit_final_scores.tex",
+      "bytes": 290,
+      "sha256": "ccfff50776d6d267f0e184ff6c9f881bff7832e0286e09aa7e838adf579a6a9d"
     },
     {
       "path": "paper/neurips/tables/pilot_baseline_scores.tex",
@@ -605,8 +655,8 @@
     },
     {
       "path": "results/tables/README.md",
-      "bytes": 3499,
-      "sha256": "1492a6ae8f55456a89d9023cac4d5c5e4ab94038d37892851583b01c21aefaa7"
+      "bytes": 3835,
+      "sha256": "1ce1e13de5fae57e1ba593fdebe8e937872bae376997168886832bf0907289a9"
     },
     {
       "path": "results/tables/human_audit_batch_001_ai_agreement.csv",
@@ -614,9 +664,19 @@
       "sha256": "e3db5c6848f5e68c3312620049f0d96287c9a15b195c7eaf644aa5b5a3c6bb77"
     },
     {
+      "path": "results/tables/human_audit_batch_001_final_label_per_example_scores.csv",
+      "bytes": 55951,
+      "sha256": "2bc682847622501f385a49639d08060e3c5ad2c64806a061da4e0bd0d7d630ef"
+    },
+    {
+      "path": "results/tables/human_audit_batch_001_final_label_scores.csv",
+      "bytes": 3094,
+      "sha256": "e326b2343e474ef84f408de7b4e5364d503558dda33055aacbd2d76de467e351"
+    },
+    {
       "path": "results/tables/human_audit_batch_001_status.csv",
-      "bytes": 426,
-      "sha256": "e3c057f2f80edb096b9899eae0b6eed8ad59ddef1a5b0695c8ce0c06bd316a5d"
+      "bytes": 624,
+      "sha256": "a52339645ccc68161871b976564d8b44769dc155206469e807ac646e0f2979f1"
     },
     {
       "path": "results/tables/pilot_annotation_bootstrap_per_example_scores.csv",

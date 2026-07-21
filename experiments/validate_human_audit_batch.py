@@ -21,6 +21,7 @@ REQUIRED_COLUMNS = {
     "annotator_1_answer_label",
     "annotator_2_answer_label",
     "adjudicated_answer_label",
+    "adjudicated_ambiguous",
 }
 
 
@@ -63,6 +64,10 @@ def main() -> int:
             raise RuntimeError(f"Unexpected model-assisted label: {row['model_assisted_answer_label']}")
         if row["florence_predicted_answer"] not in {"compliant", "violation", "uncertain"}:
             raise RuntimeError(f"Unexpected Florence label: {row['florence_predicted_answer']}")
+        if row["adjudicated_answer_label"] and row["adjudicated_answer_label"] not in {"compliant", "violation", "uncertain"}:
+            raise RuntimeError(f"Unexpected adjudicated label: {row['adjudicated_answer_label']}")
+        if row["adjudicated_ambiguous"] and row["adjudicated_ambiguous"] not in {"yes", "no"}:
+            raise RuntimeError(f"Unexpected adjudicated ambiguity value: {row['adjudicated_ambiguous']}")
         if int(row["priority_score"]) < 0:
             raise RuntimeError(f"Negative priority score for {row['audit_id']}")
         rule_counts[row["rule_id"]] = rule_counts.get(row["rule_id"], 0) + 1
@@ -77,6 +82,37 @@ def main() -> int:
         missing = required - metric_ids
         if missing:
             raise RuntimeError(f"Audit status file missing metrics: {sorted(missing)}")
+    final_label_path = ROOT / "benchmark" / "annotations" / "human_audit_batch_001_final_labels.csv"
+    if final_label_path.exists():
+        with final_label_path.open("r", encoding="utf-8", newline="") as handle:
+            final_rows = list(csv.DictReader(handle))
+        if len(final_rows) != len(csv_rows):
+            raise RuntimeError(f"Final-label row mismatch: {len(final_rows)} != {len(csv_rows)}")
+        final_ids = [row["audit_id"] for row in final_rows]
+        if final_ids != audit_ids:
+            raise RuntimeError("Final-label audit IDs must match the audit batch in order")
+        for row in final_rows:
+            if row["final_answer_label"] not in {"compliant", "violation", "uncertain"}:
+                raise RuntimeError(f"Unexpected final label: {row['final_answer_label']}")
+            if row["final_ambiguous"] not in {"yes", "no"}:
+                raise RuntimeError(f"Unexpected final ambiguity value: {row['final_ambiguous']}")
+            if row["final_label_source"] not in {"dual_annotator_agreement", "returned_adjudication"}:
+                raise RuntimeError(f"Unexpected final-label source: {row['final_label_source']}")
+    adjudication_path = ROOT / "benchmark" / "annotations" / "human_audit_batch_001_adjudication.csv"
+    if adjudication_path.exists():
+        with adjudication_path.open("r", encoding="utf-8", newline="") as handle:
+            adjudication_rows = list(csv.DictReader(handle))
+        disagreement_rows = [
+            row
+            for row in csv_rows
+            if row["annotator_1_answer_label"]
+            and row["annotator_2_answer_label"]
+            and row["annotator_1_answer_label"] != row["annotator_2_answer_label"]
+        ]
+        if len(adjudication_rows) != len(disagreement_rows):
+            raise RuntimeError(
+                f"Adjudication row count must match A/B disagreements: {len(adjudication_rows)} != {len(disagreement_rows)}"
+            )
     print(f"Validated {len(csv_rows)} human-audit rows from {args.csv}")
     return 0
 

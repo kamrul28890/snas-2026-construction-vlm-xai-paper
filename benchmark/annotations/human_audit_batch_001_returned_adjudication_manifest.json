@@ -1,0 +1,9 @@
+{
+  "package_id": "human_audit_batch_001_adjudication_package",
+  "row_count": 12,
+  "image_count": 12,
+  "adjudication_csv": "adjudication_form.csv",
+  "image_folder": "images",
+  "ground_truth_status": "pending_human_or_domain_adjudication",
+  "source_disagreements": "benchmark/annotations/human_audit_batch_001_ai_disagreements.csv"
+}

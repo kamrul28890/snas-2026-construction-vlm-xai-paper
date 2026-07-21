@@ -45,6 +45,7 @@ OUTPUT_FIELDS = [
     "annotator_2_notes",
     "adjudicated_answer_label",
     "adjudicated_evidence_regions_xyxy",
+    "adjudicated_ambiguous",
     "adjudication_notes",
 ]
 
@@ -183,6 +184,7 @@ def build_batch(
                 "annotator_2_notes": "",
                 "adjudicated_answer_label": "",
                 "adjudicated_evidence_regions_xyxy": "",
+                "adjudicated_ambiguous": "",
                 "adjudication_notes": "",
             }
         )

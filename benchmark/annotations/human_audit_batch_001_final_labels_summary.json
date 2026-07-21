@@ -1,0 +1,20 @@
+{
+  "batch_id": "human_audit_batch_001",
+  "row_count": 120,
+  "final_label_completion_count": 120,
+  "final_label_completion_rate": 1.0,
+  "final_answer_counts": {
+    "compliant": 31,
+    "uncertain": 6,
+    "violation": 83
+  },
+  "final_ambiguous_counts": {
+    "no": 61,
+    "yes": 59
+  },
+  "final_label_source_counts": {
+    "dual_annotator_agreement": 108,
+    "returned_adjudication": 12
+  },
+  "provenance": "Final audit labels combine two AI-generated annotation passes. Rows with A/B agreement use the agreed answer label; rows with A/B disagreement use the returned adjudication package."
+}

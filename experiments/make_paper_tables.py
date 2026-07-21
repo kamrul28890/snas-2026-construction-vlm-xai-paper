@@ -63,6 +63,7 @@ def main() -> int:
     write_intervention_table(out_dir / "pilot_intervention_counts.tex")
     write_intervention_effects_table(out_dir / "pilot_intervention_effects.tex")
     write_rule_slice_table(out_dir / "scaleup_florence_rule_slices.tex")
+    write_audit_final_score_table(out_dir / "human_audit_final_scores.tex")
 
     print(f"Wrote generated paper tables to {out_dir}")
     return 0
@@ -158,6 +159,35 @@ def write_rule_slice_table(path: Path) -> None:
         lines.append(
             f"{pretty} & {row['n']} & {pct(row['accuracy'])} & "
             f"{pct(row['evidence_presence_rate'])} & {float(row['mean_best_evidence_iou']):.3f} \\\\"
+        )
+    lines.extend(["\\bottomrule", "\\end{tabular}", ""])
+    path.write_text("\n".join(lines), encoding="utf-8")
+
+
+def write_audit_final_score_table(path: Path) -> None:
+    rows = []
+    with (ROOT / "results" / "tables" / "human_audit_batch_001_final_label_scores.csv").open(
+        "r", encoding="utf-8", newline=""
+    ) as handle:
+        for row in csv.DictReader(handle):
+            if row["slice_id"] == "overall":
+                rows.append(row)
+    order = {
+        "model_assisted_bootstrap": "Annotation bootstrap",
+        "florence_grounding": "Florence grounding",
+        "ai_annotator_1": "AI annotator 1",
+        "ai_annotator_2": "AI annotator 2",
+    }
+    rows.sort(key=lambda row: list(order).index(row["model_id"]))
+    lines = [
+        "\\begin{tabular}{lrrr}",
+        "\\toprule",
+        "Source & N & Accuracy & Macro-F1 \\\\",
+        "\\midrule",
+    ]
+    for row in rows:
+        lines.append(
+            f"{order[row['model_id']]} & {row['n']} & {pct(row['accuracy'])} & {pct(row['macro_f1'])} \\\\"
         )
     lines.extend(["\\bottomrule", "\\end{tabular}", ""])
     path.write_text("\n".join(lines), encoding="utf-8")

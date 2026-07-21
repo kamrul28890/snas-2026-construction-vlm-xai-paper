@@ -3,5 +3,7 @@ row_count,120.0,120,audit rows in batch
 annotator_1_completion_rate,1.0,120,rows with annotator 1 answer label
 annotator_2_completion_rate,1.0,120,rows with annotator 2 answer label
 dual_annotation_completion_rate,1.0,120,rows with both answer labels
-adjudication_completion_rate,0.0,120,rows with adjudicated answer label
+adjudication_completion_rate,0.1,120,rows with adjudicated answer label
+disagreement_adjudication_completion_rate,1.0,12,A/B disagreement rows with returned adjudication
+final_label_completion_rate,1.0,120,rows with either A/B consensus label or returned adjudication
 raw_answer_agreement,0.9,120,exact annotator 1/2 answer-label agreement

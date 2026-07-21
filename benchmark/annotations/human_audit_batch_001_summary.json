@@ -20,7 +20,7 @@
     "rule_applies": 83
   },
   "florence_bootstrap_disagreement_count": 118,
-  "provenance": "Prioritized for independent audit from scale-up Florence score diagnostics. Annotator fields are currently populated by two independent AI-generated passes and must not be described as human ground truth.",
+  "provenance": "Prioritized for independent audit from scale-up Florence score diagnostics. Two AI-generated annotator passes are ingested; A/B disagreements are resolved by the returned adjudication package. Use the final-label layer with this provenance, not as unqualified human ground truth.",
   "annotation_passes": {
     "status": "ingested",
     "ground_truth_status": "not_human_ground_truth",
@@ -39,5 +39,30 @@
       "ppe_hard_hat": 1,
       "struck_by_equipment": 4
     }
+  },
+  "adjudication": {
+    "status": "ingested",
+    "source_package": "D:\\My Projects\\human-audit-batch-001-annotation\\adjudication\\human_audit_batch_001_adjudication_package",
+    "adjudication_form_sha256": "996ee25fbfb9fcdf0aa67a10005d1a91cb911ba77e50b2ec01bf060144f9e0af",
+    "disagreement_rows_adjudicated": 12,
+    "adjudicated_answer_counts": {
+      "compliant": 7,
+      "uncertain": 2,
+      "violation": 3
+    },
+    "adjudicated_ambiguous_counts": {
+      "no": 4,
+      "yes": 8
+    }
+  },
+  "final_label_layer": {
+    "status": "available",
+    "row_count": 120,
+    "final_label_completion_count": 120,
+    "final_label_source_counts": {
+      "dual_annotator_agreement": 108,
+      "returned_adjudication": 12
+    },
+    "ground_truth_status": "adjudicated_audit_labels_with_ai_pass_provenance"
   }
 }

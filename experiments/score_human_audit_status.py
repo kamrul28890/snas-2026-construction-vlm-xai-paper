@@ -37,6 +37,19 @@ def summarize(rows: list[dict[str, str]]) -> list[dict[str, str]]:
         if label_present(row["annotator_1_answer_label"]) and label_present(row["annotator_2_answer_label"])
     ]
     adjudicated = [row for row in rows if label_present(row["adjudicated_answer_label"])]
+    disagreements = [row for row in both if row["annotator_1_answer_label"] != row["annotator_2_answer_label"]]
+    adjudicated_disagreements = [row for row in disagreements if label_present(row["adjudicated_answer_label"])]
+    final_labeled = [
+        row
+        for row in rows
+        if (
+            label_present(row["adjudicated_answer_label"])
+            or (
+                label_present(row["annotator_1_answer_label"])
+                and row["annotator_1_answer_label"] == row["annotator_2_answer_label"]
+            )
+        )
+    ]
     agreement = (
         sum(1 for row in both if row["annotator_1_answer_label"] == row["annotator_2_answer_label"]) / len(both)
         if both
@@ -48,6 +61,18 @@ def summarize(rows: list[dict[str, str]]) -> list[dict[str, str]]:
         _metric("annotator_2_completion_rate", len(annotator_2) / len(rows) if rows else math.nan, len(rows), "rows with annotator 2 answer label"),
         _metric("dual_annotation_completion_rate", len(both) / len(rows) if rows else math.nan, len(rows), "rows with both answer labels"),
         _metric("adjudication_completion_rate", len(adjudicated) / len(rows) if rows else math.nan, len(rows), "rows with adjudicated answer label"),
+        _metric(
+            "disagreement_adjudication_completion_rate",
+            len(adjudicated_disagreements) / len(disagreements) if disagreements else math.nan,
+            len(disagreements),
+            "A/B disagreement rows with returned adjudication",
+        ),
+        _metric(
+            "final_label_completion_rate",
+            len(final_labeled) / len(rows) if rows else math.nan,
+            len(rows),
+            "rows with either A/B consensus label or returned adjudication",
+        ),
         _metric("raw_answer_agreement", agreement, len(both), "exact annotator 1/2 answer-label agreement"),
     ]
 
