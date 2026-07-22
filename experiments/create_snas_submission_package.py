@@ -211,7 +211,7 @@ Raw ConstructionSite images, model weights, local annotator handoff folders, cac
 - Audit labels: 120 rows; 108 A/B consensus rows plus 12 returned adjudication decisions.
 - Final label distribution: 83 violation, 31 compliant, 6 uncertain.
 - Florence grounding accuracy on the audit layer: 18.3%.
-- Metadata-assisted bootstrap accuracy on the audit layer: 78.3%.
+- Automated baseline accuracy on the audit layer: 78.3%.
 - Targeted evidence-occlusion answer flip rate: 39.2%.
 - Matched-random answer flip rate: 9.2%.
 - Paired answer-flip difference: 30.0 percentage points.
@@ -220,7 +220,7 @@ Raw ConstructionSite images, model weights, local annotator handoff folders, cac
 
 The final audit labels should be described as:
 
-`two independent role-conditioned audit passes plus returned adjudication`
+`two independent audit passes plus returned adjudication`
 
 or:
 

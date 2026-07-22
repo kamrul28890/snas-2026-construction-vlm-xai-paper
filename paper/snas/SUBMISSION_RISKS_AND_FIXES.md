@@ -14,7 +14,7 @@
 
 The returned annotation files explicitly state that the A/B passes were AI-generated. Do not call them human annotators or actual human personas. The safe wording is:
 
-`two independent role-conditioned audit passes plus returned adjudication`
+`two independent audit passes plus returned adjudication`
 
 or:
 
@@ -27,5 +27,5 @@ or:
 - Enter author names and affiliations only in EasyChair, not inside the review PDF.
 - Do not put a GitHub URL under `kamrul28890` in the double-blind abstract or paper unless SNAS explicitly permits non-anonymous artifacts.
 - If you want a repo link in the reviewed abstract, ask SNAS whether this violates double-blind review. The package includes a public/post-review abstract with the repo link, but the safer review version omits it.
-- Have a construction-safety domain reviewer verify or replace the role-conditioned audit layer before making stronger human-ground-truth claims.
+- Have a construction-safety domain reviewer verify or replace the audit layer before making stronger human-ground-truth claims.
 - Decide whether to describe the work as `work in progress`, `audit benchmark`, or `empirical study`; the current safest label is `compact empirical audit study`.

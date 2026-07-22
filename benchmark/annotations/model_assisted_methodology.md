@@ -5,12 +5,12 @@ Prepared: 2026-07-19
 ## Status
 
 The files `pilot_model_assisted_annotations.jsonl` and
-`pilot_model_assisted_annotations.csv` are complete bootstrap annotations for
-the 163-image pilot manifest.
+`pilot_model_assisted_annotations.csv` are complete automated baseline
+annotations for the 163-image pilot manifest.
 
 The files `scaleup_model_assisted_annotations.jsonl` and
-`scaleup_model_assisted_annotations.csv` are complete bootstrap annotations for
-the 588-row scale-up candidate manifest.
+`scaleup_model_assisted_annotations.csv` are complete automated baseline
+annotations for the 588-row scale-up candidate manifest.
 
 They are not human ground truth. They should be described as
 model-assisted/source-metadata-assisted annotations.
@@ -45,7 +45,7 @@ For each image-rule pair:
 
 ## Limitations
 
-This pass can bootstrap development, prioritization, and reviewer-facing
+This pass can support development, prioritization, and reviewer-facing
 provenance. It cannot replace independent annotation because it inherits source
 dataset errors, caption incompleteness, and the pilot model's target-box
 selection for compliant examples.

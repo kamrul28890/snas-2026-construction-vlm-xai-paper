@@ -153,7 +153,7 @@ def make_audit_dashboard() -> None:
 
     ax = axes[1]
     order = [
-        ("model_assisted_bootstrap", "Bootstrap"),
+        ("model_assisted_bootstrap", "Baseline"),
         ("florence_grounding", "Florence"),
         ("ai_annotator_1", "Audit A"),
         ("ai_annotator_2", "Audit B"),

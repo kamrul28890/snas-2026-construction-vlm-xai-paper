@@ -1,4 +1,4 @@
-"""Model-assisted annotation helpers for benchmark bootstrapping."""
+"""Model-assisted annotation helpers for automated baseline labels."""
 
 from __future__ import annotations
 
@@ -143,7 +143,7 @@ def model_assisted_annotation(
     if isinstance(violation, dict):
         source_reason = str(violation.get("reason") or "")
     notes = [
-        "model-assisted bootstrap annotation, not human ground truth",
+        "automated baseline annotation, not human ground truth",
         f"source_quality={dataset_row.get('quality_of_info')}",
     ]
     if source_reason:
@@ -239,4 +239,3 @@ def build_model_assisted_annotations(
         summary_path=summary_path,
         row_count=len(annotations),
     )
-

@@ -1,4 +1,4 @@
-"""Build scale-up annotation templates and model-assisted bootstrap annotations."""
+"""Build scale-up annotation templates and automated baseline annotations."""
 
 from __future__ import annotations
 
@@ -73,7 +73,7 @@ def template_row(row: dict[str, str], question: str) -> dict[str, str]:
 
 
 def bootstrap_row(row: dict[str, str], question: str) -> dict[str, str]:
-    notes = ["scale-up model-assisted bootstrap annotation, not human ground truth"]
+    notes = ["scale-up automated baseline annotation, not human ground truth"]
     if row["source_violation_reason"]:
         notes.append(f"source_reason={row['source_violation_reason']}")
     if row["notes"]:
@@ -134,4 +134,3 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-

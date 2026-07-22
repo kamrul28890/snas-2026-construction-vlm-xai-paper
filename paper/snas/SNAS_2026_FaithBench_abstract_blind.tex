@@ -16,6 +16,7 @@
 }
 
 \setlength{\parindent}{0.5in}
+\setlength{\emergencystretch}{3em}
 \pagestyle{fancy}
 \fancyhf{}
 \fancyhead[LE,LO]{\textit{ConstructionSafety-FaithBench}}
@@ -33,6 +34,6 @@
 \textbf{Abstract}
 \end{center}
 
-Construction-safety vision-language models (VLMs) are being explored as tools for reviewing site imagery, but standard evaluation usually asks only whether the final answer or rationale sounds correct. This leaves a critical gap: a model may predict a safety violation while grounding on irrelevant scene context, or keep the same answer after the rule-relevant worker, protective equipment, or hazard region is removed. We address this gap with ConstructionSafety-FaithBench, a reproducible audit pipeline that separates answer correctness, visual evidence localization, and counterfactual sensitivity. The artifact contains 163 pilot image-rule pairs, 588 scale-up candidates, four safety-rule families, deterministic baselines, a Florence-2 grounding adapter, 948 targeted and matched-random occlusion runs, and a 120-row final audit-label layer. The audit set prioritizes Florence/bootstrap disagreements and weak evidence overlap. Against final audit labels, Florence grounding reaches 18.3\% accuracy and 12.5\% macro-F1, while a metadata-assisted bootstrap reaches 78.3\% accuracy, showing that scaffold-level labels can mask visually grounded failure. Targeted evidence occlusion changes Florence answers 39.2\% of the time versus 9.2\% for matched random masks, a paired gap of 30.0 percentage points. The final audit labels combine 108 role-conditioned A/B consensus rows with 12 returned adjudication decisions, so results are reported with explicit provenance rather than as unqualified human ground truth.
+Construction-safety vision-language models (VLMs) can produce the right safety answer for the wrong visual reason. A model may classify a scene as unsafe because construction context looks hazardous, while ignoring the specific worker, protective equipment, edge, or machine-proximity cue that the safety rule actually depends on. We introduce ConstructionSafety-FaithBench to audit this right-answer/wrong-evidence gap. The benchmark separates three questions that are usually merged: whether the answer is correct, whether the cited visual evidence is rule-relevant, and whether the answer changes when that evidence is removed. We evaluate automated baseline annotations and a Florence-2 grounding adapter on hard-hat, fall-protection, guardrail, and struck-by rules, then apply targeted occlusions to rule-relevant boxes and compare them with same-size random masks. On a prioritized audit set where Florence-2 often disagrees with the automated baseline, Florence reaches 18.3\% accuracy and 12.5\% macro-F1, while the baseline reaches 78.3\% accuracy. More importantly, masking rule-relevant evidence changes Florence answers 39.2\% of the time, compared with 9.2\% for matched random masks. These results show that construction-safety VLM evaluation needs evidence-faithfulness tests, not answer scoring alone.
 
 \end{document}

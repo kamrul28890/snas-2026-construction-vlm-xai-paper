@@ -3,9 +3,9 @@
 This protocol is for independent review of `human_audit_batch_001`.
 
 The batch is prioritized from scale-up Florence diagnostics. It intentionally
-over-samples rows where Florence disagrees with the model-assisted bootstrap
-annotation, where the bootstrap label is nonambiguous, or where evidence overlap
-is weak. It is not a random benchmark split.
+over-samples rows where Florence disagrees with the automated baseline
+annotation, where the baseline label is nonambiguous, or where evidence overlap is
+weak. It is not a random benchmark split.
 
 Each audited row should receive two independent annotations:
 

@@ -6,10 +6,10 @@ This protocol defines the first human/domain audit layer for
 ConstructionSafety-FaithBench. The pilot template is generated from
 `analysis/outputs/sample_audit.csv`.
 
-`pilot_model_assisted_annotations.*` is a completed bootstrap annotation pass
-generated from dataset metadata, captions, source rule-violation records, and
-pilot target boxes. It is useful for development and triage, but it is not a
-replacement for independent human/domain-expert annotation.
+`pilot_model_assisted_annotations.*` is a completed automated baseline
+annotation pass generated from dataset metadata, captions, source rule-violation
+records, and pilot target boxes. It is useful for development and triage, but it
+is not a replacement for independent human/domain-expert annotation.
 
 ## Goal
 

@@ -115,7 +115,7 @@ Question: Is a worker unsafely close to active heavy equipment?
 ## Important Rules For Annotation Quality
 
 - Work independently. Do not discuss labels with another annotator before submitting.
-- Do not look at model predictions or existing bootstrap labels.
+- Do not look at model predictions or existing automated baseline annotations.
 - Do not infer facts that are not visible in the image.
 - Mark `uncertain` rather than guessing when visual evidence is insufficient.
 - Do not identify people or assign blame. This is only a visual safety-rule annotation task.
