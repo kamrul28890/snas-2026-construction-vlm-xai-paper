@@ -82,21 +82,21 @@ def dark_box(ax, xy, width, height, title, subtitle, edge, face, title_color, su
     cx = xy[0] + width / 2
     ax.text(
         cx,
-        xy[1] + height * 0.63,
+        xy[1] + height * 0.69,
         title,
         ha="center",
         va="center",
-        fontsize=8.5,
+        fontsize=8.1,
         fontweight="bold",
         color=title_color,
     )
     ax.text(
         cx,
-        xy[1] + height * 0.32,
+        xy[1] + height * 0.27,
         subtitle,
         ha="center",
         va="center",
-        fontsize=7.2,
+        fontsize=6.2,
         color=subtitle_color,
     )
 
@@ -135,7 +135,7 @@ def dark_arrow(ax, points, color="#8D8D87"):
 
 
 def make_pipeline_figure() -> None:
-    fig, ax = plt.subplots(figsize=(6.3, 2.65))
+    fig, ax = plt.subplots(figsize=(7.2, 3.0))
     ax.set_xlim(0, 1)
     ax.set_ylim(0, 1)
     ax.axis("off")
@@ -147,29 +147,33 @@ def make_pipeline_figure() -> None:
     salmon = {"edge": "#E97952", "face": "#F4E5DF", "title_color": "#7B3020", "subtitle_color": "#A24425"}
     teal = {"edge": "#22B8A8", "face": "#DDF4EF", "title_color": "#075C50", "subtitle_color": "#087564"}
 
-    dark_box(ax, (0.03, 0.80), 0.20, 0.12, "Site data", "Metadata, images", **neutral)
-    dark_box(ax, (0.27, 0.80), 0.20, 0.12, "Rule schema", "4 safety rules", **neutral)
-    dark_box(ax, (0.51, 0.80), 0.20, 0.12, "Manifests", "163 / 588 rows", **purple)
-    dark_box(ax, (0.75, 0.80), 0.20, 0.12, "Adapters", "Baseline, Florence", **purple)
+    w, h = 0.21, 0.145
+    top_y, mid_y, audit_y, score_y = 0.79, 0.55, 0.315, 0.075
+    x1, x2, x3, x4 = 0.035, 0.275, 0.515, 0.755
 
-    dark_box(ax, (0.51, 0.57), 0.20, 0.12, "Audit set", "120 rows", **salmon)
-    dark_box(ax, (0.75, 0.57), 0.20, 0.12, "Interventions", "Target vs random", **salmon)
+    dark_box(ax, (x1, top_y), w, h, "Site data", "Metadata, images", **neutral)
+    dark_box(ax, (x2, top_y), w, h, "Rule schema", "4 safety rules", **neutral)
+    dark_box(ax, (x3, top_y), w, h, "Manifests", "163 / 588 rows", **purple)
+    dark_box(ax, (x4, top_y), w, h, "Adapters", "Baseline, Florence", **purple)
 
-    dark_box(ax, (0.03, 0.34), 0.20, 0.12, "A/B passes", "Two audit passes", **teal)
-    dark_box(ax, (0.27, 0.34), 0.20, 0.12, "Disagreements", "12 adjudicated", **teal)
-    dark_box(ax, (0.51, 0.34), 0.20, 0.12, "Final labels", "120 final labels", **teal)
-    dark_box(ax, (0.27, 0.08), 0.44, 0.12, "Scores + paper tables", "Accuracy, macro-F1, effects", **teal)
+    dark_box(ax, (x3, mid_y), w, h, "Audit set", "120 rows", **salmon)
+    dark_box(ax, (x4, mid_y), w, h, "Interventions", "Target vs random", **salmon)
 
-    dark_arrow(ax, [(0.23, 0.86), (0.27, 0.86)])
-    dark_arrow(ax, [(0.47, 0.86), (0.51, 0.86)])
-    dark_arrow(ax, [(0.71, 0.86), (0.75, 0.86)])
-    dark_arrow(ax, [(0.61, 0.80), (0.61, 0.69)])
-    dark_arrow(ax, [(0.85, 0.80), (0.85, 0.69)])
-    dark_arrow(ax, [(0.61, 0.57), (0.61, 0.51), (0.13, 0.51), (0.13, 0.46)])
-    dark_arrow(ax, [(0.23, 0.40), (0.27, 0.40)])
-    dark_arrow(ax, [(0.47, 0.40), (0.51, 0.40)])
-    dark_arrow(ax, [(0.61, 0.34), (0.61, 0.20)])
-    dark_arrow(ax, [(0.85, 0.57), (0.85, 0.26), (0.70, 0.26), (0.70, 0.20)])
+    dark_box(ax, (x1, audit_y), w, h, "A/B passes", "Two audit passes", **teal)
+    dark_box(ax, (x2, audit_y), w, h, "Disagreements", "12 adjudicated", **teal)
+    dark_box(ax, (x3, audit_y), w, h, "Final labels", "120 final labels", **teal)
+    dark_box(ax, (0.275, score_y), 0.45, h, "Scores + paper tables", "Accuracy, macro-F1, effects", **teal)
+
+    dark_arrow(ax, [(x1 + w, top_y + h / 2), (x2, top_y + h / 2)])
+    dark_arrow(ax, [(x2 + w, top_y + h / 2), (x3, top_y + h / 2)])
+    dark_arrow(ax, [(x3 + w, top_y + h / 2), (x4, top_y + h / 2)])
+    dark_arrow(ax, [(x3 + w / 2, top_y), (x3 + w / 2, mid_y + h)])
+    dark_arrow(ax, [(x4 + w / 2, top_y), (x4 + w / 2, mid_y + h)])
+    dark_arrow(ax, [(x3 + w / 2, mid_y), (x3 + w / 2, 0.50), (x1 + w / 2, 0.50), (x1 + w / 2, audit_y + h)])
+    dark_arrow(ax, [(x1 + w, audit_y + h / 2), (x2, audit_y + h / 2)])
+    dark_arrow(ax, [(x2 + w, audit_y + h / 2), (x3, audit_y + h / 2)])
+    dark_arrow(ax, [(x3 + w / 2, audit_y), (x3 + w / 2, score_y + h)])
+    dark_arrow(ax, [(x4 + w / 2, mid_y), (x4 + w / 2, 0.255), (0.71, 0.255), (0.71, score_y + h)])
     save(fig, "pipeline_architecture.pdf")
 
 
