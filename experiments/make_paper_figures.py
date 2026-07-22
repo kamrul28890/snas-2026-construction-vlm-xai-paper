@@ -135,41 +135,41 @@ def dark_arrow(ax, points, color="#8D8D87"):
 
 
 def make_pipeline_figure() -> None:
-    fig, ax = plt.subplots(figsize=(7.1, 4.25))
+    fig, ax = plt.subplots(figsize=(6.3, 2.65))
     ax.set_xlim(0, 1)
     ax.set_ylim(0, 1)
     ax.axis("off")
-    ax.set_facecolor("#000000")
-    fig.patch.set_facecolor("#000000")
+    ax.set_facecolor("#FFFFFF")
+    fig.patch.set_facecolor("#FFFFFF")
 
     neutral = {"edge": "#9A9A91", "face": "#F0EEE8", "title_color": "#4B4B47", "subtitle_color": "#696965"}
     purple = {"edge": "#6460FF", "face": "#E9E8F8", "title_color": "#393586", "subtitle_color": "#5A54C8"}
     salmon = {"edge": "#E97952", "face": "#F4E5DF", "title_color": "#7B3020", "subtitle_color": "#A24425"}
-    teal = {"edge": "#4EDAC3", "face": "#DDF4EF", "title_color": "#075C50", "subtitle_color": "#087564"}
+    teal = {"edge": "#22B8A8", "face": "#DDF4EF", "title_color": "#075C50", "subtitle_color": "#087564"}
 
-    dark_box(ax, (0.05, 0.78), 0.20, 0.10, "Site data", "Metadata, images", **neutral)
-    dark_box(ax, (0.28, 0.78), 0.20, 0.10, "Rule schema", "4 safety rules", **neutral)
-    dark_box(ax, (0.51, 0.78), 0.20, 0.10, "Manifests", "163 / 588 rows", **purple)
-    dark_box(ax, (0.74, 0.78), 0.20, 0.10, "Adapters", "Baseline, Florence", **purple)
+    dark_box(ax, (0.03, 0.80), 0.20, 0.12, "Site data", "Metadata, images", **neutral)
+    dark_box(ax, (0.27, 0.80), 0.20, 0.12, "Rule schema", "4 safety rules", **neutral)
+    dark_box(ax, (0.51, 0.80), 0.20, 0.12, "Manifests", "163 / 588 rows", **purple)
+    dark_box(ax, (0.75, 0.80), 0.20, 0.12, "Adapters", "Baseline, Florence", **purple)
 
-    dark_box(ax, (0.51, 0.57), 0.20, 0.10, "Audit set", "120 rows", **salmon)
-    dark_box(ax, (0.74, 0.57), 0.20, 0.10, "Interventions", "Target vs random", **salmon)
+    dark_box(ax, (0.51, 0.57), 0.20, 0.12, "Audit set", "120 rows", **salmon)
+    dark_box(ax, (0.75, 0.57), 0.20, 0.12, "Interventions", "Target vs random", **salmon)
 
-    dark_box(ax, (0.05, 0.34), 0.20, 0.10, "A/B passes", "Role-conditioned", **teal)
-    dark_box(ax, (0.28, 0.34), 0.20, 0.10, "Disagreements", "12 adjudicated", **teal)
-    dark_box(ax, (0.51, 0.34), 0.20, 0.10, "Final labels", "120 final labels", **teal)
-    dark_box(ax, (0.28, 0.12), 0.43, 0.10, "Scores + paper tables", "Accuracy, macro-F1, effects", **teal)
+    dark_box(ax, (0.03, 0.34), 0.20, 0.12, "A/B passes", "Two audit passes", **teal)
+    dark_box(ax, (0.27, 0.34), 0.20, 0.12, "Disagreements", "12 adjudicated", **teal)
+    dark_box(ax, (0.51, 0.34), 0.20, 0.12, "Final labels", "120 final labels", **teal)
+    dark_box(ax, (0.27, 0.08), 0.44, 0.12, "Scores + paper tables", "Accuracy, macro-F1, effects", **teal)
 
-    dark_arrow(ax, [(0.25, 0.83), (0.28, 0.83)])
-    dark_arrow(ax, [(0.48, 0.83), (0.51, 0.83)])
-    dark_arrow(ax, [(0.71, 0.83), (0.74, 0.83)])
-    dark_arrow(ax, [(0.61, 0.78), (0.61, 0.67)])
-    dark_arrow(ax, [(0.84, 0.78), (0.84, 0.67)])
-    dark_arrow(ax, [(0.61, 0.57), (0.61, 0.51), (0.15, 0.51), (0.15, 0.44)])
-    dark_arrow(ax, [(0.25, 0.39), (0.28, 0.39)])
-    dark_arrow(ax, [(0.48, 0.39), (0.51, 0.39)])
-    dark_arrow(ax, [(0.61, 0.34), (0.61, 0.22)])
-    dark_arrow(ax, [(0.84, 0.57), (0.84, 0.29), (0.70, 0.29), (0.70, 0.22)])
+    dark_arrow(ax, [(0.23, 0.86), (0.27, 0.86)])
+    dark_arrow(ax, [(0.47, 0.86), (0.51, 0.86)])
+    dark_arrow(ax, [(0.71, 0.86), (0.75, 0.86)])
+    dark_arrow(ax, [(0.61, 0.80), (0.61, 0.69)])
+    dark_arrow(ax, [(0.85, 0.80), (0.85, 0.69)])
+    dark_arrow(ax, [(0.61, 0.57), (0.61, 0.51), (0.13, 0.51), (0.13, 0.46)])
+    dark_arrow(ax, [(0.23, 0.40), (0.27, 0.40)])
+    dark_arrow(ax, [(0.47, 0.40), (0.51, 0.40)])
+    dark_arrow(ax, [(0.61, 0.34), (0.61, 0.20)])
+    dark_arrow(ax, [(0.85, 0.57), (0.85, 0.26), (0.70, 0.26), (0.70, 0.20)])
     save(fig, "pipeline_architecture.pdf")
 
 
