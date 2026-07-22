@@ -84,21 +84,19 @@ def arrow(ax, start, end, color="#67727E"):
 
 
 def make_pipeline_figure() -> None:
-    fig, ax = plt.subplots(figsize=(7.1, 2.55))
+    fig, ax = plt.subplots(figsize=(7.1, 3.0))
     ax.set_xlim(0, 1)
     ax.set_ylim(0, 1)
     ax.axis("off")
 
     nodes = [
-        ((0.02, 0.58), 0.14, 0.28, "ConstructionSite\nmetadata + images", COLORS["data"]),
-        ((0.19, 0.58), 0.14, 0.28, "Rule schema\n4 safety rules", COLORS["data"]),
-        ((0.36, 0.58), 0.14, 0.28, "Manifests\n163 pilot / 588 scale", COLORS["annotation"]),
-        ((0.53, 0.58), 0.14, 0.28, "Adapters\nbaselines + Florence", COLORS["model"]),
-        ((0.70, 0.58), 0.14, 0.28, "Interventions\ntargeted vs random", COLORS["intervention"]),
-        ((0.86, 0.58), 0.12, 0.28, "Scores +\npaper tables", COLORS["score"]),
+        ((0.02, 0.70), 0.18, 0.20, "ConstructionSite\nmetadata + images", COLORS["data"], 7.2),
+        ((0.27, 0.70), 0.15, 0.20, "Rule schema\n4 safety rules", COLORS["data"], 7.2),
+        ((0.49, 0.70), 0.18, 0.20, "Manifests\n163 pilot / 588 scale", COLORS["annotation"], 7.2),
+        ((0.74, 0.70), 0.18, 0.20, "Adapters\nbaselines + Florence", COLORS["model"], 7.2),
     ]
-    for xy, width, height, text, color in nodes:
-        box(ax, xy, width, height, text, color)
+    for xy, width, height, text, color, fontsize in nodes:
+        box(ax, xy, width, height, text, color, fontsize=fontsize)
     for i in range(len(nodes) - 1):
         x1 = nodes[i][0][0] + nodes[i][1]
         y1 = nodes[i][0][1] + nodes[i][2] / 2
@@ -106,11 +104,20 @@ def make_pipeline_figure() -> None:
         y2 = nodes[i + 1][0][1] + nodes[i + 1][2] / 2
         arrow(ax, (x1, y1), (x2, y2))
 
+    eval_nodes = [
+        ((0.50, 0.42), 0.18, 0.19, "Interventions\ntargeted vs random", COLORS["intervention"], 7.2),
+        ((0.76, 0.42), 0.18, 0.19, "Scores +\npaper tables", COLORS["score"], 7.2),
+    ]
+    for xy, width, height, text, color, fontsize in eval_nodes:
+        box(ax, xy, width, height, text, color, fontsize=fontsize)
+    arrow(ax, (0.83, 0.70), (0.59, 0.61))
+    arrow(ax, (0.68, 0.515), (0.76, 0.515))
+
     audit_nodes = [
-        ((0.18, 0.17), 0.18, 0.23, "Prioritized audit\n120 rows", COLORS["annotation"], 7.2),
-        ((0.40, 0.17), 0.18, 0.23, "Role-conditioned\nA/B audit passes", COLORS["annotation"], 7.2),
-        ((0.62, 0.17), 0.15, 0.23, "12 disagreements\nadjudicated", COLORS["intervention"], 7.0),
-        ((0.81, 0.17), 0.17, 0.23, "Final labels\n108 consensus\n12 adjudicated", COLORS["score"], 6.8),
+        ((0.08, 0.14), 0.19, 0.19, "Prioritized audit\n120 rows", COLORS["annotation"], 7.0),
+        ((0.33, 0.14), 0.20, 0.19, "Role-conditioned\nA/B audit passes", COLORS["annotation"], 7.0),
+        ((0.59, 0.14), 0.16, 0.19, "12 disagreements\nadjudicated", COLORS["intervention"], 6.8),
+        ((0.80, 0.14), 0.17, 0.19, "Final labels\n108 consensus\n12 adjudicated", COLORS["score"], 6.6),
     ]
     for xy, width, height, text, color, fontsize in audit_nodes:
         box(ax, xy, width, height, text, color, fontsize=fontsize)
@@ -120,8 +127,8 @@ def make_pipeline_figure() -> None:
         x2 = audit_nodes[i + 1][0][0]
         y2 = audit_nodes[i + 1][0][1] + audit_nodes[i + 1][2] / 2
         arrow(ax, (x1, y1), (x2, y2))
-    arrow(ax, (0.43, 0.58), (0.27, 0.40), "#8A6F3D")
-    arrow(ax, (0.895, 0.40), (0.92, 0.58), "#8A6F3D")
+    arrow(ax, (0.58, 0.70), (0.18, 0.33), "#8A6F3D")
+    arrow(ax, (0.885, 0.33), (0.85, 0.42), "#8A6F3D")
     ax.text(0.02, 0.045, "All outputs use normalized JSONL/CSV schemas and SHA-256 release manifests.", fontsize=7, color="#4B5563")
     save(fig, "pipeline_architecture.pdf")
 
@@ -174,11 +181,14 @@ def make_intervention_figure() -> None:
     metrics = [
         ("Answer flip", "targeted_answer_flip_rate", "matched_random_answer_flip_rate"),
         ("Centroid drift", "targeted_mean_centroid_drift", "matched_random_mean_centroid_drift"),
-        ("Evidence disappear", "targeted_evidence_disappearance_rate", "matched_random_evidence_disappearance_rate"),
+        ("Evidence\nmissing", "targeted_evidence_disappearance_rate", "matched_random_evidence_disappearance_rate"),
     ]
-    fig, ax = plt.subplots(figsize=(7.1, 2.2))
+    fig, axes = plt.subplots(1, 2, figsize=(7.1, 2.35), gridspec_kw={"width_ratios": [1.25, 0.95]})
+    fig.subplots_adjust(left=0.07, right=0.98, bottom=0.22, top=0.82, wspace=0.34)
+
+    ax = axes[0]
     x = range(len(metrics))
-    width = 0.34
+    width = 0.30
     targeted = [float(rows[t]["value"]) for _, t, _ in metrics]
     random = [float(rows[r]["value"]) for _, _, r in metrics]
     ax.bar([i - width / 2 for i in x], targeted, width=width, label="Targeted", color="#B279A2")
@@ -187,24 +197,47 @@ def make_intervention_figure() -> None:
     ax.set_ylabel("Rate / normalized drift", fontsize=8)
     ax.set_ylim(0, 0.46)
     ax.tick_params(axis="y", labelsize=7)
-    ax.set_title("Rule-evidence occlusion has larger effects than matched random masking", fontsize=9, pad=4)
-    ax.legend(frameon=False, fontsize=7, loc="upper right")
+    ax.set_title("A. Mask response", fontsize=9, pad=5)
+    ax.legend(frameon=False, fontsize=7, loc="upper right", borderaxespad=0.2)
     ax.spines[["top", "right"]].set_visible(False)
     for idx, value in enumerate(targeted):
         ax.text(idx - width / 2, value + 0.012, f"{value:.2f}", ha="center", fontsize=7)
     for idx, value in enumerate(random):
         ax.text(idx + width / 2, value + 0.012, f"{value:.2f}", ha="center", fontsize=7)
-    diff = float(rows["paired_answer_flip_rate_difference"]["value"])
-    lo = float(rows["paired_answer_flip_rate_difference"]["ci_low"])
-    hi = float(rows["paired_answer_flip_rate_difference"]["ci_high"])
-    ax.text(
-        0.03,
-        0.94,
-        f"Paired answer-flip diff: {diff:.2f} (95% CI {lo:.2f}, {hi:.2f})",
-        transform=ax.transAxes,
-        fontsize=7,
-        color="#374151",
-        va="top",
+
+    ax = axes[1]
+    paired = [
+        ("Answer flip", "paired_answer_flip_rate_difference"),
+        ("Centroid drift", "paired_centroid_drift_difference"),
+    ]
+    y = list(range(len(paired)))
+    values = [float(rows[key]["value"]) for _, key in paired]
+    lows = [float(rows[key]["ci_low"]) for _, key in paired]
+    highs = [float(rows[key]["ci_high"]) for _, key in paired]
+    lower = [value - low for value, low in zip(values, lows)]
+    upper = [high - value for value, high in zip(values, highs)]
+    ax.barh(y, values, color=["#B279A2", "#8E6C8A"], height=0.42)
+    ax.errorbar(values, y, xerr=[lower, upper], fmt="none", ecolor="#27313A", elinewidth=0.9, capsize=3)
+    ax.axvline(0, color="#6B7280", linewidth=0.7)
+    ax.set_yticks(y, [name for name, _ in paired], fontsize=8)
+    ax.set_xlim(0, 0.43)
+    ax.set_xlabel("Targeted - random", fontsize=8)
+    ax.set_title("B. Paired effect (95% CI)", fontsize=9, pad=5)
+    ax.tick_params(axis="x", labelsize=7)
+    ax.spines[["top", "right"]].set_visible(False)
+    for idx, (value, high) in enumerate(zip(values, highs)):
+        ax.text(
+            min(high + 0.014, 0.415),
+            idx,
+            f"{value:.2f}",
+            va="center",
+            fontsize=7,
+            color="#1F2933",
+        )
+    fig.suptitle(
+        "Rule-evidence occlusion has larger effects than matched random masking",
+        fontsize=9,
+        y=0.96,
     )
     save(fig, "intervention_effects_chart.pdf")
 
