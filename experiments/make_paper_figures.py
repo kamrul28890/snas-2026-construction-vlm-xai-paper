@@ -68,6 +68,39 @@ def box(ax, xy, width, height, text, color, fontsize=7.5):
     )
 
 
+def dark_box(ax, xy, width, height, title, subtitle, edge, face, title_color, subtitle_color):
+    patch = FancyBboxPatch(
+        xy,
+        width,
+        height,
+        boxstyle="round,pad=0.012,rounding_size=0.014",
+        linewidth=1.1,
+        edgecolor=edge,
+        facecolor=face,
+    )
+    ax.add_patch(patch)
+    cx = xy[0] + width / 2
+    ax.text(
+        cx,
+        xy[1] + height * 0.63,
+        title,
+        ha="center",
+        va="center",
+        fontsize=8.5,
+        fontweight="bold",
+        color=title_color,
+    )
+    ax.text(
+        cx,
+        xy[1] + height * 0.32,
+        subtitle,
+        ha="center",
+        va="center",
+        fontsize=7.2,
+        color=subtitle_color,
+    )
+
+
 def arrow(ax, start, end, color="#67727E"):
     ax.add_patch(
         FancyArrowPatch(
@@ -83,53 +116,60 @@ def arrow(ax, start, end, color="#67727E"):
     )
 
 
+def dark_arrow(ax, points, color="#8D8D87"):
+    xs, ys = zip(*points)
+    if len(points) > 2:
+        ax.plot(xs[:-1], ys[:-1], color=color, linewidth=1.2, solid_capstyle="round")
+    ax.add_patch(
+        FancyArrowPatch(
+            points[-2],
+            points[-1],
+            arrowstyle="->",
+            mutation_scale=10,
+            linewidth=1.2,
+            color=color,
+            shrinkA=0,
+            shrinkB=0,
+        )
+    )
+
+
 def make_pipeline_figure() -> None:
-    fig, ax = plt.subplots(figsize=(7.1, 3.0))
+    fig, ax = plt.subplots(figsize=(7.1, 4.25))
     ax.set_xlim(0, 1)
     ax.set_ylim(0, 1)
     ax.axis("off")
+    ax.set_facecolor("#000000")
+    fig.patch.set_facecolor("#000000")
 
-    nodes = [
-        ((0.02, 0.70), 0.18, 0.20, "ConstructionSite\nmetadata + images", COLORS["data"], 7.2),
-        ((0.27, 0.70), 0.15, 0.20, "Rule schema\n4 safety rules", COLORS["data"], 7.2),
-        ((0.49, 0.70), 0.18, 0.20, "Manifests\n163 pilot / 588 scale", COLORS["annotation"], 7.2),
-        ((0.74, 0.70), 0.18, 0.20, "Adapters\nbaselines + Florence", COLORS["model"], 7.2),
-    ]
-    for xy, width, height, text, color, fontsize in nodes:
-        box(ax, xy, width, height, text, color, fontsize=fontsize)
-    for i in range(len(nodes) - 1):
-        x1 = nodes[i][0][0] + nodes[i][1]
-        y1 = nodes[i][0][1] + nodes[i][2] / 2
-        x2 = nodes[i + 1][0][0]
-        y2 = nodes[i + 1][0][1] + nodes[i + 1][2] / 2
-        arrow(ax, (x1, y1), (x2, y2))
+    neutral = {"edge": "#9A9A91", "face": "#F0EEE8", "title_color": "#4B4B47", "subtitle_color": "#696965"}
+    purple = {"edge": "#6460FF", "face": "#E9E8F8", "title_color": "#393586", "subtitle_color": "#5A54C8"}
+    salmon = {"edge": "#E97952", "face": "#F4E5DF", "title_color": "#7B3020", "subtitle_color": "#A24425"}
+    teal = {"edge": "#4EDAC3", "face": "#DDF4EF", "title_color": "#075C50", "subtitle_color": "#087564"}
 
-    eval_nodes = [
-        ((0.50, 0.42), 0.18, 0.19, "Interventions\ntargeted vs random", COLORS["intervention"], 7.2),
-        ((0.76, 0.42), 0.18, 0.19, "Scores +\npaper tables", COLORS["score"], 7.2),
-    ]
-    for xy, width, height, text, color, fontsize in eval_nodes:
-        box(ax, xy, width, height, text, color, fontsize=fontsize)
-    arrow(ax, (0.83, 0.70), (0.59, 0.61))
-    arrow(ax, (0.68, 0.515), (0.76, 0.515))
+    dark_box(ax, (0.05, 0.78), 0.20, 0.10, "Site data", "Metadata, images", **neutral)
+    dark_box(ax, (0.28, 0.78), 0.20, 0.10, "Rule schema", "4 safety rules", **neutral)
+    dark_box(ax, (0.51, 0.78), 0.20, 0.10, "Manifests", "163 / 588 rows", **purple)
+    dark_box(ax, (0.74, 0.78), 0.20, 0.10, "Adapters", "Baseline, Florence", **purple)
 
-    audit_nodes = [
-        ((0.08, 0.14), 0.19, 0.19, "Prioritized audit\n120 rows", COLORS["annotation"], 7.0),
-        ((0.33, 0.14), 0.20, 0.19, "Role-conditioned\nA/B audit passes", COLORS["annotation"], 7.0),
-        ((0.59, 0.14), 0.16, 0.19, "12 disagreements\nadjudicated", COLORS["intervention"], 6.8),
-        ((0.80, 0.14), 0.17, 0.19, "Final labels\n108 consensus\n12 adjudicated", COLORS["score"], 6.6),
-    ]
-    for xy, width, height, text, color, fontsize in audit_nodes:
-        box(ax, xy, width, height, text, color, fontsize=fontsize)
-    for i in range(len(audit_nodes) - 1):
-        x1 = audit_nodes[i][0][0] + audit_nodes[i][1]
-        y1 = audit_nodes[i][0][1] + audit_nodes[i][2] / 2
-        x2 = audit_nodes[i + 1][0][0]
-        y2 = audit_nodes[i + 1][0][1] + audit_nodes[i + 1][2] / 2
-        arrow(ax, (x1, y1), (x2, y2))
-    arrow(ax, (0.58, 0.70), (0.18, 0.33), "#8A6F3D")
-    arrow(ax, (0.885, 0.33), (0.85, 0.42), "#8A6F3D")
-    ax.text(0.02, 0.045, "All outputs use normalized JSONL/CSV schemas and SHA-256 release manifests.", fontsize=7, color="#4B5563")
+    dark_box(ax, (0.51, 0.57), 0.20, 0.10, "Audit set", "120 rows", **salmon)
+    dark_box(ax, (0.74, 0.57), 0.20, 0.10, "Interventions", "Target vs random", **salmon)
+
+    dark_box(ax, (0.05, 0.34), 0.20, 0.10, "A/B passes", "Role-conditioned", **teal)
+    dark_box(ax, (0.28, 0.34), 0.20, 0.10, "Disagreements", "12 adjudicated", **teal)
+    dark_box(ax, (0.51, 0.34), 0.20, 0.10, "Final labels", "120 final labels", **teal)
+    dark_box(ax, (0.28, 0.12), 0.43, 0.10, "Scores + paper tables", "Accuracy, macro-F1, effects", **teal)
+
+    dark_arrow(ax, [(0.25, 0.83), (0.28, 0.83)])
+    dark_arrow(ax, [(0.48, 0.83), (0.51, 0.83)])
+    dark_arrow(ax, [(0.71, 0.83), (0.74, 0.83)])
+    dark_arrow(ax, [(0.61, 0.78), (0.61, 0.67)])
+    dark_arrow(ax, [(0.84, 0.78), (0.84, 0.67)])
+    dark_arrow(ax, [(0.61, 0.57), (0.61, 0.51), (0.15, 0.51), (0.15, 0.44)])
+    dark_arrow(ax, [(0.25, 0.39), (0.28, 0.39)])
+    dark_arrow(ax, [(0.48, 0.39), (0.51, 0.39)])
+    dark_arrow(ax, [(0.61, 0.34), (0.61, 0.22)])
+    dark_arrow(ax, [(0.84, 0.57), (0.84, 0.29), (0.70, 0.29), (0.70, 0.22)])
     save(fig, "pipeline_architecture.pdf")
 
 
