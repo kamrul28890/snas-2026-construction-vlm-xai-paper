@@ -148,8 +148,8 @@ FILES = [
 ]
 
 SUBMISSION_FILES = [
-    ("SNAS_2026_FaithBench_short_paper_blind.pdf", "submission/SNAS_2026_FaithBench_short_paper_blind.pdf"),
-    ("SNAS_2026_FaithBench_abstract_blind.pdf", "submission/SNAS_2026_FaithBench_abstract_blind.pdf"),
+    ("tmp/snas/SNAS_2026_FaithBench_short_paper.pdf", "submission/SNAS_2026_FaithBench_short_paper_blind.pdf"),
+    ("tmp/snas/SNAS_2026_FaithBench_abstract_blind.pdf", "submission/SNAS_2026_FaithBench_abstract_blind.pdf"),
 ]
 
 
@@ -292,7 +292,7 @@ def main() -> int:
         copy_file(src_rel)
 
     for src_name, dst_rel in SUBMISSION_FILES:
-        copy_file(f"output/snas_submission_ready/{src_name}", dst_rel)
+        copy_file(src_name, dst_rel)
 
     write_readme()
     assert_clean_text()
