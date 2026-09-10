@@ -25,8 +25,12 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--package",
         type=Path,
-        default=Path(r"D:\My Projects\human-audit-batch-001-annotation\final_package"),
-        help="Returned annotation package containing annotator_A_pass.csv and annotator_B_pass.csv.",
+        required=True,
+        help=(
+            "Returned annotation package containing annotator_A_pass.csv and "
+            "annotator_B_pass.csv. This package is produced outside the repository, "
+            "so its location must be supplied explicitly."
+        ),
     )
     parser.add_argument(
         "--batch-csv",

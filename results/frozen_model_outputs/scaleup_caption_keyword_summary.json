@@ -3,8 +3,8 @@
   "model_id": "baseline/caption_keyword_v1",
   "prompt_id": "caption_only_keywords",
   "row_count": 588,
-  "jsonl_path": "D:\\My Projects\\society-of-north-american-scholar-paper\\results\\frozen_model_outputs\\scaleup_caption_keyword.jsonl",
-  "csv_path": "D:\\My Projects\\society-of-north-american-scholar-paper\\results\\frozen_model_outputs\\scaleup_caption_keyword.csv",
+  "jsonl_path": "results/frozen_model_outputs/scaleup_caption_keyword.jsonl",
+  "csv_path": "results/frozen_model_outputs/scaleup_caption_keyword.csv",
   "answer_counts": {
     "uncertain": 394,
     "compliant": 190,

@@ -21,11 +21,12 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--package",
         type=Path,
-        default=Path(
-            r"D:\My Projects\human-audit-batch-001-annotation\adjudication"
-            r"\human_audit_batch_001_adjudication_package"
+        required=True,
+        help=(
+            "Returned adjudication package containing adjudication_form.csv. This "
+            "package is produced outside the repository, so its location must be "
+            "supplied explicitly."
         ),
-        help="Returned adjudication package containing adjudication_form.csv.",
     )
     parser.add_argument(
         "--batch-csv",

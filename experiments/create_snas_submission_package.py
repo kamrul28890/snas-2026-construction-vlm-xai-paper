@@ -5,6 +5,7 @@ from __future__ import annotations
 import hashlib
 import json
 import os
+import re
 import shutil
 import zipfile
 from datetime import datetime, timezone
@@ -262,7 +263,11 @@ def write_manifest() -> None:
 
 def assert_clean_text() -> None:
     blocked = ["NeurIPS", "neurips ready", "top-tier neurips"]
+    # Absolute Windows/UNC paths would publish local directory layout, including
+    # sibling project directories outside this repository.
+    machine_paths = re.compile(r"[A-Za-z]:\\\\?[A-Za-z0-9_. -]|\\\\[A-Za-z0-9_.-]+\\")
     offenders: list[str] = []
+    path_offenders: list[str] = []
     for path in REPRO.rglob("*"):
         if ".git" in path.parts:
             continue
@@ -271,8 +276,15 @@ def assert_clean_text() -> None:
         text = path.read_text(encoding="utf-8", errors="ignore")
         if any(term in text for term in blocked):
             offenders.append(path.relative_to(REPRO).as_posix())
+        if machine_paths.search(text):
+            path_offenders.append(path.relative_to(REPRO).as_posix())
     if offenders:
         raise RuntimeError("Blocked venue wording found in export: " + ", ".join(offenders))
+    if path_offenders:
+        raise RuntimeError(
+            "Absolute machine paths found in export (run "
+            "experiments/sanitize_release_paths.py): " + ", ".join(path_offenders)
+        )
 
 
 def write_zip() -> Path:

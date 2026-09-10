@@ -1,7 +1,7 @@
 {
   "benchmark_version": "0.1.0-pilot",
-  "source_sample_audit": "D:\\My Projects\\society-of-north-american-scholar-paper\\analysis\\outputs\\sample_audit.csv",
-  "source_dataset_summary": "D:\\My Projects\\society-of-north-american-scholar-paper\\analysis\\outputs\\dataset_summary.csv",
+  "source_sample_audit": "analysis/outputs/sample_audit.csv",
+  "source_dataset_summary": "analysis/outputs/dataset_summary.csv",
   "row_count": 163,
   "annotation_template_count": 163,
   "class_counts": {

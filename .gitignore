@@ -35,3 +35,17 @@ output/human_annotation_package/
 output/human_audit_adjudication_package/
 output/human_audit_final_package/
 output/snas_submission_ready/
+output/snas_camera_ready/
+
+# Reviewer correspondence and private submission logistics - never publish
+reviews/
+SNAS_2026_submission_todo.md
+
+# LaTeX build artifacts (contain absolute local paths)
+*.aux
+*.log
+*.out
+*.blg
+*.synctex.gz
+*.fdb_latexmk
+*.fls

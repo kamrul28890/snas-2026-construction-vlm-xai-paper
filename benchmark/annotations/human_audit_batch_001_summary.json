@@ -3,9 +3,9 @@
   "row_count": 120,
   "batch_size_requested": 120,
   "per_rule_cap": 30,
-  "source_scores": "D:\\My Projects\\society-of-north-american-scholar-paper\\results\\tables\\scaleup_florence_grounding_per_example_scores.csv",
-  "source_manifest": "D:\\My Projects\\society-of-north-american-scholar-paper\\benchmark\\splits\\scaleup_candidate_manifest.csv",
-  "source_annotations": "D:\\My Projects\\society-of-north-american-scholar-paper\\benchmark\\annotations\\scaleup_model_assisted_annotations.jsonl",
+  "source_scores": "results/tables/scaleup_florence_grounding_per_example_scores.csv",
+  "source_manifest": "benchmark/splits/scaleup_candidate_manifest.csv",
+  "source_annotations": "benchmark/annotations/scaleup_model_assisted_annotations.jsonl",
   "rule_counts": {
     "fall_harness": 30,
     "guardrail_edge": 30,
@@ -25,7 +25,7 @@
     "status": "ingested",
     "ground_truth_status": "not_human_ground_truth",
     "provenance": "Two independent AI-generated passes from the returned final_package. Both are useful for pipeline/adjudication analysis but require human/domain adjudication before ground-truth claims.",
-    "source_package": "D:\\My Projects\\human-audit-batch-001-annotation\\final_package",
+    "source_package": "<external-annotation-package>/final_package",
     "annotator_1_id": "ai_annotator_A_compliance_officer",
     "annotator_2_id": "ai_annotator_B_site_superintendent",
     "annotator_1_completion_count": 120,
@@ -42,7 +42,7 @@
   },
   "adjudication": {
     "status": "ingested",
-    "source_package": "D:\\My Projects\\human-audit-batch-001-annotation\\adjudication\\human_audit_batch_001_adjudication_package",
+    "source_package": "<external-annotation-package>/human_audit_batch_001_adjudication_package",
     "adjudication_form_sha256": "996ee25fbfb9fcdf0aa67a10005d1a91cb911ba77e50b2ec01bf060144f9e0af",
     "disagreement_rows_adjudicated": 12,
     "adjudicated_answer_counts": {

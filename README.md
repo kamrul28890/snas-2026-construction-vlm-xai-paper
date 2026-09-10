@@ -1,87 +1,195 @@
-# ConstructionSafety-FaithBench SNAS 2026 Package
+# ConstructionSafety-FaithBench
 
-This repository contains the working materials for the SNAS 2026 short-paper
-submission:
+An audit benchmark for measuring whether construction-safety vision-language
+models (VLMs) actually use the visual evidence their safety verdicts depend on.
 
-**ConstructionSafety-FaithBench: Auditing Visual-Evidence Faithfulness in
-Construction-Safety Vision-Language Models**
+This repository accompanies the SNAS 2026 short paper *ConstructionSafety-FaithBench:
+Auditing Visual-Evidence Faithfulness in Construction-Safety Vision-Language Models*.
 
-The paper studies whether a construction-safety vision-language pipeline uses
-rule-relevant visual evidence, rather than only producing plausible final
-answers. It includes manifests, safety-rule prompts, model-output schemas,
-Florence-2 grounding outputs, targeted and matched-random visual interventions,
-audit labels with explicit provenance, scoring scripts, result tables, generated
-figures, and SNAS-ready manuscript files.
+## Overview
 
-## Submission Files
+A construction-safety VLM can produce the right answer for the wrong visual
+reason: judging a scene unsafe because construction sites look hazardous, while
+ignoring the specific hard hat, harness, edge, or machine-proximity cue the
+safety rule concerns. Reporting answer accuracy alone cannot detect this.
 
-- Blind short-paper PDF:
-  `output/snas_submission_ready/SNAS_2026_FaithBench_short_paper_blind.pdf`
-- Blind standalone abstract PDF:
-  `output/snas_submission_ready/SNAS_2026_FaithBench_abstract_blind.pdf`
-- Copy-paste submission text:
-  `paper/snas/SUBMISSION_TEXTS.md`
-- Submission risks and final checks:
-  `paper/snas/SUBMISSION_RISKS_AND_FIXES.md`
-- Clean reproducibility export:
-  `output/snas_submission_ready/reproducibility_repo/`
-- Zip package:
-  `output/snas_submission_ready/SNAS_2026_FaithBench_submission_package.zip`
+FaithBench separates three properties that are usually merged into one score:
 
-The review PDFs are double-blind. Author names, affiliations, and a public
-repository link should be entered only where SNAS/EasyChair allows them.
+| Property | Question | How it is measured |
+| --- | --- | --- |
+| Correctness | Is the verdict right? | Accuracy, macro-F1 against adjudicated audit labels |
+| Grounding | Does the cited region match the rule's object? | Evidence presence, IoU with the reference region |
+| Faithfulness | Does the verdict depend on that region? | Answer-flip rate under targeted vs. size-matched random occlusion |
 
-## Current Results
+The faithfulness test is causal. For every targeted occlusion of a rule-relevant
+region, five occlusions of identical width and height are placed elsewhere in the
+same image. Because the number of occluded pixels is held constant, any
+difference between conditions reflects *where* pixels were removed, not how many.
 
-- 163 pilot image-rule pairs and 588 scale-up candidate pairs.
-- Four safety-rule families: PPE hard-hat compliance, fall harness protection,
-  guardrail/edge protection, and struck-by/equipment proximity.
-- 120-row final audit-label layer: 108 A/B consensus rows plus 12 returned
-  adjudication decisions.
-- Florence grounding accuracy on the audit layer: 18.3%.
-- Metadata-assisted bootstrap accuracy on the audit layer: 78.3%.
-- Targeted evidence occlusion answer flip rate: 39.2%.
-- Matched-random answer flip rate: 9.2%.
-- Paired answer-flip difference: 30.0 percentage points.
+## Motivation
 
-These numbers support a measurement claim about visual-evidence faithfulness.
-They do not establish deployment readiness or recover a model's internal
-reasoning.
+Safety screening is not ordinary visual question answering. A wrong caption is an
+inconvenience; a missed fall-protection violation can precede a fatal fall, and a
+confidently reported hazard that is not there erodes the trust that makes the
+tool usable. A system that supplies a confident verdict alongside a plausible but
+unscored bounding box provides the visual trappings of justification without the
+substance, which is the failure mode this benchmark is built to expose.
 
-## Annotation Provenance
+## Repository layout
 
-The final audit labels must not be described as unqualified human ground truth.
-The safe submission wording is:
-
-`two independent role-conditioned audit passes plus returned adjudication`
-
-or:
-
-`adjudicated audit labels with AI-pass provenance`
-
-The stronger claim that two actual human annotators labeled all rows would
-require a new independent human/domain audit and replacement labels.
-
-## Rebuild
-
-From the repository root:
-
-```powershell
-python .\experiments\make_paper_figures.py --output-dir .\paper\snas\figures
-$out = (Resolve-Path .\tmp\snas).Path
-Push-Location .\paper\snas
-xelatex -interaction=nonstopmode -halt-on-error -output-directory $out .\SNAS_2026_FaithBench_short_paper.tex
-xelatex -interaction=nonstopmode -halt-on-error -output-directory $out .\SNAS_2026_FaithBench_short_paper.tex
-xelatex -interaction=nonstopmode -halt-on-error -output-directory $out .\SNAS_2026_FaithBench_abstract_blind.tex
-xelatex -interaction=nonstopmode -halt-on-error -output-directory $out .\SNAS_2026_FaithBench_abstract_blind.tex
-Pop-Location
-python .\experiments\create_snas_submission_package.py
+```
+benchmark/     Manifests, safety-rule schema, annotations, intervention specs
+src/faithbench/  Library: manifests, adapters, scoring, interventions, metrics
+experiments/   Runnable scripts: build, score, validate, figures, packaging
+analysis/      Statistical analysis, protocol.json, generated result artifacts
+results/       Frozen model outputs and generated score tables
+paper/         LaTeX sources for the SNAS and NeurIPS-format manuscripts
+figures/       Generated publication figures
+tests/         Unit tests for schema and specification invariants
 ```
 
-Run the lightweight checks:
+## Installation
 
-```powershell
-python .\experiments\validate_all.py
+Requires Python 3.10 or newer.
+
+```bash
+git clone https://github.com/kamrul28890/snas-2026-construction-safety-faithbench.git
+cd snas-2026-construction-safety-faithbench
+python -m venv .venv
+source .venv/bin/activate        # Windows: .venv\Scripts\activate
+pip install -r requirements.txt
 ```
 
-Raw dataset images and model weights are not redistributed in this repository.
+The core scoring and analysis path depends only on the Python standard library
+plus `matplotlib` (figures) and `pytest` (tests). Re-running Florence-2 inference
+additionally requires `torch` and `transformers`, which are intentionally not
+pinned here so that the analysis pipeline can be reproduced without a GPU.
+
+## Data availability
+
+Benchmark **metadata** is included: manifests, rule definitions, evidence-box
+coordinates, model outputs, audit labels, and score tables.
+
+Source **images are not redistributed**. They derive from the ConstructionSite
+collection (`LouisChen15/ConstructionSite`, revision recorded in each manifest
+row), and the scripts load them only when a local copy of that dataset is already
+available. Model weights are likewise not redistributed. Every reported number in
+the paper can be recomputed from the included artifacts without image access; only
+re-running inference from scratch requires the images.
+
+## Reproducing the results
+
+Verify the shipped artifacts and run the test suites:
+
+```bash
+python experiments/validate_all.py
+```
+
+Regenerate the statistical analysis, result tables, and publication figures:
+
+```bash
+python analysis/generate_paper_results.py
+python experiments/make_paper_figures.py --output-dir paper/snas/figures
+```
+
+Before publishing or sharing the repository, strip machine-specific paths from
+generated summaries:
+
+```bash
+python experiments/sanitize_release_paths.py --check   # report only
+python experiments/sanitize_release_paths.py           # rewrite in place
+```
+
+## What was evaluated
+
+| Adapter | Role | Why included |
+| --- | --- | --- |
+| `microsoft/Florence-2-base-ft` + grounding adapter | System under audit | Open-vocabulary grounding lets a written rule be queried directly; small enough to re-run for the intervention study |
+| Metadata-assisted bootstrap | Reference annotation | Scales labelling and supports triage; partly circular by construction, so not treated as ground truth |
+| Manifest seed | Blind reference point | Echoes the stored label, exposing how much of the annotation is circular |
+| Majority violation | Blind reference point | Always answers "violation", establishing the class-imbalance floor |
+| Caption keyword | Blind reference point | Reads captions only, never pixels, testing whether labels leak from text |
+
+The grounding adapter converts Florence-2's boxes into a verdict using fixed
+geometric tests with no learned parameters, so a failure is traceable to either
+the grounding step or the rule logic rather than hidden inside a second model.
+
+## Example
+
+A single benchmark row pairs one image with one safety rule:
+
+```
+image_id:    0000007
+rule_id:     ppe_hard_hat
+target_box:  [982, 225, 1199, 406]     # the head region the rule depends on
+expected:    violation
+```
+
+The audited pipeline returns:
+
+```json
+{
+  "image_id": "0000007",
+  "rule_id": "ppe_hard_hat",
+  "answer": "compliant",
+  "evidence_regions_xyxy": "[[982,225,1199,406]]",
+  "evidence_objects": "[\"worker\",\"head_protection\",\"hard_hat\"]"
+}
+```
+
+This row illustrates the problem the benchmark exists to measure. The cited
+evidence region is *exactly* the rule-relevant box, so any grounding score would
+call this a success, yet the verdict is wrong. Correct localization did not
+produce a correct rule judgment.
+
+## Headline results
+
+Auditing the Florence-2 grounding pipeline across four rule families:
+
+| Measure | Value |
+| --- | --- |
+| Accuracy on 120 adjudicated hard cases | 18.3% |
+| Macro-F1 on the same set | 12.5% |
+| Evidence returned (scale-up split) | 98.8% |
+| Mean best evidence IoU (scale-up split) | 0.058 |
+| Answer-flip rate, targeted occlusion | 39.2% |
+| Answer-flip rate, size-matched random occlusion | 9.2% |
+| Paired difference | 30.0 points (95% CI 22.3–37.7) |
+| Paired centroid-drift difference | 0.166 (95% CI 0.140–0.193) |
+| Rows answered "uncertain" | 0 of 120 |
+
+The three properties dissociate. The pipeline is often wrong, usually points
+somewhere unhelpful, and is nonetheless measurably sensitive to the right pixels.
+Any one measured alone would misrepresent it.
+
+## Label provenance
+
+The 120-row audit layer was produced by **two independent AI annotation passes
+working from a written protocol, plus returned adjudication** of the 12
+disagreements. These are *not* human domain-expert labels and must not be cited
+as such. Replacing this layer with certified construction-safety professionals is
+the most important outstanding improvement to this work.
+
+## Intended use and limitations
+
+This is a research evaluation artifact. It is **not** validated for deployment,
+and it must not be used for autonomous safety inspection, disciplinary
+monitoring, or surveillance. It does not infer worker identity, intent,
+competence, or blame. The documented failure modes fall hardest on missed
+violations, so using such a system without human review would shift risk onto
+workers while appearing to provide oversight.
+
+Further limitations, including single-model coverage, single-source imagery,
+static frames, and synthetic occlusions, are documented in the paper.
+
+## Citation
+
+```bibtex
+@inproceedings{kamruzzaman2026faithbench,
+  title     = {ConstructionSafety-FaithBench: Auditing Visual-Evidence Faithfulness
+               in Construction-Safety Vision-Language Models},
+  author    = {Kamruzzaman, Md and Jahan, Eashraque and Abdallah, Mustafa},
+  booktitle = {Proceedings of the 5th SNAS Interdisciplinary Research Conference},
+  year      = {2026}
+}
+```
