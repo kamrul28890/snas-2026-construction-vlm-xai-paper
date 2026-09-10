@@ -43,7 +43,7 @@ src/faithbench/  Library: manifests, adapters, scoring, interventions, metrics
 experiments/   Runnable scripts: build, score, validate, figures, packaging
 analysis/      Statistical analysis, protocol.json, generated result artifacts
 results/       Frozen model outputs and generated score tables
-paper/         LaTeX sources for the SNAS and NeurIPS-format manuscripts
+paper/snas/    LaTeX sources for the manuscript (SNAS and IEEE formats)
 figures/       Generated publication figures
 tests/         Unit tests for schema and specification invariants
 ```
@@ -71,11 +71,18 @@ Benchmark **metadata** is included: manifests, rule definitions, evidence-box
 coordinates, model outputs, audit labels, and score tables.
 
 Source **images are not redistributed**. They derive from the ConstructionSite
-collection (`LouisChen15/ConstructionSite`, revision recorded in each manifest
-row), and the scripts load them only when a local copy of that dataset is already
-available. Model weights are likewise not redistributed. Every reported number in
-the paper can be recomputed from the included artifacts without image access; only
-re-running inference from scratch requires the images.
+collection (`LouisChen15/ConstructionSite`, revision
+`ca3d9b885b45cbec956817edc42253664c7faf3f`), which is licensed **CC BY-NC 4.0**,
+so any downstream use must respect that non-commercial term. The scripts load
+images only when a local copy of that dataset is already available. Model weights
+are likewise not redistributed; the evaluated model is
+`microsoft/Florence-2-base-ft` at revision
+`f6c1a25888ffc1d945ee8a1a77ac833c7303d46e`.
+
+Every reported number in the paper can be recomputed from the included artifacts
+without image access; only re-running inference from scratch requires the images.
+Full frozen-input provenance, including SHA-256 hashes for every source file, is
+in `SNAS_2026_reproducibility_README.md`.
 
 ## Reproducing the results
 

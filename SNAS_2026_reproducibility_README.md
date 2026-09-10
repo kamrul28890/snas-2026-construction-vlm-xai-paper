@@ -1,7 +1,7 @@
 # SNAS 2026 Reproducibility Bundle
 
-This bundle supports the double-blind submission candidate. It does not contain
-raw ConstructionSite 10k images or model weights.
+Frozen-input provenance for the camera-ready paper. It does not contain raw
+ConstructionSite 10k images or model weights.
 
 ## Frozen Inputs
 

@@ -41,6 +41,27 @@ output/snas_camera_ready/
 reviews/
 SNAS_2026_submission_todo.md
 
+# Superseded drafts. These carry the earlier title "Beyond Stable Answers..."
+# and earlier numbers; the current manuscript lives in paper/snas/.
+SNAS_2026_paper_draft.md
+SNAS_2026_paper_draft.tex
+SNAS_2026_paper_submission_candidate.tex
+SNAS_2026_abstract_draft.md
+SNAS_2026_abstract_draft.tex
+SNAS_2026_abstract_submission_candidate.tex
+SNAS_2026_submission_metadata.md
+SNAS_2026_blind_review_checklist.md
+SNAS_2026_construction_VLM_XAI_research_plan.md
+
+# Internal planning and review notes - not for public release
+NEURIPS_TOP_TIER_UPGRADE_PLAN.md
+paper/neurips/
+docs/internal_review_checklist.md
+
+# Build outputs. Regenerate with build_latex.ps1 rather than tracking PDFs.
+output/pdf/
+output/submission/
+
 # LaTeX build artifacts (contain absolute local paths)
 *.aux
 *.log
