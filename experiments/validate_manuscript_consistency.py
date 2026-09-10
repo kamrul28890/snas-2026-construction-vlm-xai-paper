@@ -52,19 +52,22 @@ def main() -> int:
     failures: list[str] = []
 
     snas = SNAS.read_text(encoding="utf-8")
+
+    # The released reproducibility export is a subset of this repository and omits
+    # internal submission documents, so a copy that is absent is simply not checked.
+    sources = [
+        ("SNAS manuscript", SNAS,
+         r"\\textbf\{Abstract\}\s*\\end\{center\}\s*(.*?)\s*\\noindent\\textit\{Keywords:\}"),
+        ("IEEE variant", IEEE, r"\\begin\{abstract\}(.*?)\\end\{abstract\}"),
+        ("standalone abstract", STANDALONE,
+         r"\\textbf\{Abstract\}\s*\\end\{center\}\s*(.*?)\s*\\end\{document\}"),
+        # the markdown copy is one paragraph, so read to the next blank line
+        # rather than anchoring on a sentence that may move
+        ("submission texts", SUBMISSION, r"(Construction safety depends on small.*?)(?=\n\n)"),
+    ]
     abstracts = {
-        "SNAS manuscript": extract(
-            r"\\textbf\{Abstract\}\s*\\end\{center\}\s*(.*?)\s*\\noindent\\textit\{Keywords:\}",
-            snas, "SNAS manuscript"),
-        "IEEE variant": extract(
-            r"\\begin\{abstract\}(.*?)\\end\{abstract\}",
-            IEEE.read_text(encoding="utf-8"), "IEEE variant"),
-        "standalone abstract": extract(
-            r"\\textbf\{Abstract\}\s*\\end\{center\}\s*(.*?)\s*\\end\{document\}",
-            STANDALONE.read_text(encoding="utf-8"), "standalone abstract"),
-        "submission texts": extract(
-            r"(Construction safety depends on small.*?its accuracy\.)",
-            SUBMISSION.read_text(encoding="utf-8"), "submission texts"),
+        name: extract(pattern, path.read_text(encoding="utf-8"), name)
+        for name, path, pattern in sources if path.exists()
     }
 
     reference_name = "SNAS manuscript"
@@ -80,10 +83,12 @@ def main() -> int:
     title = extract(r"\\begin\{center\}\s*\\textbf\{(.*?)\}\s*\\end\{center\}", snas, "title")
     title_norm = normalize(title)
     for path in (IEEE, STANDALONE, SUBMISSION):
-        if title_norm not in normalize(path.read_text(encoding="utf-8")):
+        if path.exists() and title_norm not in normalize(path.read_text(encoding="utf-8")):
             failures.append(f"title in {path.name} does not match the SNAS manuscript")
 
     for path in (SNAS, IEEE, STANDALONE, SUBMISSION):
+        if not path.exists():
+            continue
         content = path.read_text(encoding="utf-8")
         for fragment in RETIRED_TITLE_FRAGMENTS:
             if fragment in content:

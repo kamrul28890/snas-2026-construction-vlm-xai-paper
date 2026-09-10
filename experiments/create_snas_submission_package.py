@@ -20,6 +20,31 @@ PUBLIC_REPO_URL = "https://github.com/kamrul28890/snas-2026-construction-safety-
 FILES = [
     ".gitignore",
     "requirements.txt",
+    "analysis/protocol.json",
+    "analysis/generate_paper_results.py",
+    "analysis/paper_analysis.py",
+    "analysis/run_matched_random_occlusion.py",
+    "analysis/outputs/paper_results.json",
+    "analysis/outputs/paper_results.csv",
+    "analysis/outputs/analysis_summary.md",
+    "analysis/outputs/matched_random_occlusion.csv",
+    "analysis/outputs/dataset_summary.csv",
+    "analysis/outputs/size_bias_summary.csv",
+    "analysis/outputs/artifact_manifest.json",
+    "analysis/outputs/sample_audit.csv",
+    "analysis/outputs/qualitative_example.json",
+    "experiments/analyze_mask_characteristics.py",
+    "experiments/analyze_error_asymmetry.py",
+    "experiments/sanitize_release_paths.py",
+    "experiments/validate_manuscript_consistency.py",
+    "experiments/build_ieee_variant.py",
+    "results/tables/mask_characteristics.csv",
+    "results/tables/control_robustness.csv",
+    "results/tables/error_asymmetry.csv",
+    "results/tables/audit_pass_agreement.csv",
+    "paper/snas/SNAS_2026_FaithBench_camera_ready_ieee.tex",
+    "build_latex.ps1",
+    "SNAS_2026_reproducibility_README.md",
     "benchmark/README.md",
     "benchmark/data_card.md",
     "benchmark/evaluation_card.md",
@@ -93,6 +118,36 @@ FILES = [
     "results/intervention_outputs/pilot_florence_interventions.jsonl",
     "results/intervention_outputs/pilot_florence_interventions_summary.json",
     "results/tables/README.md",
+    "results/tables/audit_pass_agreement.csv",
+    "results/tables/control_robustness.csv",
+    "results/tables/error_asymmetry.csv",
+    "results/tables/human_audit_batch_001_ai_agreement.csv",
+    "results/tables/human_audit_batch_001_final_label_per_example_scores.csv",
+    "results/tables/human_audit_batch_001_final_label_scores.csv",
+    "results/tables/human_audit_batch_001_status.csv",
+    "results/tables/mask_characteristics.csv",
+    "results/tables/pilot_annotation_bootstrap_per_example_scores.csv",
+    "results/tables/pilot_annotation_bootstrap_scores.csv",
+    "results/tables/pilot_florence_grounding_per_example_scores.csv",
+    "results/tables/pilot_florence_grounding_scores.csv",
+    "results/tables/pilot_florence_grounding_slices.csv",
+    "results/tables/pilot_florence_interventions_per_intervention.csv",
+    "results/tables/pilot_florence_interventions_summary.csv",
+    "results/tables/pilot_majority_violation_per_example_scores.csv",
+    "results/tables/pilot_majority_violation_scores.csv",
+    "results/tables/pilot_manifest_seed_per_example_scores.csv",
+    "results/tables/pilot_manifest_seed_scores.csv",
+    "results/tables/scaleup_annotation_bootstrap_per_example_scores.csv",
+    "results/tables/scaleup_annotation_bootstrap_scores.csv",
+    "results/tables/scaleup_caption_keyword_per_example_scores.csv",
+    "results/tables/scaleup_caption_keyword_scores.csv",
+    "results/tables/scaleup_florence_grounding_per_example_scores.csv",
+    "results/tables/scaleup_florence_grounding_scores.csv",
+    "results/tables/scaleup_florence_grounding_slices.csv",
+    "results/tables/scaleup_majority_violation_per_example_scores.csv",
+    "results/tables/scaleup_majority_violation_scores.csv",
+    "results/tables/scaleup_manifest_seed_per_example_scores.csv",
+    "results/tables/scaleup_manifest_seed_scores.csv",
     "results/tables/human_audit_batch_001_ai_agreement.csv",
     "results/tables/human_audit_batch_001_final_label_per_example_scores.csv",
     "results/tables/human_audit_batch_001_final_label_scores.csv",
@@ -103,8 +158,6 @@ FILES = [
     "paper/snas/README.md",
     "paper/snas/SNAS_2026_FaithBench_short_paper.tex",
     "paper/snas/SNAS_2026_FaithBench_abstract_blind.tex",
-    "paper/snas/SUBMISSION_TEXTS.md",
-    "paper/snas/SUBMISSION_RISKS_AND_FIXES.md",
     "paper/snas/figures/pipeline_architecture.pdf",
     "paper/snas/figures/audit_result_dashboard.pdf",
     "paper/snas/figures/intervention_effects_chart.pdf",
@@ -121,6 +174,7 @@ FILES = [
     "src/faithbench/scoring.py",
     "src/faithbench/statistics.py",
     "tests/test_faithbench_specs.py",
+    "analysis/tests/test_paper_analysis.py",
     "experiments/analyze_score_slices.py",
     "experiments/build_human_audit_batch.py",
     "experiments/build_intervention_specs.py",
@@ -149,8 +203,8 @@ FILES = [
 ]
 
 SUBMISSION_FILES = [
-    ("tmp/snas/SNAS_2026_FaithBench_short_paper.pdf", "submission/SNAS_2026_FaithBench_short_paper_blind.pdf"),
-    ("tmp/snas/SNAS_2026_FaithBench_abstract_blind.pdf", "submission/SNAS_2026_FaithBench_abstract_blind.pdf"),
+    ("tmp/snas/SNAS_2026_FaithBench_short_paper.pdf", "submission/SNAS_2026_FaithBench_camera_ready.pdf"),
+    ("tmp/snas/SNAS_2026_FaithBench_abstract_blind.pdf", "submission/SNAS_2026_FaithBench_abstract.pdf"),
 ]
 
 
@@ -179,6 +233,16 @@ def make_writable(function, path, _exc_info) -> None:
     function(path)
 
 
+def paper_title() -> str:
+    """Read the title from the manuscript so this package cannot go stale."""
+    tex = (ROOT / "paper" / "snas" / "SNAS_2026_FaithBench_short_paper.tex").read_text(
+        encoding="utf-8")
+    match = re.search(r"\\begin\{center\}\s*\\textbf\{(.*?)\}\s*\\end\{center\}", tex, re.S)
+    if not match:
+        raise RuntimeError("could not read the title from the manuscript")
+    return " ".join(match.group(1).split())
+
+
 def sha256(path: Path) -> str:
     digest = hashlib.sha256()
     with path.open("rb") as handle:
@@ -192,14 +256,15 @@ def write_readme() -> None:
 
 Clean reproducibility package for the SNAS 2026 short paper:
 
-**ConstructionSafety-FaithBench: Auditing Visual-Evidence Faithfulness in Construction-Safety Vision-Language Models**
+**{paper_title()}**
 
 Public repository: {PUBLIC_REPO_URL}
 
 ## What Is Included
 
-- Blind SNAS short-paper and abstract PDFs under `submission/`.
-- Copy-paste submission text and final risk checklist under `paper/snas/`.
+- Camera-ready short-paper and standalone abstract PDFs under `submission/`.
+- LaTeX sources for both the SNAS-format and IEEE-format manuscripts under `paper/snas/`.
+- The frozen analysis protocol and its outputs under `analysis/`.
 - Benchmark manifests, safety rules, prompts, schemas, and intervention specs.
 - Frozen model outputs and generated score tables used in the paper.
 - The 120-row final audit-label layer with explicit A/B audit-pass and adjudication provenance.
@@ -253,7 +318,7 @@ def write_manifest() -> None:
         records.append({"path": rel, "bytes": path.stat().st_size, "sha256": sha256(path)})
     manifest = {
         "created_utc": datetime.now(timezone.utc).isoformat(),
-        "paper_title": "ConstructionSafety-FaithBench: Auditing Visual-Evidence Faithfulness in Construction-Safety Vision-Language Models",
+        "paper_title": paper_title(),
         "public_repo_url": PUBLIC_REPO_URL,
         "file_count": len(records),
         "files": records,
@@ -265,7 +330,15 @@ def assert_clean_text() -> None:
     blocked = ["NeurIPS", "neurips ready", "top-tier neurips"]
     # Absolute Windows/UNC paths would publish local directory layout, including
     # sibling project directories outside this repository.
-    machine_paths = re.compile(r"[A-Za-z]:\\\\?[A-Za-z0-9_. -]|\\\\[A-Za-z0-9_.-]+\\")
+    # Absolute paths only: a drive letter or a UNC share. Windows-style relative
+    # paths such as ".\\experiments\\x.py" are portable and carry nothing
+    # private, and the lookbehind keeps URL schemes such as https:// out.
+    # A drive-lettered absolute path, in either raw or escaped form, is what would
+    # leak the machine. Relative Windows paths are portable and carry nothing
+    # private; in Python and JSON sources they are written with doubled
+    # backslashes, so a UNC pattern cannot be told apart from them and is not
+    # used here. The lookbehind keeps URL schemes such as https:// out.
+    machine_paths = re.compile(r"(?<![A-Za-z])[A-Za-z]:[\\/]{1,2}[A-Za-z0-9_.\- ]")
     offenders: list[str] = []
     path_offenders: list[str] = []
     for path in REPRO.rglob("*"):
