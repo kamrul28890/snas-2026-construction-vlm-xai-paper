@@ -1,0 +1,5 @@
+model_id,n,missed_violations,true_violations,missed_violation_rate,false_alarms,true_compliant,false_alarm_rate,uncertain_predicted,true_uncertain
+ai_annotator_1,120,0,83,0.000000,3,31,0.096774,11,6
+ai_annotator_2,120,3,83,0.036145,0,31,0.000000,4,6
+florence_grounding,120,70,83,0.843373,22,31,0.709677,0,6
+model_assisted_bootstrap,120,11,83,0.132530,9,31,0.290323,0,6
