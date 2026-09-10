@@ -1,0 +1,2 @@
+n_rows,raw_agreement,expected_agreement,cohens_kappa
+120,0.900000,0.539514,0.782838
