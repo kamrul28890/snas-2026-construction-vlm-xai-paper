@@ -5,9 +5,12 @@ This folder contains the SNAS-formatted version of the current ConstructionSafet
 Primary files:
 
 - `SNAS_2026_FaithBench_short_paper.tex` (SNAS format: Times New Roman, 12 pt,
-  double-spaced, APA references; build with XeLaTeX)
+  double-spaced, APA references; build with XeLaTeX). **This is the source of
+  truth for all prose.**
 - `SNAS_2026_FaithBench_camera_ready_ieee.tex` (IEEE two-column camera-ready
-  variant, same content and numbers; build with pdfLaTeX)
+  variant, same content and numbers; build with pdfLaTeX). **Generated file.**
+  Edit the SNAS manuscript and run `python experiments/build_ieee_variant.py`;
+  direct edits here are overwritten.
 - `SNAS_2026_FaithBench_abstract_blind.tex` (standalone abstract; text must stay
   identical to the abstract in both manuscripts)
 - `SUBMISSION_TEXTS.md`

@@ -99,6 +99,40 @@ python analysis/generate_paper_results.py
 python experiments/make_paper_figures.py --output-dir paper/snas/figures
 ```
 
+Regenerate the analyses that support the control and error discussion in the
+paper:
+
+```bash
+# occlusion size match, target overlap, and control degeneracy on large targets;
+# also repeats the primary comparison with degenerate-control images excluded
+python experiments/analyze_mask_characteristics.py
+
+# confusion matrix over the reference labels, separating missed violations
+# from false alarms
+python experiments/analyze_error_asymmetry.py
+```
+
+These write `results/tables/mask_characteristics.csv`,
+`results/tables/control_robustness.csv`, and `results/tables/error_asymmetry.csv`,
+which are the sources for the corresponding numbers in the manuscript.
+
+## Manuscript
+
+The SNAS-format manuscript is the single source of truth for prose. The IEEE
+two-column variant is generated from it, so edit the former and regenerate:
+
+```bash
+python experiments/build_ieee_variant.py
+```
+
+Direct edits to `SNAS_2026_FaithBench_camera_ready_ieee.tex` are overwritten. The
+title and abstract also appear in the standalone abstract and in
+`SUBMISSION_TEXTS.md`; `experiments/validate_manuscript_consistency.py`, part of
+`validate_all.py`, fails if those copies drift apart or if the abstract exceeds
+the venue word limit.
+
+Build the PDFs with `build_latex.ps1`.
+
 Before publishing or sharing the repository, strip machine-specific paths from
 generated summaries:
 

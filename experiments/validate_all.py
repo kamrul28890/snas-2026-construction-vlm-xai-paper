@@ -75,6 +75,7 @@ COMMANDS = [
     ["python", ".\\experiments\\validate_phase4_outputs.py"],
     ["python", ".\\experiments\\validate_paper_scaffold.py"],
     ["python", ".\\experiments\\validate_scaleup_manifest.py"],
+    ["python", ".\\experiments\\validate_manuscript_consistency.py"],
     ["python", "-m", "pytest", ".\\analysis\\tests", ".\\tests", "-q"],
 ]
 
