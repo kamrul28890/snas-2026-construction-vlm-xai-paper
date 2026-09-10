@@ -18,7 +18,6 @@ ZIP_BASE = OUT / "SNAS_2026_FaithBench_submission_package"
 PUBLIC_REPO_URL = "https://github.com/kamrul28890/snas-2026-construction-safety-faithbench"
 
 FILES = [
-    ".gitignore",
     "requirements.txt",
     "analysis/protocol.json",
     "analysis/generate_paper_results.py",
@@ -251,6 +250,43 @@ def sha256(path: Path) -> str:
     return digest.hexdigest()
 
 
+RELEASE_GITIGNORE = """# Python caches and local environments
+__pycache__/
+.pytest_cache/
+*.py[cod]
+.venv/
+venv/
+
+# LaTeX build intermediates
+tmp/
+*.aux
+*.log
+*.out
+*.toc
+*.bbl
+*.blg
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+
+# Editor and OS state
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Local secrets
+.env
+.env.*
+"""
+
+
+def write_gitignore() -> None:
+    """The working repository's ignore file names internal documents that are
+    deliberately not released, so the package gets its own."""
+    (REPRO / ".gitignore").write_text(RELEASE_GITIGNORE, encoding="utf-8")
+
+
 def write_readme() -> None:
     text = f"""# ConstructionSafety-FaithBench
 
@@ -379,6 +415,7 @@ def main() -> int:
     for src_name, dst_rel in SUBMISSION_FILES:
         copy_file(src_name, dst_rel)
 
+    write_gitignore()
     write_readme()
     assert_clean_text()
     write_manifest()
