@@ -220,12 +220,62 @@ def make_audit_dashboard() -> None:
     save(fig, "audit_result_dashboard.pdf")
 
 
+def _intervention_condition_means() -> dict[str, tuple[float, float]]:
+    """Per-condition means from the frozen matched-random occlusion dataset.
+
+    Random controls are averaged within an image before being averaged across
+    images, matching the pairing the paper reports. Reading this dataset rather
+    than the benchmark scorer's own summary keeps the figure numerically
+    identical to the statistics in the text, which come from the same frozen
+    analysis protocol.
+    """
+    rows = read_csv(ROOT / "analysis" / "outputs" / "matched_random_occlusion.csv")
+    fields = ("answer_changed", "object_centroid_drift", "object_disappeared")
+
+    def as_float(value: str) -> float | None:
+        text = value.strip().lower()
+        if text in {"", "na", "nan", "none"}:
+            return None
+        if text in {"true", "false"}:
+            return 1.0 if text == "true" else 0.0
+        try:
+            return float(text)
+        except ValueError:
+            return None
+
+    targeted: dict[str, list[float]] = {f: [] for f in fields}
+    per_image: dict[str, dict[str, list[float]]] = {f: {} for f in fields}
+    for row in rows:
+        for field in fields:
+            value = as_float(row.get(field, ""))
+            if value is None:
+                continue
+            if row["condition"] == "targeted":
+                targeted[field].append(value)
+            else:
+                per_image[field].setdefault(row["image_id"], []).append(value)
+
+    def mean(values: list[float]) -> float:
+        return sum(values) / len(values) if values else 0.0
+
+    return {
+        field: (
+            mean(targeted[field]),
+            mean([mean(v) for v in per_image[field].values()]),
+        )
+        for field in fields
+    }
+
+
 def make_intervention_figure() -> None:
-    rows = {row["metric_id"]: row for row in read_csv(ROOT / "results" / "tables" / "pilot_florence_interventions_summary.csv")}
+    condition_means = _intervention_condition_means()
+    paired_results = json.loads(
+        (ROOT / "analysis" / "outputs" / "paper_results.json").read_text(encoding="utf-8")
+    )["primary_results"]
     metrics = [
-        ("Answer flip", "targeted_answer_flip_rate", "matched_random_answer_flip_rate"),
-        ("Centroid drift", "targeted_mean_centroid_drift", "matched_random_mean_centroid_drift"),
-        ("Evidence\nmissing", "targeted_evidence_disappearance_rate", "matched_random_evidence_disappearance_rate"),
+        ("Answer flip", "answer_changed"),
+        ("Centroid drift", "object_centroid_drift"),
+        ("Evidence\nmissing", "object_disappeared"),
     ]
     fig, axes = plt.subplots(1, 2, figsize=(7.1, 2.35), gridspec_kw={"width_ratios": [1.25, 0.95]})
     fig.subplots_adjust(left=0.07, right=0.98, bottom=0.22, top=0.82, wspace=0.34)
@@ -233,11 +283,11 @@ def make_intervention_figure() -> None:
     ax = axes[0]
     x = range(len(metrics))
     width = 0.30
-    targeted = [float(rows[t]["value"]) for _, t, _ in metrics]
-    random = [float(rows[r]["value"]) for _, _, r in metrics]
+    targeted = [condition_means[key][0] for _, key in metrics]
+    random = [condition_means[key][1] for _, key in metrics]
     ax.bar([i - width / 2 for i in x], targeted, width=width, label="Targeted", color="#B279A2")
     ax.bar([i + width / 2 for i in x], random, width=width, label="Matched random", color="#72B7B2")
-    ax.set_xticks(list(x), [name for name, _, _ in metrics], fontsize=8)
+    ax.set_xticks(list(x), [name for name, _ in metrics], fontsize=8)
     ax.set_ylabel("Rate / normalized drift", fontsize=8)
     ax.set_ylim(0, 0.46)
     ax.tick_params(axis="y", labelsize=7)
@@ -250,30 +300,34 @@ def make_intervention_figure() -> None:
         ax.text(idx + width / 2, value + 0.012, f"{value:.2f}", ha="center", fontsize=7)
 
     ax = axes[1]
+    # Drift is shown to three decimals so the label matches the value quoted in
+    # the text and headline table exactly; two decimals would render 0.166 as 0.17.
     paired = [
-        ("Answer flip", "paired_answer_flip_rate_difference"),
-        ("Centroid drift", "paired_centroid_drift_difference"),
+        ("Answer flip", "answer_difference", 2),
+        ("Centroid drift", "drift_difference", 3),
     ]
     y = list(range(len(paired)))
-    values = [float(rows[key]["value"]) for _, key in paired]
-    lows = [float(rows[key]["ci_low"]) for _, key in paired]
-    highs = [float(rows[key]["ci_high"]) for _, key in paired]
+    values = [float(paired_results[key]["point"]) for _, key, _ in paired]
+    lows = [float(paired_results[key]["lo"]) for _, key, _ in paired]
+    highs = [float(paired_results[key]["hi"]) for _, key, _ in paired]
     lower = [value - low for value, low in zip(values, lows)]
     upper = [high - value for value, high in zip(values, highs)]
     ax.barh(y, values, color=["#B279A2", "#8E6C8A"], height=0.42)
     ax.errorbar(values, y, xerr=[lower, upper], fmt="none", ecolor="#27313A", elinewidth=0.9, capsize=3)
     ax.axvline(0, color="#6B7280", linewidth=0.7)
-    ax.set_yticks(y, [name for name, _ in paired], fontsize=8)
+    ax.set_yticks(y, [name for name, _, _ in paired], fontsize=8)
     ax.set_xlim(0, 0.43)
     ax.set_xlabel("Targeted - random", fontsize=8)
     ax.set_title("B. Paired effect (95% CI)", fontsize=9, pad=5)
     ax.tick_params(axis="x", labelsize=7)
     ax.spines[["top", "right"]].set_visible(False)
-    for idx, (value, high) in enumerate(zip(values, highs)):
+    for idx, (value, high, digits) in enumerate(
+        zip(values, highs, [d for _, _, d in paired])
+    ):
         ax.text(
             min(high + 0.014, 0.415),
             idx,
-            f"{value:.2f}",
+            f"{value:.{digits}f}",
             va="center",
             fontsize=7,
             color="#1F2933",
