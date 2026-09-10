@@ -18,10 +18,10 @@
 \urlstyle{same}
 \usepackage[hidelinks]{hyperref}
 \hypersetup{
-  pdftitle={ConstructionSafety-FaithBench: Auditing Visual-Evidence Faithfulness in Construction-Safety Vision-Language Models},
+  pdftitle={ConstructionSafety-FaithBench: Evaluating Visual-Evidence Sensitivity in Construction-Safety Vision-Language Systems},
   pdfauthor={Md Kamruzzaman, Eashraque Jahan, Mustafa Abdallah},
   pdfsubject={SNAS 2026 camera-ready short paper},
-  pdfkeywords={trustworthy AI, explainable AI, vision-language models, construction safety, evidence faithfulness}
+  pdfkeywords={trustworthy AI, explainable AI, vision-language models, construction safety, evidence sensitivity}
 }
 
 \setlength{\parindent}{0.5in}
@@ -60,7 +60,7 @@
 \begin{document}
 
 \begin{center}
-\textbf{ConstructionSafety-FaithBench: Auditing Visual-Evidence Faithfulness in Construction-Safety Vision-Language Models}
+\textbf{ConstructionSafety-FaithBench: Evaluating Visual-Evidence Sensitivity in Construction-Safety Vision-Language Systems}
 \end{center}
 
 \begin{center}
@@ -77,9 +77,9 @@ kamrul28890@gmail.com; easha003eee@du.edu; abdalla0@purdue.edu\\
 \textbf{Abstract}
 \end{center}
 
-Construction safety depends on small, rule-specific visual details: a hard hat on a particular worker, a barrier at a particular edge. Vision-language models (VLMs) are increasingly proposed to check such details automatically, but they can produce the right safety answer for the wrong visual reason, judging a scene unsafe because construction sites look hazardous while ignoring the cue the rule actually concerns. Existing evaluations report answer accuracy and are therefore silent on this failure. We introduce ConstructionSafety-FaithBench, an audit benchmark that separates three properties usually merged into one score: whether the answer is correct, whether the cited visual evidence is rule-relevant, and whether the answer actually depends on that evidence. Faithfulness is tested causally, by occluding the rule-relevant region and comparing the effect against occlusions of identical size placed elsewhere in the same image, so that any difference reflects location rather than disruption. Auditing an open-vocabulary grounding pipeline across hard-hat, fall-protection, guardrail, and struck-by rules, we find the three properties come apart. The pipeline reaches 18.3\% accuracy on 120 adjudicated hard cases. It returns an evidence region on 98.8\% of images, yet those regions overlap the rule-relevant region poorly, with a mean intersection-over-union of 0.058. It nonetheless flips its answer 39.2\% of the time under targeted occlusion, against 9.2\% under size-matched random occlusion, a paired difference of 30.0 points. It never answers ``uncertain,'' even where a single frame cannot support a decision. These results indicate that answer accuracy is insufficient evidence of trustworthiness for safety-critical visual screening, and that a system's willingness to abstain deserves scrutiny alongside its accuracy.
+Construction safety depends on small, rule-specific visual details: a hard hat on a particular worker, a barrier at a particular edge. Vision-language models (VLMs) are increasingly proposed to check such details automatically, but they can produce the right safety answer for the wrong visual reason, judging a scene unsafe because construction sites look hazardous while ignoring the cue the rule actually concerns. Existing evaluations report answer accuracy and are silent on this failure. We introduce ConstructionSafety-FaithBench, an audit benchmark that separates three properties usually merged into one score: whether the answer is correct, whether the cited visual evidence is rule-relevant, and whether the answer changes when that evidence is removed. Evidence dependence is probed by occluding the rule-relevant region and comparing the effect against occlusions of identical size placed elsewhere in the same image, so that any difference reflects location rather than the amount removed. The benchmark is model-agnostic; here we validate it on one system, an open-vocabulary grounding pipeline built on Florence-2, across hard-hat, fall-protection, guardrail, and struck-by rules. For that system the three properties come apart. The pipeline reaches 18.3\% accuracy on 120 adjudicated hard cases. It returns an evidence region on 98.8\% of images, yet those regions overlap the rule-relevant region poorly, with a mean intersection-over-union of 0.058. It nonetheless flips its answer 39.2\% of the time under targeted occlusion, against 9.2\% under size-matched random occlusion, a paired difference of 30.0 points. It never answers ``uncertain,'' even where a single frame cannot support a decision. Coming from one system on one imagery source, these findings characterize that pipeline rather than vision-language models in general. They nonetheless indicate that answer accuracy is insufficient evidence of trustworthiness for safety-critical screening, and that a system's willingness to abstain deserves scrutiny alongside its accuracy.
 
-\noindent\textit{Keywords:} trustworthy AI; explainable AI; vision-language models; construction safety; evidence faithfulness; AI risk assessment
+\noindent\textit{Keywords:} trustworthy AI; explainable AI; vision-language models; construction safety; evidence sensitivity; AI risk assessment
 
 \section{Introduction}
 
@@ -91,7 +91,9 @@ Vision-language models (VLMs) are an appealing tool for this task. A VLM takes a
 
 Safety-critical use changes what counts as an acceptable answer. In ordinary image captioning, a wrong answer is an inconvenience. In safety screening, a missed fall-protection violation can precede a fatal fall, and a confidently reported hazard that does not exist erodes the trust that makes the tool usable at all. It is therefore not enough for a model to be right on average. A reviewer needs to know whether a particular verdict rests on the visual evidence that the rule actually concerns.
 
-That requirement separates three properties which are often treated as one. \textit{Correctness} asks whether the model's verdict matches the true safety status. \textit{Grounding} asks whether the image region the model points to corresponds to the object the rule is about. \textit{Faithfulness}, the focus of this paper, asks whether the verdict actually depends on that region: if the rule-relevant evidence were removed from the image, would the verdict change? These come apart in practice. A model can be correct without being grounded, by inferring ``unsafe'' from generic construction-scene clutter. It can also return a plausible-looking region without that region driving its answer.
+That requirement separates properties which are often treated as one. \textit{Correctness} asks whether the system's verdict matches the reference safety label. \textit{Evidence relevance} asks whether the image region the system points to corresponds to the object the rule is about. \textit{Intervention sensitivity} asks whether the verdict changes when that region is removed from the image. These come apart in practice. A system can be correct without being grounded, by inferring ``unsafe'' from generic construction-scene clutter. It can also return a plausible-looking region without that region driving its answer.
+
+We are deliberately careful about how these relate to \textit{faithfulness}, meaning the stronger property that a system's answer genuinely depends on the evidence that ought to support it. The three measurable properties above contribute evidence toward such an assessment, but none of them establishes it. Intervention sensitivity in particular is necessary but not sufficient: an answer that changes when rule-relevant pixels are removed shows dependence on that location, yet a black rectangle also introduces an artifact the system may react to, and an answer that does \textit{not} change may reflect redundant visual cues or language priors rather than an absent dependence. We therefore report sensitivity as an observable behavior and treat faithfulness as an interpretive question that this evidence informs without resolving.
 
 Existing evaluation does not close this gap. Benchmarks for construction-safety VLMs report answer accuracy against labeled images, which measures correctness but is silent on whether the answer used the right evidence (Chen \& Zou, 2025). Broader multimodal work has begun to evaluate the quality of model-generated rationales, but it is not specific to safety rules and does not target the localized, object-level cues that construction rules depend on (Li et al., 2025). Most directly, MERLIM identifies what it calls hidden hallucinations, correct answers produced without meaningful visual grounding, and reports that instruction-tuned vision-language models often succeed by exploiting global scene patterns and language priors rather than the visual content actually in question (Villa et al., 2025). That work establishes the phenomenon on general imagery. It does not test whether the same failure occurs when a written rule designates which region is decisive, which is the situation a safety inspection creates.
 
@@ -100,23 +102,25 @@ Methodologically, research on explanation faithfulness has repeatedly shown that
 This paper addresses that gap. We ask three questions:
 
 \begin{itemize}
-\item \textbf{RQ1 (Correctness).} How accurately does an open-vocabulary grounding pipeline answer construction-safety rule questions when scored against adjudicated audit labels?
-\item \textbf{RQ2 (Grounding).} Does the visual evidence the pipeline returns correspond to the region the safety rule actually concerns?
-\item \textbf{RQ3 (Faithfulness).} Does the pipeline's answer depend on that evidence? Specifically, does removing the rule-relevant region change the answer more than removing an equally sized but irrelevant region?
+\item \textbf{RQ1 (Correctness).} How accurately does the evaluated grounding pipeline answer construction-safety rule questions, scored against adjudicated reference labels?
+\item \textbf{RQ2 (Evidence relevance).} Does the visual evidence the pipeline returns correspond to the region the safety rule actually concerns?
+\item \textbf{RQ3 (Intervention sensitivity).} Does removing the rule-relevant region change the pipeline's answer more than removing an equally sized region elsewhere in the same image?
 \end{itemize}
 
-To answer them we introduce ConstructionSafety-FaithBench, a compact and reproducible audit benchmark for construction-safety VLMs. Each example pairs a construction-site image with a written safety rule, an answer label, the evidence regions the rule depends on, and provenance fields recording where each label came from. The benchmark covers four rule families, chosen for their correspondence to the leading hazard categories above. Two of them address falls, the largest single category: harness and fall protection, and guardrail and edge protection. A third covers struck-by hazards from equipment proximity. The fourth, hard-hat and personal protective equipment (PPE) compliance, covers the principal control against head injury arising from either.
+To answer them we introduce ConstructionSafety-FaithBench, a compact and reproducible audit benchmark for construction-safety vision-language systems. Each example pairs a construction-site image with a written safety rule, an answer label, the evidence regions the rule depends on, and provenance fields recording where each label came from. The benchmark covers four rule families, chosen for their correspondence to the leading hazard categories above. Two of them address falls, the largest single category: harness and fall protection, and guardrail and edge protection. A third covers struck-by hazards from equipment proximity. The fourth, hard-hat and personal protective equipment (PPE) compliance, covers the principal control against head injury arising from either.
+
+It is worth stating plainly what is general here and what is not. The benchmark schema, the metrics, and the intervention protocol are model-agnostic: any system that accepts an image and a written rule and returns an answer with evidence regions can be run through them. The empirical results, by contrast, come from a single system. Nothing in this paper establishes how other vision-language models behave, and we have taken care throughout to phrase findings as properties of the evaluated pipeline rather than of the model class.
 
 The paper makes four contributions:
 
 \begin{itemize}
-\item An audit benchmark structure for construction-safety VLMs that records images, written rules, answers, rule-relevant evidence regions, and label provenance in one schema.
-\item An evaluation protocol that measures correctness, grounding, and faithfulness separately rather than collapsing them into a single accuracy number.
-\item A counterfactual intervention design in which each targeted occlusion of rule-relevant evidence is compared against size-matched random occlusions in the same image, so that measured effects cannot be explained by the amount of pixels removed.
-\item An empirical audit of one open-vocabulary grounding pipeline showing that answer accuracy and evidence dependence give different, and partly contradictory, pictures of reliability.
+\item An audit benchmark structure for construction-safety vision-language systems that records images, written rules, answers, rule-relevant evidence regions, and label provenance in one schema.
+\item An evaluation protocol that measures correctness, evidence relevance, and intervention sensitivity separately rather than collapsing them into a single accuracy number.
+\item An intervention design in which each targeted occlusion of rule-relevant evidence is compared against size-matched occlusions placed elsewhere in the same image, so that measured effects cannot be explained by the number of pixels removed, together with a quantitative characterization of what that control does and does not isolate.
+\item A demonstration of the framework on one open-vocabulary grounding pipeline, showing that answer accuracy and evidence dependence give different, and partly contradictory, pictures of that system's reliability.
 \end{itemize}
 
-We deliberately frame these as evaluation contributions. The study audits an existing model rather than proposing a new one, and its findings describe measurement, not deployment readiness. The next section describes the benchmark and the audit pipeline used to produce these measurements.
+We deliberately frame these as evaluation contributions. The study audits an existing system rather than proposing a new one, and its findings describe measurement, not deployment readiness. The next section describes the benchmark and the audit pipeline used to produce these measurements.
 
 \section{Benchmark and Audit Pipeline}
 
@@ -142,7 +146,7 @@ We also run three reference points that require no image understanding at all, i
 
 \subsection{From Image to Score}
 
-Figure~\ref{fig:pipeline} summarizes the full path, which runs as follows. A construction image and a written safety rule enter the pipeline. The grounding adapter prompts Florence-2, which returns candidate boxes. The deterministic rule logic converts those boxes into an answer and a cited evidence region. That answer is compared against the audit label to measure correctness, and the cited region is compared against the rule's reference region to measure grounding. Separately, the rule-relevant region is occluded and the image is re-run, and the change in the answer is compared against the change produced by occluding an equally sized irrelevant region. That comparison measures faithfulness. Every stage writes normalized CSV and JSONL records, so each reported number can be traced back to the run that produced it.
+Figure~\ref{fig:pipeline} summarizes the full path, which runs as follows. A construction image and a written safety rule enter the pipeline. The grounding adapter prompts Florence-2, which returns candidate boxes. The deterministic rule logic converts those boxes into an answer and a cited evidence region. That answer is compared against the audit label to measure correctness, and the cited region is compared against the rule's reference region to measure evidence relevance. Separately, the rule-relevant region is occluded and the image is re-run, and the change in the answer is compared against the change produced by occluding an equally sized region elsewhere. That comparison measures intervention sensitivity. Every stage writes normalized CSV and JSONL records, so each reported number can be traced back to the run that produced it.
 
 \begin{figure}[t]
 \centering
@@ -157,9 +161,15 @@ Scoring requires reference labels, and the quality of those labels bounds what t
 
 First, automated baseline annotations are derived from the dataset's own metadata, captions, rule-violation records, and available boxes. These scale cheaply and support triage, but because they are generated from the same metadata used to assemble the splits, they are not independent ground truth and are never treated as such.
 
-Second, a prioritized audit set of 120 rows isolates the cases where evaluation is most informative: those where the Florence-2 pipeline and the automated baseline disagree, or where their evidence regions barely overlap. Of the 120 audited rows, 118 are outright answer disagreements. This set is deliberately adversarial, and reported accuracies on it should be read as performance on hard cases rather than as average-case performance.
+Second, a prioritized audit set of 120 rows is drawn from the full splits by conditioning on disagreement: rows where the Florence-2 pipeline and the automated baseline give different answers, or where their evidence regions barely overlap. Of the 120 audited rows, 118 are outright answer disagreements. The reason for selecting this way is that adjudication is expensive and disagreements are where adjudication is most informative; rows where both sources already agree would consume the same effort to confirm what is not in dispute.
 
-Third, every row in that set receives two independent audit passes, with the 12 disagreements between those passes resolved by a returned adjudication step. These passes were generated by AI annotators working from a written audit protocol, not by independent human domain experts. We report the resulting labels as adjudicated audit labels with this provenance rather than as human ground truth, and we treat replacement of this layer by certified safety professionals as required future work.
+This selection has a direct consequence that we want to state before reporting any number from it. \textbf{The audit set is enriched for disagreement and is therefore not a representative sample.} Statistics computed on it estimate performance on contested cases, not performance across the benchmark or across construction imagery generally. Wherever we report an audit-set figure we also report the corresponding figure from the full, non-enriched splits, so that the two are never confused. It is useful to keep three sets distinct: the \textit{full splits} of 163 pilot and 588 scale-up rows, the \textit{screening stage} that compares pipeline and baseline answers across them, and the \textit{audit set} of 120 rows that screening selects for adjudication and intervention analysis.
+
+Third, every row in that set receives two independent audit passes, with the 12 disagreements between those passes resolved by a returned adjudication step. These passes were generated by AI annotators working from a written audit protocol, not by independent human domain experts.
+
+We call the result \textit{reference labels} rather than ground truth throughout, and the distinction is not merely verbal. The annotation task mixes two kinds of judgment with different validity requirements. Whether a helmet is visible on a given head, or where a barrier sits in the frame, is a largely perceptual question that a careful non-expert can answer reliably. Whether a scene constitutes a fall-protection violation, whether a given proximity to operating equipment is unsafe, or whether a rule applies at all in the depicted context are safety judgments that in practice depend on training and site experience. Our labels cover both kinds, but only the first kind is well supported by the procedure we used.
+
+Two consequences follow. Ambiguity is not evenly distributed: the six rows adjudicated \textit{uncertain} are concentrated in exactly the judgment-dependent cases, such as a static frame that cannot establish an excavator's swing radius, and the 12 rows requiring adjudication were disproportionately of this type. And the labels have not been validated by independent construction-safety professionals, which is the single largest threat to the validity of every accuracy figure we report. Independent review by at least two qualified professionals, blinded to model predictions, with inter-rater agreement reported and a documented adjudication procedure, is required before these labels should be treated as authoritative.
 
 These labels provide the reference against which the evaluated pipeline is assessed. The next section defines the metrics that perform that assessment.
 
@@ -169,7 +179,7 @@ Each research question requires a different measurement, and the central design 
 
 \begin{table}[h]
 \centering
-\caption{How each research question is answered. Correctness, grounding, and faithfulness are measured by separate experiments rather than inferred from one another.}
+\caption{How each research question is answered. Correctness, evidence relevance, and intervention sensitivity are measured by separate experiments rather than inferred from one another.}
 \label{tab:rqmap}
 {\setstretch{1.0}\small
 \begin{tabular}{L{0.9in}L{1.7in}L{1.6in}L{0.8in}}
@@ -178,9 +188,9 @@ Question & Experiment & Metric & Result \\
 \midrule
 RQ1 Correctness & Score answers against adjudicated audit labels & Accuracy, macro-F1 & Table~\ref{tab:headline}, Fig.~\ref{fig:audit} \\
 \addlinespace
-RQ2 Grounding & Compare returned evidence with the rule's reference region & Evidence presence, box overlap (IoU) & Table~\ref{tab:rulelevel}, Fig.~\ref{fig:ruleslice} \\
+RQ2 Evidence relevance & Compare returned evidence with the rule's reference region & Evidence presence, box overlap (IoU) & Table~\ref{tab:rulelevel} \\
 \addlinespace
-RQ3 Faithfulness & Occlude rule-relevant evidence vs.\ size-matched random regions & Answer-flip rate, paired difference, centroid drift & Table~\ref{tab:headline}, Fig.~\ref{fig:intervention} \\
+RQ3 Intervention sensitivity & Occlude rule-relevant evidence vs.\ size-matched random regions & Answer-flip rate, paired difference, centroid drift & Table~\ref{tab:headline}, Fig.~\ref{fig:intervention} \\
 \bottomrule
 \end{tabular}
 \par}
@@ -206,11 +216,43 @@ Faithfulness cannot be read off a single run, because a correct answer and a wel
 
 For each image we construct a \textit{targeted occlusion}: a solid mask covering the region the rule depends on. For a hard-hat row this is the worker and head region, for guardrails the exposed edge or barrier, for fall protection the worker-at-height region, and for struck-by risk the worker and equipment proximity region. If the model is genuinely using that evidence, removing it should change the verdict or at least push it toward uncertainty.
 
-Any occlusion changes the image, however, so a change in answer proves nothing on its own. The control is what makes this a test rather than an observation. For every targeted occlusion we generate five \textit{matched-random} occlusions in the same image, each using exactly the same width and height as the targeted mask but placed elsewhere, with minimal overlap with the target. Because the number of occluded pixels is held constant, any systematic difference between the two conditions must come from \textit{where} the pixels were removed, not from how many. This design follows the principle that a faithfulness claim requires a comparison against an equally disruptive but irrelevant intervention (Wu et al., 2024).
+Both mask types are solid black rectangles. The targeted mask covers the first rule-relevant object box recorded in the manifest. Each matched-random control uses the identical clipped width and height, placed at a seeded random location: the generator draws up to 200 candidate positions seeking a target-box IoU at or below 0.05, and if none qualifies it keeps the lowest-overlap candidate and reports the resulting overlap rather than discarding the image. Five controls are generated per image under fixed seeds 42 through 46, giving 948 runs in total: 158 targeted occlusions and 790 controls.
 
-The primary statistic is the \textit{answer-flip rate}: the proportion of images whose answer changes after occlusion. We compute it under the targeted condition and under the matched-random condition, and report the paired difference, defined per image as the targeted outcome minus the mean of that image's five random controls. Pairing within image removes differences in scene difficulty. A paired difference near zero would indicate that the model is no more sensitive to rule-relevant evidence than to arbitrary pixels; a large positive difference indicates location-specific dependence.
+Any occlusion changes the image, so a change in answer proves nothing on its own. The control is what makes this a test rather than an observation. Because the number of occluded pixels is held constant, a systematic difference between conditions cannot be attributed to the amount removed. Table~\ref{tab:maskchar} confirms the size match holds exactly and characterizes what else differs.
 
-The intervention study comprises 948 Florence-2 runs: 158 targeted occlusions and 790 matched-random controls. Confidence intervals are obtained by bootstrap resampling at the image level, which repeatedly re-samples images to estimate how much the reported value would vary on a different sample of the same size. Paired comparisons additionally use the Wilcoxon signed-rank test, a test that does not assume the differences are normally distributed, with rank-biserial correlation as the effect size and Holm correction applied across the paired tests to control for multiple comparisons.
+\begin{table}[h]
+\centering
+\caption{Occlusion characteristics by condition. Mask area is identical by construction, so the conditions differ in placement rather than extent. Areas are strongly right-skewed, hence both mean and median. The last row shows the limitation discussed below.}
+\label{tab:maskchar}
+{\setstretch{1.0}\small
+\begin{tabular}{L{1.45in}rr}
+\toprule
+Quantity & Targeted & Matched-random \\
+\midrule
+Occlusions & 158 & 790 \\
+Mask area, mean share & 0.136 & 0.136 \\
+Mask area, median share & 0.014 & 0.014 \\
+Mask--target IoU & 1.000 & 0.056 \\
+Mask area on target & 100.0\% & 7.1\% \\
+Removed worker detection & 5.1\% & 1.4\% \\
+\bottomrule
+\end{tabular}
+\par}
+\end{table}
+
+Two qualifications follow, and we prefer to state them plainly rather than let the averages carry more weight than they can.
+
+First, the control does not isolate as much as it may appear. It does establish that the effect is not produced by removing pixels as such, since 88.2\% of random masks overlap the target at an IoU of 0.05 or below while occluding an identical area. It does not establish that the rule-relevant region is special among \textit{informative} regions, because a randomly placed mask disturbs content the pipeline was actually using only 1.4\% of the time, against 5.1\% for targeted masks. The comparison separates rule-relevant evidence from arbitrary image area, not from other meaningful content. A near-target control, placing an equally sized mask adjacent to but not overlapping the rule region, would tighten this and is the most valuable single extension to the protocol.
+
+Second, mask areas are strongly right-skewed: the median target covers 1.4\% of the image, but 13 of 158 targets cover more than half of it. On those 13 images the control is geometrically degenerate, because a mask of equal size cannot avoid a box that large. Their random masks average a target IoU of 0.572 and none reaches the 0.05 criterion, against a mean of 0.009 and a 96.1\% success rate on the remaining 145 images. We therefore repeat the primary comparison with those images removed and report both results in Section~4, rather than relying on the pooled figure alone.
+
+A further caveat concerns the mask itself. A black rectangle is not a natural occlusion, and the pipeline may respond partly to the artifact rather than to the absence of the evidence. Size matching controls for this to the extent that both conditions introduce an identical artifact, but it does not rule out an interaction between artifact and location.
+
+The primary statistic is the \textit{answer-flip rate}: the proportion of images whose answer changes after occlusion. We compute it under both conditions and report the paired difference, defined per image as the targeted outcome minus the mean of that image's five controls. Pairing within image removes differences in scene difficulty. A paired difference near zero would indicate the pipeline is no more sensitive to rule-relevant evidence than to arbitrary pixels; a large positive difference indicates location-specific dependence.
+
+Confidence intervals come from bootstrap resampling at the image level with 10{,}000 resamples under seed 20260716. Paired comparisons additionally use the two-sided Wilcoxon signed-rank test, which does not assume the differences are normally distributed, with matched-pairs rank-biserial correlation as the effect size and Holm correction across the two primary paired tests.
+
+The full configuration of the intervention study, covering model and dataset revisions, decoding settings, mask construction, placement search, seeds, and every statistical setting quoted above, is frozen in \texttt{analysis/protocol.json} in the released repository and is reproduced in the repository documentation.
 
 Using this protocol, we now compare the evaluated pipeline in terms of answer performance, evidence quality, and evidence dependence.
 
@@ -220,7 +262,7 @@ We report each research question in turn. Table~\ref{tab:headline} collects the 
 
 \begin{table}[h]
 \centering
-\caption{Headline results. The upper block describes the audited evaluation set, the middle block answers RQ1 (correctness) and RQ2 (grounding), and the lower block answers RQ3 (faithfulness). For accuracy, macro-F1, and evidence presence, higher is better; for the paired differences, larger values indicate stronger dependence on rule-relevant evidence.}
+\caption{Headline results. The upper block describes the audited evaluation set, the middle block answers RQ1 (correctness) and RQ2 (evidence relevance), and the lower block answers RQ3 (intervention sensitivity). For accuracy, macro-F1, and evidence presence, higher is better; for the paired differences, larger values indicate stronger dependence on rule-relevant evidence.}
 \label{tab:headline}
 {\setstretch{1.0}
 \begin{tabular}{lr}
@@ -253,7 +295,25 @@ The key comparison in Figure~\ref{fig:audit} is between the automated baseline a
 
 Florence-2 reaches 18.3\% accuracy and 12.5\% macro-F1 on this set. Two caveats keep this from being a general performance claim. First, the audit set was deliberately built from disagreement and weak-overlap cases, so it represents hard cases rather than average ones. On the full splits scored against the weaker metadata-assisted labels, the same pipeline reaches 41.7\% accuracy on the 163-row pilot and 39.3\% on the 588-row scale-up. Second, the low audit-set score is a statement about the complete pipeline, grounding plus rule logic, not about Florence-2's detection ability in isolation.
 
-Two failure patterns matter more than the headline number. The pipeline never returned \textit{uncertain} on any of the 120 audited rows, despite six rows being adjudicated as genuinely undecidable from a single frame. On the hard-hat and guardrail slices it went further and answered \textit{compliant} for all 30 rows in each, even though 26 and 24 of those rows respectively were violations. A system that cannot abstain and cannot flag a violation in an entire rule family is not merely inaccurate; it fails silently, in the direction that matters most for safety.
+Accuracy is the wrong summary for a safety task, because it prices a missed hazard and a false alarm identically. Table~\ref{tab:errors} separates them. On these contested rows the pipeline reported \textit{compliant} for 70 of the 83 genuine violations, a missed-violation rate of 84.3\%, while also raising false alarms on 22 of 31 compliant rows. Both directions are poor, but they are not equally consequential: a false alarm costs an unnecessary inspection, whereas a missed violation is the failure the system exists to prevent. For comparison, the metadata-assisted baseline misses 13.3\% of violations on the same rows.
+
+\begin{table}[h]
+\centering
+\caption{Safety-relevant error breakdown on the 120 adjudicated rows. Because this set is enriched for disagreement, these rates describe contested cases and overstate what would occur across the full splits. A missed violation is a genuine violation reported as compliant.}
+\label{tab:errors}
+{\setstretch{1.0}\small
+\begin{tabular}{L{1.35in}rr}
+\toprule
+System & Missed violations & False alarms \\
+\midrule
+Florence-2 pipeline & 70/83 (84.3\%) & 22/31 (71.0\%) \\
+Metadata baseline & 11/83 (13.3\%) & 9/31 (29.0\%) \\
+\bottomrule
+\end{tabular}
+\par}
+\end{table}
+
+Two further patterns matter more than the headline number. The pipeline never returned \textit{uncertain} on any of the 120 audited rows, despite six rows being adjudicated as genuinely undecidable from a single frame. On the hard-hat and guardrail slices it went further and answered \textit{compliant} for all 30 rows in each, even though 26 and 24 of those rows respectively were violations. A system that cannot abstain and cannot flag a violation in an entire rule family is not merely inaccurate; it fails silently, in the direction that matters most for safety.
 
 For comparison, three strategies that never look at the image at all provide the floor. A manifest-seed baseline that echoes the stored label scores 100\% by construction, confirming that portion of the annotation is circular. A majority-violation baseline that always answers ``violation'' reaches 69.3\% on the pilot and 57.5\% on the scale-up split. A caption-keyword baseline that reads only text reaches 19.7\%, which shows the labels are not simply recoverable from captions. The relevant lesson is that answering ``violation'' every time outperforms the grounding pipeline on these splits, so accuracy alone cannot demonstrate that a model is reading the image.
 
@@ -266,7 +326,7 @@ For comparison, three strategies that never look at the image at all provide the
 
 \subsection{Evidence Quality (RQ2)}
 
-Correctness scores say nothing about whether the pipeline pointed at the right thing. Figure~\ref{fig:ruleslice} and Table~\ref{tab:rulelevel} answer that question, and the pattern to look for is the gap between the two bars in each rule family.
+Correctness scores say nothing about whether the pipeline pointed at the right thing. Table~\ref{tab:rulelevel} answers that question, and the pattern to look for is the gap between accuracy and evidence presence within each rule family.
 
 The pipeline almost always produces evidence: it returned at least one region for 96.9\% of pilot rows and 98.8\% of scale-up rows. The regions themselves, however, agree poorly with the rule's reference region. Mean best IoU is 0.369 on the pilot split and only 0.058 on the scale-up split. An IoU of 0.058 means the returned rectangle and the rule-relevant rectangle barely intersect.
 
@@ -292,13 +352,6 @@ Overall & 588 & 39.3\% & 98.8\% & 0.058 \\
 \par}
 \end{table}
 
-\begin{figure}[t]
-\centering
-\includegraphics[width=\linewidth]{figures/scaleup_rule_slice_chart.pdf}
-\caption{Answer accuracy against evidence presence for each rule family on the scale-up split. Evidence is returned almost every time regardless of rule, while accuracy varies widely, showing that the presence of a box carries no guarantee about the answer it accompanies.}
-\label{fig:ruleslice}
-\end{figure}
-
 The practical consequence is specific. A safety reviewer using this pipeline would receive a bounding box on essentially every image, which looks like a system that always shows its work. On hard-hat rows that box would usually not contain the hard hat in question. Evidence presence is therefore not evidence quality, and an interface that displays model evidence without scoring it can create confidence that the underlying measurement does not support.
 
 \subsection{Evidence Dependence (RQ3)}
@@ -306,6 +359,8 @@ The practical consequence is specific. A safety reviewer using this pipeline wou
 The final question is whether the answer depends on the rule-relevant region at all. The comparison to read in Figure~\ref{fig:intervention} is targeted occlusion against size-matched random occlusion, since both remove identical numbers of pixels.
 
 Occluding the rule-relevant region changed the answer 39.2\% of the time, against 9.2\% for size-matched random masks. The paired difference is 30.0 percentage points, with a bootstrap 95\% interval of 22.3 to 37.7 points and a rank-biserial effect size of 0.89. Evidence relocation shows the same pattern: the paired centroid-drift difference is 0.166, interval 0.140 to 0.193, Holm-adjusted $p < .001$.
+
+Because the control degenerates on the 13 images whose target box covers more than half the frame, we repeat the comparison without them. The difference does not depend on those cases; it grows slightly, to 31.7 points with an interval of 23.7 to 39.9 across the remaining 145 images. This is the expected direction, since on degenerate images the ``random'' mask substantially overlaps the target and therefore flips answers too, compressing the gap. We report the pooled figure as the headline result because it is the more conservative of the two.
 
 This result cuts in two directions, and both matter. Positively, the model is not merely reacting to generic construction-scene clutter. If it were, removing a rule-relevant region would be no more disruptive than removing an arbitrary region of the same size, and the paired difference would sit near zero. It does not. Something in the pipeline is genuinely location-sensitive.
 
@@ -322,7 +377,7 @@ Read together, the three results are not redundant. The pipeline is often wrong 
 
 \subsection{Qualitative Cases}
 
-Individual audit rows show what these aggregates look like in practice. In one PPE row, the adjudicated label is a violation because a third pedestrian in dark clothing is bare-headed while nearby workers wear yellow hard hats; a model drawn to the salient yellow helmets records compliance and misses the person actually at risk. In a fall-protection row, workers on elevated formwork have no visible harness or lanyard, so the decisive evidence is a small worker-at-height region rather than the surrounding scene. In a struck-by row, a worker in high-visibility clothing stands near an operating excavator; the adjudicated label is compliant, but the single frame cannot confirm distance or swing state, which is precisely the situation an \textit{uncertain} answer exists to express. In guardrail rows, the distinction between a walkable graded slope and an unprotected edge determines the label and is often a few pixels wide.
+Individual audit rows show what these aggregates look like in practice. In one PPE row, the adjudicated label is a violation because a third pedestrian in dark clothing is bare-headed while nearby workers wear yellow hard hats; a system drawn to the salient yellow helmets records compliance and misses the person actually at risk. In a struck-by row, a worker in high-visibility clothing stands near an operating excavator; the adjudicated label is compliant, but the single frame cannot confirm distance or swing state, which is precisely the situation an \textit{uncertain} answer exists to express.
 
 These cases share a structure. The correct judgment depends on a small, specific, rule-defined region, while the surrounding image offers abundant construction-scene cues that point toward a plausible but unfounded answer.
 
@@ -340,11 +395,25 @@ Two practical recommendations follow. First, evaluations of safety-critical VLMs
 
 We are correspondingly careful about what these results do not establish. They characterize one grounding pipeline on one dataset, and they do not rank VLMs, demonstrate that stronger instruction-following models share this behavior, or measure how human reviewers actually respond to evidence displays. The benchmark supports model comparison, regression testing, and audit documentation. It does not license autonomous inspection, worker discipline, or surveillance.
 
-\section{Limitations and Ethics}
+\section{Threats to Validity and Limitations}
 
-\textbf{Labels.} The audit-label layer covers all 120 audited rows, but every label comes from two AI-generated audit passes plus returned adjudication rather than independent human annotation. We report it with that provenance rather than as ground truth, and replacing it with certified construction-safety professionals is the single most important improvement to this work.
+The results above rest on a chain of choices, each of which could bear weight it cannot carry. We set out the load-bearing ones here.
 
-\textbf{Model coverage.} Florence-2 is the only image-grounded model evaluated. We therefore cannot say whether the failures reported here are specific to this model, to compact grounding models generally, or to the detection-to-rule translation step that any such pipeline requires. Broader model-ranking claims need a wider model suite.
+\textbf{Model coverage.} One system was evaluated. Every empirical statement in this paper is a statement about that pipeline. We cannot distinguish failures specific to Florence-2 from failures of compact grounding models generally, or from failures of the detection-to-rule translation step that any such pipeline requires. No result here should be read as characterizing vision-language models as a class, and comparative claims need a wider model suite.
+
+\textbf{Selection.} The audit set conditions on pipeline--baseline disagreement, so its statistics describe contested cases and not the benchmark as a whole. We report full-split figures alongside every audit-set figure for this reason, but the enrichment cannot be undone analytically, and an evaluation subset sampled without conditioning on disagreement would be a stronger design.
+
+\textbf{Annotation.} Reference labels were produced by two AI passes plus adjudication, not by independent construction-safety professionals. The safety-judgment portion of the labelling task, as distinct from the perceptual portion, is the part least supported by this procedure, and it is the part that determines most reported accuracies.
+
+\textbf{Intervention.} A black rectangle is not a natural occlusion. The pipeline may respond in part to the artifact rather than to the absence of evidence, and size matching equalizes but does not eliminate this, since artifact and location could interact.
+
+\textbf{Control.} Size-matched random masks separate the rule-relevant region from arbitrary image area, but they disturb content the pipeline was using only 1.4\% of the time. They therefore do not establish that the rule region is special among informative regions. On the 13 images with very large targets the control degenerates entirely, which is why we report the comparison with those images excluded as well.
+
+\textbf{Interpretation.} Intervention sensitivity is an observable behavior, not a demonstration of faithful reasoning. A changed answer shows dependence on the occluded location; it does not show that the system reasoned from that evidence in any richer sense. An unchanged answer is equally ambiguous, since redundant visual cues, language priors, or an ineffective mask would each produce one. We report sensitivity and let it constrain, rather than settle, the faithfulness question.
+
+\textbf{Scope of measurement.} The benchmark does not measure human-like reasoning, internal chain-of-thought, causal reasoning in any strong sense, general model interpretability, deployment reliability, real-world injury reduction, or how human reviewers respond to displayed evidence. It measures three observable behaviors on a fixed set of images and rules, and it supports comparison between systems evaluated under the same protocol. It provides one mechanism for assessing evidence dependence within a broader trustworthy-AI evaluation programme; it does not constitute such a programme on its own.
+
+\textbf{Scale and distribution.} The evaluation covers 163 pilot and 588 scale-up rows drawn from a single source collection. The distribution is sharply imbalanced: scanning 3,004 source rows yielded only 13 struck-by-risk and 75 fall-hazard candidates against 250 PPE-violation and 250 compliant candidates. Struck-by and fall-hazard results are therefore diagnostic rather than stable estimates, and future releases should deliberately oversample rare but safety-critical events.
 
 \textbf{Scale and distribution.} The evaluation covers 163 pilot and 588 scale-up rows drawn from a single source collection. The distribution is sharply imbalanced: scanning 3,004 source rows yielded only 13 struck-by-risk and 75 fall-hazard candidates against 250 PPE-violation and 250 compliant candidates. Struck-by and fall-hazard results are therefore diagnostic rather than stable estimates, and future releases should deliberately oversample rare but safety-critical events.
 
@@ -354,11 +423,11 @@ We are correspondingly careful about what these results do not establish. They c
 
 \textbf{Static frames.} Every judgment is made from one image. Hazards defined by motion or duration, such as equipment swing radius or how long a worker remains exposed, cannot be assessed, and some rows are genuinely undecidable for this reason.
 
-\textbf{Intervention realism.} Occlusions are solid rectangles. They test evidence dependence cleanly because size is controlled, but they are not photorealistic, and a model's response to a synthetic mask may differ from its response to natural occlusion by dust, scaffolding, or a passing vehicle.
+\textbf{Metric scope.} Evidence is compared at the level of rectangles. Box overlap does not capture whether the model used the correct part of a correctly located object, and our intervention measure detects location sensitivity rather than recovering internal reasoning, so it constrains a faithfulness assessment without settling it.
 
-\textbf{Metric scope.} Evidence is compared at the level of rectangles. Box overlap does not capture whether the model used the correct part of a correctly located object, and our faithfulness measure detects location sensitivity rather than recovering internal reasoning.
+\section{Ethical Considerations}
 
-\textbf{Ethics.} Construction imagery raises privacy, surveillance, and labor-governance concerns. The benchmark does not infer identity, intent, competence, or blame, and it should not be used for autonomous inspection or disciplinary monitoring. Because the failure modes documented here fall hardest on missed violations, deploying such a system without human review would shift risk onto workers while presenting an appearance of oversight. Appropriate use is research evaluation under documented scope limits, data minimization, source-license compliance, and human professional review, consistent with risk-management guidance for AI-enabled workplace tools (National Institute of Standards and Technology, 2023; Howard \& Schulte, 2024).
+Construction imagery is imagery of people at work, and the concerns it raises are concrete rather than abstract. A camera installed to check hard-hat compliance is also a camera that can support productivity monitoring, biometric identification, or retrospective review of an individual worker's conduct, and footage gathered for one purpose is routinely available for another. Safety monitoring does not by itself justify persistent worker surveillance; the two should be separated deliberately, through retention limits, restrictions on secondary use, meaningful consent, and worker representation in decisions about deployment. The benchmark does not infer identity, intent, competence, or blame, and it should not be used for autonomous inspection or disciplinary monitoring. Because the failure modes documented here fall hardest on missed violations, deploying such a system without human review would shift risk onto workers while presenting an appearance of oversight. Appropriate use is research evaluation under documented scope limits, data minimization, source-license compliance, and human professional review, consistent with risk-management guidance for AI-enabled workplace tools (National Institute of Standards and Technology, 2023; Howard \& Schulte, 2024).
 
 \section{Conclusion}
 
