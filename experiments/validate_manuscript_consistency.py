@@ -1,10 +1,10 @@
 """Check that the manuscript files agree with each other.
 
-The title and abstract exist in four places: the SNAS manuscript, the generated
-IEEE variant, the standalone abstract, and the copy-paste submission text. They
-have drifted apart twice, once leaving a superseded abstract in the file meant
-for pasting into the submission portal, and once leaving a retracted claim in
-the title of two files after the paper itself had been retitled.
+The title and abstract exist in three places: the SNAS manuscript, the
+standalone abstract, and the copy-paste submission text. They have drifted
+apart twice, once leaving a superseded abstract in the file meant for pasting
+into the submission portal, and once leaving a retracted claim in the title of
+two files after the paper itself had been retitled.
 
 This checks that they match, that the abstract respects the venue word limit,
 and that no file still carries the superseded title. Exits nonzero on failure.
@@ -20,7 +20,6 @@ ROOT = Path(__file__).resolve().parents[1]
 PAPER_DIR = ROOT / "paper" / "snas"
 
 SNAS = PAPER_DIR / "SNAS_2026_FaithBench_short_paper.tex"
-IEEE = PAPER_DIR / "SNAS_2026_FaithBench_camera_ready_ieee.tex"
 STANDALONE = PAPER_DIR / "SNAS_2026_FaithBench_abstract_blind.tex"
 SUBMISSION = PAPER_DIR / "SUBMISSION_TEXTS.md"
 
@@ -56,9 +55,9 @@ def main() -> int:
     # The released reproducibility export is a subset of this repository and omits
     # internal submission documents, so a copy that is absent is simply not checked.
     sources = [
-        ("SNAS manuscript", SNAS,
-         r"\\textbf\{Abstract\}\s*\\end\{center\}\s*(.*?)\s*\\noindent\\textit\{Keywords:\}"),
-        ("IEEE variant", IEEE, r"\\begin\{abstract\}(.*?)\\end\{abstract\}"),
+        # Since the port to the official SNAS template the manuscript uses the
+        # template's abstract environment rather than a hand-built center block.
+        ("SNAS manuscript", SNAS, r"\\begin\{abstract\}(.*?)\\end\{abstract\}"),
         ("standalone abstract", STANDALONE,
          r"\\textbf\{Abstract\}\s*\\end\{center\}\s*(.*?)\s*\\end\{document\}"),
         # the markdown copy is one paragraph, so read to the next blank line
@@ -80,13 +79,15 @@ def main() -> int:
     if words > ABSTRACT_WORD_LIMIT:
         failures.append(f"abstract is {words} words, over the {ABSTRACT_WORD_LIMIT}-word limit")
 
-    title = extract(r"\\begin\{center\}\s*\\textbf\{(.*?)\}\s*\\end\{center\}", snas, "title")
+    # The template's \title{} block carries font directives ahead of the text;
+    # the title itself is everything between \bfseries and the closing brace.
+    title = extract(r"\\title\{.*?\\bfseries\s*(.*?)\n\}", snas, "title")
     title_norm = normalize(title)
-    for path in (IEEE, STANDALONE, SUBMISSION):
+    for path in (STANDALONE, SUBMISSION):
         if path.exists() and title_norm not in normalize(path.read_text(encoding="utf-8")):
             failures.append(f"title in {path.name} does not match the SNAS manuscript")
 
-    for path in (SNAS, IEEE, STANDALONE, SUBMISSION):
+    for path in (SNAS, STANDALONE, SUBMISSION):
         if not path.exists():
             continue
         content = path.read_text(encoding="utf-8")
@@ -98,8 +99,8 @@ def main() -> int:
         print("Manuscript consistency check FAILED:")
         for failure in failures:
             print(f"  - {failure}")
-        print("\nIf the SNAS manuscript is correct, regenerate and resync:")
-        print("  python experiments/build_ieee_variant.py")
+        print("\nIf the SNAS manuscript is correct, copy its title and abstract")
+        print("into the other files by hand; there is no generator to re-run.")
         return 1
 
     print(f"Manuscript consistency OK (abstract {words} words, "

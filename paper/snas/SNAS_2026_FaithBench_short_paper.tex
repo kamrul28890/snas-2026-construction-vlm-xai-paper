@@ -1,22 +1,69 @@
-% SNAS 2026 camera-ready short paper (non-blind revision addressing Review 1).
-% Compile with XeLaTeX so the document uses Times New Roman.
-\documentclass[12pt,letterpaper,twoside]{article}
+% SNAS 2026 camera-ready short paper.
+% Built on the official SNAS_main.tex camera-ready template distributed by the
+% program committee on 2026-09-15. Package list, spacing, title block, and
+% caption setup follow that template; the \newcolumntype{L} table helper and
+% the hyperref metadata below are the only additions this manuscript needs.
+% Compile with: pdflatex -> bibtex -> pdflatex -> pdflatex
+
+\documentclass[12pt,letterpaper]{article}
 
 \usepackage[margin=1in]{geometry}
-\usepackage{fontspec}
-\setmainfont{Times New Roman}
+
+% Times New Roman-like font
+\usepackage{newtxtext}
+\usepackage{newtxmath}
+
+\usepackage{abstract}
+
+% APA-style citations, drawn from references.bib via BibTeX
+\usepackage[natbibapa]{apacite}
+
 \usepackage{setspace}
-\doublespacing
-\usepackage{booktabs}
-\usepackage{array}
-\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
-\usepackage{graphicx}
-\usepackage{caption}
-\usepackage{fancyhdr}
+\onehalfspacing
+
+\usepackage{microtype}
+
 \usepackage{titlesec}
-\usepackage{xurl}
-\urlstyle{same}
-\usepackage[hidelinks]{hyperref}
+\titlespacing*{\section}{0pt}{0.6\baselineskip}{0.3\baselineskip}
+\titlespacing*{\subsection}{0pt}{0.45\baselineskip}{0.2\baselineskip}
+\titlespacing*{\subsubsection}{0pt}{0.35\baselineskip}{0.15\baselineskip}
+
+\usepackage{graphicx}
+
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{makecell}
+\usepackage{colortbl}
+
+% Ragged-right fixed-width column used by this manuscript's tables.
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+
+\usepackage{amsmath}
+% newtxmath already defines \Bbbk, so loading amssymb after it is a fatal
+% "command already defined" error. The official template ships both packages in
+% this order and so hits this; undefining the symbol first lets amssymb supply
+% its own without changing anything the template renders.
+\let\Bbbk\relax
+\usepackage{amssymb}
+\usepackage{amsfonts}
+% Same collision, second instance: newtxmath supplies \openbox and the proof
+% environment, which amsthm then tries to define again.
+\let\openbox\relax
+\let\proof\relax
+\let\endproof\relax
+\usepackage{amsthm}
+
+\usepackage{textcomp}
+\usepackage{url}
+\usepackage{placeins}
+\usepackage{enumitem}
+\usepackage{xcolor}
+
+\raggedbottom
+
+\usepackage[hidelinks,bookmarks=true]{hyperref}
 \hypersetup{
   pdftitle={ConstructionSafety-FaithBench: Evaluating Visual-Evidence Sensitivity in Construction-Safety Vision-Language Systems},
   pdfauthor={Md Kamruzzaman, Eashraque Jahan, Mustafa Abdallah},
@@ -24,66 +71,89 @@
   pdfkeywords={trustworthy AI, explainable AI, vision-language models, construction safety, evidence sensitivity}
 }
 
-\setlength{\parindent}{0.5in}
-\setlength{\parskip}{0pt}
-\setlength{\emergencystretch}{3em}
-\setlength{\textfloatsep}{8pt plus 2pt minus 2pt}
-\setlength{\floatsep}{6pt plus 2pt minus 2pt}
-\captionsetup{font=small,skip=3pt}
-\raggedbottom
+\newtheorem{definition}{Definition}
+\newtheorem{example}{Example}
+\newtheorem{theorem}{Theorem}
 
-\titleformat{\section}
-  {\normalfont\bfseries\centering}
-  {\thesection.}{0.5em}{}
-\titlespacing*{\section}{0pt}{8pt}{4pt}
-\titleformat{\subsection}
-  {\normalfont\bfseries}
-  {\thesubsection.}{0.5em}{}
-\titlespacing*{\subsection}{0pt}{6pt}{2pt}
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf,labelsep=period}
 
-\pagestyle{fancy}
-\fancyhf{}
-\fancyhead[LE,LO]{\textit{ConstructionSafety-FaithBench}}
-\fancyhead[RE,RO]{\thepage}
-\renewcommand{\headrulewidth}{0.4pt}
-\setlength{\headheight}{15pt}
+\renewcommand{\arraystretch}{1.15}
 
-\newenvironment{apareferences}
-  {\begin{list}{}{%
-    \setlength{\leftmargin}{0.5in}%
-    \setlength{\itemindent}{-0.5in}%
-    \setlength{\itemsep}{0pt}%
-    \setlength{\parsep}{0pt}%
-    \setlength{\topsep}{0pt}}}
-  {\end{list}}
+% ---- Author / affiliation commands (verbatim from SNAS_main.tex) ----
+\newcommand{\Author}[2]{%
+    #1$^{#2}$%
+}
+\newcommand{\Affiliation}[2]{%
+    $^{#1}$#2
+}
+
+\makeatletter
+\renewcommand{\maketitle}{
+    \begin{center}
+        {\fontsize{16}{19}\selectfont
+        \bfseries
+        \@title\par}
+        \vspace{8pt}
+        {\fontsize{12}{14}\selectfont
+        \@author\par}
+    \end{center}
+    \vspace{6pt}
+}
+\makeatother
+
+\date{}
 
 \begin{document}
 
-\begin{center}
-\textbf{ConstructionSafety-FaithBench: Evaluating Visual-Evidence Sensitivity in Construction-Safety Vision-Language Systems}
-\end{center}
+\title{
+    \vspace{-1.0cm}
+    \fontsize{16}{19}\selectfont
+    \bfseries
+    ConstructionSafety-FaithBench: Evaluating Visual-Evidence Sensitivity
+    in Construction-Safety Vision-Language Systems
+}
 
-\begin{center}
-{\setstretch{1.0}
-Md Kamruzzaman\textsuperscript{1}, Eashraque Jahan\textsuperscript{2}, Mustafa Abdallah\textsuperscript{1}\\
-\textsuperscript{1}Purdue University, United States\\
-\textsuperscript{2}University of Denver, United States\\
-kamrul28890@gmail.com; easha003eee@du.edu; abdalla0@purdue.edu\\
-\textsuperscript{*}Corresponding author: Md Kamruzzaman
-\par}
-\end{center}
+\author{
+    \Author{Md Kamruzzaman}{1,*};
+    \Author{Eashraque Jahan}{2};
+    \Author{Mustafa Abdallah}{1}
+    \\[4pt]
+    \Affiliation{1}{
+        Purdue University, West Lafayette, IN, United States
+    }
+    \\
+    \Affiliation{2}{
+        University of Denver, Denver, CO, United States
+    }
+    \\[4pt]
+    kamrul28890@gmail.com;
+    easha003eee@du.edu;
+    abdalla0@purdue.edu
+    \\[2pt]
+    $^{*}$Corresponding author
+}
 
-\begin{center}
-\textbf{Abstract}
-\end{center}
+\maketitle
+
+\vspace{-0.6cm}
+
+\begin{abstract}
 
 Construction safety depends on small, rule-specific visual details: a hard hat on a particular worker, a barrier at a particular edge. Vision-language models (VLMs) are increasingly proposed to check such details automatically, but they can give the right safety answer for the wrong visual reason, judging a scene unsafe because construction sites look hazardous while ignoring the cue the rule concerns. Existing evaluations report answer accuracy and are silent on this failure. We introduce ConstructionSafety-FaithBench, an audit benchmark that separates three properties usually merged into one score: whether the answer is correct, whether the cited visual evidence is rule-relevant, and whether the answer changes when that evidence is removed. Evidence dependence is probed by occluding the rule-relevant region and comparing the effect against occlusions of identical size placed elsewhere in the image, so any difference reflects location rather than the amount removed. The benchmark is model-agnostic; here we validate it on one system, an open-vocabulary grounding pipeline built on Florence-2, across hard-hat, fall-protection, guardrail, and struck-by rules. For that system the three properties come apart. The pipeline reaches 18.3\% accuracy on 120 adjudicated hard cases. It returns an evidence region on 98.8\% of images, yet those regions overlap the rule-relevant one poorly, mean intersection-over-union 0.058. It nonetheless flips its answer 39.2\% of the time under targeted occlusion, against 9.2\% under size-matched random occlusion, a paired difference of 30.0 points. It never answers ``uncertain,'' even where a single frame cannot support a decision. Coming from one system on one imagery source, these findings characterize that pipeline rather than vision-language models in general. They nonetheless indicate that answer accuracy is insufficient evidence of trustworthiness for safety-critical screening, and that a system's willingness to abstain deserves scrutiny alongside its accuracy. Benchmark, code, and frozen artifacts: \url{https://github.com/kamrul28890/snas-2026-construction-safety-faithbench}.
 
-\noindent\textit{Keywords:} trustworthy AI; explainable AI; vision-language models; construction safety; evidence sensitivity; AI risk assessment
+\end{abstract}
+
+\vspace{2pt}
+
+\noindent
+\textbf{Keywords:}
+trustworthy AI; explainable AI; vision-language models;
+construction safety; evidence sensitivity
 
 \section{Introduction}
 
-Construction remains one of the most hazardous industries in which to work. Construction and extraction occupations accounted for 1,032 fatal work injuries in the United States in 2024, of which 370 were falls, slips, and trips (U.S. Bureau of Labor Statistics, 2026). Regulators group the leading causes of construction death into four categories: falls, struck-by incidents, caught-in or caught-between events, and electrocution (Occupational Safety and Health Administration, n.d.). Crucially, most of these hazards are visible in the moments before they cause harm. Safety supervision is therefore largely a visual task: a supervisor looks at a specific worker, a specific edge, or a specific machine, and decides whether a specific written rule is being followed. The limiting factor is coverage. One person cannot watch every worker, every unprotected edge, and every moving machine at once, and site conditions change hour by hour.
+Construction remains one of the most hazardous industries in which to work. Construction and extraction occupations accounted for 1,032 fatal work injuries in the United States in 2024, of which 370 were falls, slips, and trips \citep{bls2026cfoi}. Regulators group the leading causes of construction death into four categories: falls, struck-by incidents, caught-in or caught-between events, and electrocution \citep{osha_focusfour}. Crucially, most of these hazards are visible in the moments before they cause harm. Safety supervision is therefore largely a visual task: a supervisor looks at a specific worker, a specific edge, or a specific machine, and decides whether a specific written rule is being followed. The limiting factor is coverage. One person cannot watch every worker, every unprotected edge, and every moving machine at once, and site conditions change hour by hour.
 
 This coverage gap motivates automated visual screening. Construction sites already produce large volumes of imagery from fixed cameras, drones, and routine progress documentation. If that imagery could be checked automatically against written safety rules, supervisors could be directed toward the situations that most need human attention.
 
@@ -95,9 +165,9 @@ That requirement separates properties which are often treated as one. \textit{Co
 
 We are deliberately careful about how these relate to \textit{faithfulness}, meaning the stronger property that a system's answer genuinely depends on the evidence that ought to support it. The three measurable properties above contribute evidence toward such an assessment, but none of them establishes it. Intervention sensitivity in particular is necessary but not sufficient: an answer that changes when rule-relevant pixels are removed shows dependence on that location, yet a black rectangle also introduces an artifact the system may react to, and an answer that does \textit{not} change may reflect redundant visual cues or language priors rather than an absent dependence. We therefore report sensitivity as an observable behavior and treat faithfulness as an interpretive question that this evidence informs without resolving.
 
-Existing evaluation does not close this gap. Benchmarks for construction-safety VLMs report answer accuracy against labeled images, which measures correctness but is silent on whether the answer used the right evidence (Chen \& Zou, 2025). Broader multimodal work has begun to evaluate the quality of model-generated rationales, but it is not specific to safety rules and does not target the localized, object-level cues that construction rules depend on (Li et al., 2025). Most directly, MERLIM identifies what it calls hidden hallucinations, correct answers produced without meaningful visual grounding, and reports that instruction-tuned vision-language models often succeed by exploiting global scene patterns and language priors rather than the visual content actually in question (Villa et al., 2025). That work establishes the phenomenon on general imagery. It does not test whether the same failure occurs when a written rule designates which region is decisive, which is the situation a safety inspection creates.
+Existing evaluation does not close this gap. Benchmarks for construction-safety VLMs report answer accuracy against labeled images, which measures correctness but is silent on whether the answer used the right evidence \citep{chen2025inspectors}. Broader multimodal work has begun to evaluate the quality of model-generated rationales, but it is not specific to safety rules and does not target the localized, object-level cues that construction rules depend on \citep{li2025rationales}. Most directly, MERLIM identifies what it calls hidden hallucinations, correct answers produced without meaningful visual grounding, and reports that instruction-tuned vision-language models often succeed by exploiting global scene patterns and language priors rather than the visual content actually in question \citep{villa2025merlim}. That work establishes the phenomenon on general imagery. It does not test whether the same failure occurs when a written rule designates which region is decisive, which is the situation a safety inspection creates.
 
-Methodologically, research on explanation faithfulness has repeatedly shown that internal scores such as attention weights can look convincing while failing to track what a model actually uses (Jain \& Wallace, 2019; Wu et al., 2024). That finding motivates testing behavior under controlled interventions rather than inspecting internal scores, and it aligns with the descriptive-accuracy and robustness requirements set out for explainable systems (Phillips et al., 2021). What is missing is an evaluation that applies such intervention-based tests to construction-safety rules, on construction imagery, using evidence regions defined by the rule rather than by visual salience.
+Methodologically, research on explanation faithfulness has repeatedly shown that internal scores such as attention weights can look convincing while failing to track what a model actually uses \citep{jain2019attention,wu2024faithfulness}. That finding motivates testing behavior under controlled interventions rather than inspecting internal scores, and it aligns with the descriptive-accuracy and robustness requirements set out for explainable systems \citep{phillips2021principles}. What is missing is an evaluation that applies such intervention-based tests to construction-safety rules, on construction imagery, using evidence regions defined by the rule rather than by visual salience.
 
 This paper addresses that gap. We ask three questions:
 
@@ -126,7 +196,7 @@ We deliberately frame these as evaluation contributions. The study audits an exi
 
 \subsection{Images and Safety Rules}
 
-The benchmark is built from ConstructionSite imagery and its associated metadata, a construction-site collection released with safety-oriented captioning, rule-violation, and object-grounding annotations (Chen \& Zou, 2025). We selected this source because it provides real construction scenes together with the safety-relevant object annotations that a rule-level audit requires; generic object-detection corpora do not carry safety semantics.
+The benchmark is built from ConstructionSite imagery and its associated metadata, a construction-site collection released with safety-oriented captioning, rule-violation, and object-grounding annotations \citep{chen2025inspectors}. We selected this source because it provides real construction scenes together with the safety-relevant object annotations that a rule-level audit requires; generic object-detection corpora do not carry safety semantics.
 
 Each benchmark row pairs one image with one written safety rule and records seven fields: an image identifier, the source split, the safety question in natural language, a normalized rule identifier, the answer label, the evidence regions the rule depends on, and provenance metadata describing where the label came from. Evidence regions are stored as \textit{bounding boxes}, rectangles specified by their pixel coordinates that mark where in the image a relevant object appears.
 
@@ -138,7 +208,7 @@ Two splits are used. A 163-row pilot split supports the intervention study, and 
 
 The system under audit answers a safety question in two steps: it first locates candidate objects in the image, then applies a fixed rule to those locations to produce a verdict.
 
-The locating step uses Florence-2, a compact vision-language model that accepts an image together with a text prompt and can return bounding boxes for the objects that prompt describes (Xiao et al., 2024). This capability is called \textit{open-vocabulary grounding}: the model is not restricted to a fixed list of trained categories, so it can be asked for ``hard hat'' or ``guardrail'' directly, in words, without being retrained for each new safety rule. We evaluate the \textit{microsoft/Florence-2-base-ft} release. We selected it because it is small enough to run repeatedly on modest hardware, which the intervention study requires, and because its prompt-driven grounding matches the way construction rules are written.
+The locating step uses Florence-2, a compact vision-language model that accepts an image together with a text prompt and can return bounding boxes for the objects that prompt describes \citep{xiao2024florence}. This capability is called \textit{open-vocabulary grounding}: the model is not restricted to a fixed list of trained categories, so it can be asked for ``hard hat'' or ``guardrail'' directly, in words, without being retrained for each new safety rule. We evaluate the \textit{microsoft/Florence-2-base-ft} release. We selected it because it is small enough to run repeatedly on modest hardware, which the intervention study requires, and because its prompt-driven grounding matches the way construction rules are written.
 
 Around this model we build what we call a \textit{grounding adapter}: a thin wrapper that turns the model's raw boxes into a rule verdict. For a given rule the adapter prompts Florence-2 for the objects that rule concerns, then applies fixed geometric tests to the returned boxes. A hard-hat rule, for example, checks whether a helmet box overlaps the head region of each detected worker. These tests are \textit{deterministic}, meaning they involve no learned parameters and no randomness: the same boxes always produce the same verdict. We use deterministic geometry rather than a second learned model so that any failure can be traced to either the grounding step or the rule logic, instead of being hidden inside another black box.
 
@@ -389,7 +459,7 @@ A plausible technical explanation lies in the difference between detecting an ob
 
 For construction safety the implication is about failure mode rather than accuracy alone. A screening tool that misses hazards is dangerous, but a screening tool that misses hazards while displaying a confident verdict and a plausible bounding box is worse, because it supplies the visual trappings of justification. Our RQ2 result shows this concretely: a reviewer would receive a box on 98.8\% of images, and on hard-hat rows that box would usually not contain the relevant hard hat. The RQ3 result compounds it, since degrading the very evidence a rule depends on yields a different confident answer rather than a request for human attention. The safety-relevant property is not only how often a system is right, but whether it knows when it cannot tell.
 
-These findings connect to two literatures. They extend to a safety-critical visual domain the established result that plausible-looking explanations need not reflect what a model uses (Jain \& Wallace, 2019; Wu et al., 2024) and that correct answers can be produced without visual grounding at all (Villa et al., 2025). Our contribution to that line is the rule-defined reference region: where hidden hallucinations have previously been identified against general visual content, a safety rule specifies in advance which region should be decisive, which makes the targeted intervention well posed and supports the argument for intervention-based rather than inspection-based faithfulness testing. They also qualify optimism about applying general-purpose VLMs to construction inspection (Chen \& Zou, 2025): our pipeline's difficulty is not primarily detection but the translation from detections into rule verdicts, which is where safety semantics live.
+These findings connect to two literatures. They extend to a safety-critical visual domain the established result that plausible-looking explanations need not reflect what a model uses \citep{jain2019attention,wu2024faithfulness} and that correct answers can be produced without visual grounding at all \citep{villa2025merlim}. Our contribution to that line is the rule-defined reference region: where hidden hallucinations have previously been identified against general visual content, a safety rule specifies in advance which region should be decisive, which makes the targeted intervention well posed and supports the argument for intervention-based rather than inspection-based faithfulness testing. They also qualify optimism about applying general-purpose VLMs to construction inspection \citep{chen2025inspectors}: our pipeline's difficulty is not primarily detection but the translation from detections into rule verdicts, which is where safety semantics live.
 
 Two practical recommendations follow. First, evaluations of safety-critical VLMs should report an abstention rate alongside accuracy; a system that never returns ``uncertain'' should be treated as unvalidated for review support regardless of its headline score. Second, systems that display evidence regions to human reviewers should have those regions scored, not merely rendered, since unscored evidence invites reviewers to assume a grounding that has not been demonstrated.
 
@@ -427,7 +497,7 @@ The results above rest on a chain of choices, each of which could bear weight it
 
 \section{Ethical Considerations}
 
-Construction imagery is imagery of people at work, and the concerns it raises are concrete rather than abstract. A camera installed to check hard-hat compliance is also a camera that can support productivity monitoring, biometric identification, or retrospective review of an individual worker's conduct, and footage gathered for one purpose is routinely available for another. Safety monitoring does not by itself justify persistent worker surveillance; the two should be separated deliberately, through retention limits, restrictions on secondary use, meaningful consent, and worker representation in decisions about deployment. The benchmark does not infer identity, intent, competence, or blame, and it should not be used for autonomous inspection or disciplinary monitoring. Because the failure modes documented here fall hardest on missed violations, deploying such a system without human review would shift risk onto workers while presenting an appearance of oversight. Appropriate use is research evaluation under documented scope limits, data minimization, source-license compliance, and human professional review, consistent with risk-management guidance for AI-enabled workplace tools (National Institute of Standards and Technology, 2023; Howard \& Schulte, 2024).
+Construction imagery is imagery of people at work, and the concerns it raises are concrete rather than abstract. A camera installed to check hard-hat compliance is also a camera that can support productivity monitoring, biometric identification, or retrospective review of an individual worker's conduct, and footage gathered for one purpose is routinely available for another. Safety monitoring does not by itself justify persistent worker surveillance; the two should be separated deliberately, through retention limits, restrictions on secondary use, meaningful consent, and worker representation in decisions about deployment. The benchmark does not infer identity, intent, competence, or blame, and it should not be used for autonomous inspection or disciplinary monitoring. Because the failure modes documented here fall hardest on missed violations, deploying such a system without human review would shift risk onto workers while presenting an appearance of oversight. Appropriate use is research evaluation under documented scope limits, data minimization, source-license compliance, and human professional review, consistent with risk-management guidance for AI-enabled workplace tools \citep{nist2023airmf,howard2024workplace}.
 
 \section{Conclusion}
 
@@ -450,8 +520,7 @@ specifications, score tables, and analysis scripts are available at:
 
 \noindent Every number reported in this paper is regenerated from those artifacts by the
 included scripts rather than transcribed by hand. Source images are not
-redistributed: they derive from the ConstructionSite collection (Chen \& Zou,
-2025), whose dataset revision is recorded in each manifest row, and the scripts
+redistributed: they derive from the ConstructionSite collection \citep{chen2025inspectors}, whose dataset revision is recorded in each manifest row, and the scripts
 load them only where a local copy of that dataset is already available. Model
 weights are likewise not redistributed. Reproducing the reported statistics and
 figures requires neither the images nor a GPU; only re-running grounding
@@ -459,30 +528,15 @@ inference from scratch does.
 
 \label{bodyend}
 \clearpage
-\section*{References}
 
-\begin{apareferences}
-\item Chen, X., \& Zou, Z. (2025). Are large pre-trained vision language models effective construction safety inspectors? \textit{arXiv}. \url{https://arxiv.org/abs/2508.11011}
+\begingroup
 
-\item Howard, J., \& Schulte, P. A. (2024). Exploring approaches to keep an AI-enabled workplace safe for workers. \textit{National Institute for Occupational Safety and Health}. \url{https://www.cdc.gov/niosh/bulletin/2024/ai-risk-management.html}
+\small
 
-\item Jain, S., \& Wallace, B. C. (2019). Attention is not explanation. In \textit{Proceedings of NAACL-HLT 2019} (pp. 3543--3556). \url{https://doi.org/10.18653/v1/N19-1357}
+% APA reference list, generated from references.bib
+\bibliographystyle{apacite}
+\bibliography{references}
 
-\item Li, K., Vosselman, G., \& Yang, M. Y. (2025). Multimodal rationales for explainable visual question answering. In \textit{Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition Workshops} (pp. 191--201).
-
-\item National Institute of Standards and Technology. (2023). \textit{Artificial Intelligence Risk Management Framework (AI RMF 1.0)}. \url{https://doi.org/10.6028/NIST.AI.100-1}
-
-\item Occupational Safety and Health Administration. (n.d.). \textit{Construction focus four training}. U.S. Department of Labor. \url{https://www.osha.gov/training/outreach/construction/focus-four}
-
-\item Phillips, P. J., Hahn, C. A., Fontana, P. C., Yates, A. N., Greene, K., Broniatowski, D. A., \& Przybocki, M. A. (2021). \textit{Four principles of explainable artificial intelligence} (NISTIR 8312). National Institute of Standards and Technology. \url{https://doi.org/10.6028/NIST.IR.8312}
-
-\item U.S. Bureau of Labor Statistics. (2026). \textit{Census of fatal occupational injuries summary, 2024}. U.S. Department of Labor. \url{https://www.bls.gov/news.release/cfoi.nr0.htm}
-
-\item Villa, A., Le\'{o}n Alc\'{a}zar, J. C., Soto, A., \& Ghanem, B. (2025). Behind the magic, MERLIM: Multi-modal evaluation benchmark for large image-language models. In \textit{Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition Workshops}. \url{https://arxiv.org/abs/2312.02219}
-
-\item Wu, J., Kang, W., Tang, H., Hong, Y., \& Yan, Y. (2024). On the faithfulness of Vision Transformer explanations. In \textit{Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition} (pp. 10936--10945).
-
-\item Xiao, B., Wu, H., Xu, W., Dai, X., Hu, H., Lu, Y., Zeng, M., Liu, C., \& Yuan, L. (2024). Florence-2: Advancing a unified representation for a variety of vision tasks. In \textit{Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition} (pp. 4818--4829).
-\end{apareferences}
+\endgroup
 
 \end{document}

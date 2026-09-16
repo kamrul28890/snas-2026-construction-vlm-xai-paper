@@ -118,18 +118,16 @@ which are the sources for the corresponding numbers in the manuscript.
 
 ## Manuscript
 
-The SNAS-format manuscript is the single source of truth for prose. The IEEE
-two-column variant is generated from it, so edit the former and regenerate:
+`paper/snas/SNAS_2026_FaithBench_short_paper.tex` is the single source of truth
+for prose. It follows the official SNAS 2026 camera-ready template and draws its
+APA reference list from `paper/snas/references.bib` via `apacite`, so it builds
+with pdfLaTeX and needs a BibTeX pass between LaTeX runs.
 
-```bash
-python experiments/build_ieee_variant.py
-```
-
-Direct edits to `SNAS_2026_FaithBench_camera_ready_ieee.tex` are overwritten. The
-title and abstract also appear in the standalone abstract and in
+The title and abstract also appear in the standalone abstract and in
 `SUBMISSION_TEXTS.md`; `experiments/validate_manuscript_consistency.py`, part of
 `validate_all.py`, fails if those copies drift apart or if the abstract exceeds
-the venue word limit.
+the venue word limit. There is no generator to re-run, so keep them in sync by
+hand.
 
 Build the PDFs with `build_latex.ps1`.
 

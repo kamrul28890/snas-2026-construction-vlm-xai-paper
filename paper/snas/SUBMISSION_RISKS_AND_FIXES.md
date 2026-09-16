@@ -18,17 +18,28 @@ present.
   in both directions.
 - Added author byline, PDF author metadata, and a Reproducibility Statement
   carrying the public repository link.
-- Produced an IEEE two-column camera-ready variant
-  (`SNAS_2026_FaithBench_camera_ready_ieee.tex`).
 - Stripped machine-specific absolute paths from generated artifacts and added an
   export guard that fails if they reappear.
+- Ported the manuscript onto the official SNAS camera-ready LaTeX template and
+  converted the hand-written APA reference list to BibTeX (`references.bib`,
+  `apacite`).
 
-## Two Open Format Questions
+## Format: Settled
 
-- Confirm whether the camera-ready must use the IEEE template or the original
-  SNAS format (Times New Roman, 12 pt, double-spaced, APA).
-- Confirm the camera-ready page limit. The IEEE variant is currently about 8.2
-  body pages, marginally over the 4-8 page limit stated in the original call.
+On 2026-09-15 the program chair emailed the official camera-ready templates.
+They are **not** IEEE: the LaTeX template is a single-column
+`\documentclass[12pt,letterpaper]{article}` with 1 in margins, `newtxtext`,
+`\onehalfspacing`, and APA citations via `apacite`. The manuscript now follows
+it, and the IEEE variant and its generator have been deleted. The email also
+states that authors may change headings freely, so this paper's section names
+need no adjustment.
+
+## One Open Format Question
+
+- Confirm the camera-ready page limit. **Neither the templates nor the
+  camera-ready email states one.** The manuscript currently runs 21 pages in the
+  official single-column template, against the 4-8 page limit in the original
+  call. If that limit still applies, the paper needs substantial compression.
 
 ## Do Not Misrepresent
 
@@ -42,7 +53,9 @@ or:
 
 ## Remaining Human Checks Before Camera-Ready Upload
 
-- Confirm the required template (IEEE vs. original SNAS format) and the page limit.
+- Confirm the camera-ready page limit with the organizers (see above).
+- Complete the presentation attendance-mode form and conference registration;
+  registration closes 2026-09-25, the same day as the camera-ready upload.
 - Confirm author order, affiliations, and corresponding author in the byline.
 - Publish the reproducibility repository before upload, since the paper now cites
   its URL. Run `python experiments/sanitize_release_paths.py --check` first.

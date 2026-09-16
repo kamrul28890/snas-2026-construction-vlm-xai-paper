@@ -36,12 +36,10 @@ FILES = [
     "experiments/analyze_error_asymmetry.py",
     "experiments/sanitize_release_paths.py",
     "experiments/validate_manuscript_consistency.py",
-    "experiments/build_ieee_variant.py",
     "results/tables/mask_characteristics.csv",
     "results/tables/control_robustness.csv",
     "results/tables/error_asymmetry.csv",
     "results/tables/audit_pass_agreement.csv",
-    "paper/snas/SNAS_2026_FaithBench_camera_ready_ieee.tex",
     "build_latex.ps1",
     "SNAS_2026_reproducibility_README.md",
     "benchmark/README.md",
@@ -156,6 +154,7 @@ FILES = [
     "results/tables/scaleup_florence_grounding_slices.csv",
     "paper/snas/README.md",
     "paper/snas/SNAS_2026_FaithBench_short_paper.tex",
+    "paper/snas/references.bib",
     "paper/snas/SNAS_2026_FaithBench_abstract_blind.tex",
     "paper/snas/figures/pipeline_architecture.pdf",
     "paper/snas/figures/audit_result_dashboard.pdf",
@@ -236,7 +235,9 @@ def paper_title() -> str:
     """Read the title from the manuscript so this package cannot go stale."""
     tex = (ROOT / "paper" / "snas" / "SNAS_2026_FaithBench_short_paper.tex").read_text(
         encoding="utf-8")
-    match = re.search(r"\\begin\{center\}\s*\\textbf\{(.*?)\}\s*\\end\{center\}", tex, re.S)
+    # The official SNAS template's \title{} block puts font directives ahead of
+    # the title text, so read from \bfseries to the closing brace.
+    match = re.search(r"\\title\{.*?\\bfseries\s*(.*?)\n\}", tex, re.S)
     if not match:
         raise RuntimeError("could not read the title from the manuscript")
     return " ".join(match.group(1).split())
