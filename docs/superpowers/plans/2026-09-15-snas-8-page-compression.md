@@ -33,6 +33,8 @@ Measured from the current 21-page build.
 | Title block + abstract + keywords | ~0.9 page | abstract is 293 words |
 | References | ~0.8 page | excluded from the limit |
 
+> **Calibration correction, measured after Phase 3.** The 500-words-per-page figure below was optimistic. Measured against real builds, a full text page holds **~430 PDF-words**, and source words are **0.76×** PDF-words once headings and float contents are excluded. The true source-word budget for 8 body pages is therefore **~2,100**, not 2,735. Phases 1–3 took the paper from 20 to 15 body pages and 6,079 to 4,331 source words — all of it information-preserving — which means the remaining gap must come from **deleting content, not compressing it**. The per-section targets below are consequently ~25% too generous; treat them as upper bounds.
+
 An uninterrupted text page in this format holds **~500 words**. So:
 
 ```
