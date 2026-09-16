@@ -63,6 +63,11 @@
 
 \raggedbottom
 
+% Compression: keep floats from opening large vertical gaps.
+\setlength{\textfloatsep}{8pt plus 2pt minus 2pt}
+\setlength{\floatsep}{6pt plus 2pt minus 2pt}
+\setlength{\intextsep}{6pt plus 2pt minus 2pt}
+
 \usepackage[hidelinks,bookmarks=true]{hyperref}
 \hypersetup{
   pdftitle={ConstructionSafety-FaithBench: Evaluating Visual-Evidence Sensitivity in Construction-Safety Vision-Language Systems},
@@ -237,26 +242,7 @@ These labels provide the reference against which the evaluated pipeline is asses
 
 \section{Metrics and Experimental Setup}
 
-Each research question requires a different measurement, and the central design decision of this benchmark is to keep them apart. Table~\ref{tab:rqmap} shows how each question maps onto an experiment, a metric, and the result that answers it.
-
-\begin{table}[h]
-\centering
-\caption{How each research question is answered. Correctness, evidence relevance, and intervention sensitivity are measured by separate experiments rather than inferred from one another.}
-\label{tab:rqmap}
-{\setstretch{1.0}\small
-\begin{tabular}{L{0.9in}L{1.7in}L{1.6in}L{0.8in}}
-\toprule
-Question & Experiment & Metric & Result \\
-\midrule
-RQ1 Correctness & Score answers against adjudicated audit labels & Accuracy, macro-F1 & Table~\ref{tab:headline}, Fig.~\ref{fig:audit} \\
-\addlinespace
-RQ2 Evidence relevance & Compare returned evidence with the rule's reference region & Evidence presence, box overlap (IoU) & Table~\ref{tab:rulelevel} \\
-\addlinespace
-RQ3 Intervention sensitivity & Occlude rule-relevant evidence vs.\ size-matched random regions & Answer-flip rate, paired difference, centroid drift & Table~\ref{tab:headline}, Fig.~\ref{fig:intervention} \\
-\bottomrule
-\end{tabular}
-\par}
-\end{table}
+Each research question requires a different measurement, and the central design decision of this benchmark is to keep them apart. The three subsections below define the metrics for RQ1, RQ2, and RQ3 in turn, and Section~\ref{sec:results} reports each in the same order.
 
 \subsection{Answer Metrics (RQ1)}
 
@@ -319,12 +305,13 @@ The full configuration of the intervention study, covering model and dataset rev
 Using this protocol, we now compare the evaluated pipeline in terms of answer performance, evidence quality, and evidence dependence.
 
 \section{Results}
+\label{sec:results}
 
 We report each research question in turn. Table~\ref{tab:headline} collects the headline quantities; the subsections that follow explain what each one means.
 
 \begin{table}[h]
 \centering
-\caption{Headline results. The upper block describes the audited evaluation set, the middle block answers RQ1 (correctness) and RQ2 (evidence relevance), and the lower block answers RQ3 (intervention sensitivity). For accuracy, macro-F1, and evidence presence, higher is better; for the paired differences, larger values indicate stronger dependence on rule-relevant evidence.}
+\caption{Headline results. The first block describes the audited evaluation set, the second answers RQ1 (correctness) and RQ2 (evidence relevance), the third breaks RQ1 down by safety-relevant error direction, and the fourth answers RQ3 (intervention sensitivity). For accuracy, macro-F1, and evidence presence, higher is better; for the paired differences, larger values indicate stronger dependence on rule-relevant evidence. A missed violation is a genuine violation reported as compliant. Because the audit set is enriched for disagreement, the error rates describe contested cases and overstate what would occur across the full splits.}
 \label{tab:headline}
 {\setstretch{1.0}
 \begin{tabular}{lr}
@@ -342,6 +329,11 @@ Automated baseline accuracy on audit labels & 78.3\% \\
 Florence-2 evidence presence (scale-up) & 98.8\% \\
 Florence-2 mean best evidence IoU (scale-up) & 0.058 \\
 \addlinespace
+Florence-2 missed violations & 70/83 (84.3\%) \\
+Florence-2 false alarms & 22/31 (71.0\%) \\
+Metadata baseline missed violations & 11/83 (13.3\%) \\
+Metadata baseline false alarms & 9/31 (29.0\%) \\
+\addlinespace
 Targeted answer-flip rate & 39.2\% \\
 Matched-random answer-flip rate & 9.2\% \\
 Paired answer-flip difference & 30.0 points \\
@@ -357,23 +349,7 @@ The key comparison in Figure~\ref{fig:audit} is between the automated baseline a
 
 Florence-2 reaches 18.3\% accuracy and 12.5\% macro-F1 on this set. Two caveats keep this from being a general performance claim. First, the audit set was deliberately built from disagreement and weak-overlap cases, so it represents hard cases rather than average ones. On the full splits scored against the weaker metadata-assisted labels, the same pipeline reaches 41.7\% accuracy on the 163-row pilot and 39.3\% on the 588-row scale-up. Second, the low audit-set score is a statement about the complete pipeline, grounding plus rule logic, not about Florence-2's detection ability in isolation.
 
-Accuracy is the wrong summary for a safety task, because it prices a missed hazard and a false alarm identically. Table~\ref{tab:errors} separates them. On these contested rows the pipeline reported \textit{compliant} for 70 of the 83 genuine violations, a missed-violation rate of 84.3\%, while also raising false alarms on 22 of 31 compliant rows. Both directions are poor, but they are not equally consequential: a false alarm costs an unnecessary inspection, whereas a missed violation is the failure the system exists to prevent. For comparison, the metadata-assisted baseline misses 13.3\% of violations on the same rows.
-
-\begin{table}[h]
-\centering
-\caption{Safety-relevant error breakdown on the 120 adjudicated rows. Because this set is enriched for disagreement, these rates describe contested cases and overstate what would occur across the full splits. A missed violation is a genuine violation reported as compliant.}
-\label{tab:errors}
-{\setstretch{1.0}\small
-\begin{tabular}{L{1.35in}rr}
-\toprule
-System & Missed violations & False alarms \\
-\midrule
-Florence-2 pipeline & 70/83 (84.3\%) & 22/31 (71.0\%) \\
-Metadata baseline & 11/83 (13.3\%) & 9/31 (29.0\%) \\
-\bottomrule
-\end{tabular}
-\par}
-\end{table}
+Accuracy is the wrong summary for a safety task, because it prices a missed hazard and a false alarm identically. The third block of Table~\ref{tab:headline} separates them. On these contested rows the pipeline reported \textit{compliant} for 70 of the 83 genuine violations, a missed-violation rate of 84.3\%, while also raising false alarms on 22 of 31 compliant rows. Both directions are poor, but they are not equally consequential: a false alarm costs an unnecessary inspection, whereas a missed violation is the failure the system exists to prevent. For comparison, the metadata-assisted baseline misses 13.3\% of violations on the same rows.
 
 Two further patterns matter more than the headline number. The pipeline never returned \textit{uncertain} on any of the 120 audited rows, despite six rows being adjudicated as genuinely undecidable from a single frame. On the hard-hat and guardrail slices it went further and answered \textit{compliant} for all 30 rows in each, even though 26 and 24 of those rows respectively were violations. A system that cannot abstain and cannot flag a violation in an entire rule family is not merely inaccurate; it fails silently, in the direction that matters most for safety.
 
@@ -381,7 +357,7 @@ For comparison, three strategies that never look at the image at all provide the
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=\linewidth]{figures/audit_result_dashboard.pdf}
+\includegraphics[width=0.82\textwidth]{figures/audit_result_dashboard.pdf}
 \caption{Composition of the 120-row adjudicated audit set (left) and answer scores against those labels (right). The audit split deliberately over-samples disagreement and weak-overlap cases, so these accuracies describe hard cases rather than average-case performance.}
 \label{fig:audit}
 \end{figure}
@@ -432,7 +408,7 @@ Read together, the three results are not redundant. The pipeline is often wrong 
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=\linewidth]{figures/intervention_effects_chart.pdf}
+\includegraphics[width=0.82\textwidth]{figures/intervention_effects_chart.pdf}
 \caption{Effect of occluding rule-relevant evidence compared with occluding an equally sized random region in the same image. Because both conditions remove the same number of pixels, the difference between them isolates the contribution of location rather than disruption.}
 \label{fig:intervention}
 \end{figure}
